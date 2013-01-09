@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class JLTextView;
 @interface ViewController : UIViewController
 
+@property (nonatomic, weak) JLTextView *textView;
 @end

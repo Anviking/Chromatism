@@ -7,9 +7,9 @@
 //
 
 #import "ViewController.h"
+#import "JLTextView.h"
 
 @interface ViewController ()
-
 @end
 
 @implementation ViewController
@@ -17,7 +17,25 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    //There are some problems with the textView when setting text while its frame isn't yet set.
+    self.textView.text = [[NSString alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"text" withExtension:@"txt"] encoding:NSUTF8StringEncoding error:nil];
+}
+
+- (void)loadView
+{
+    JLTextView *textView = [[JLTextView alloc] initWithFrame:CGRectZero];
+    textView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    textView.font = [UIFont fontWithName:@"Menlo-Regular" size:13];
+    textView.syntaxTokenizer = [[JLTokenizer alloc] init];
+    textView.syntaxTokenizer.theme = kTokenizerThemeDusk;
+    self.view = textView;
+    self.textView = textView;
 }
 
 - (void)didReceiveMemoryWarning

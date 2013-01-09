@@ -24,6 +24,19 @@
 		8F0F05A3169C98770060CB48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F0F057B169C98770060CB48 /* Foundation.framework */; };
 		8F0F05AB169C98770060CB48 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F0F05A9169C98770060CB48 /* InfoPlist.strings */; };
 		8F0F05AE169C98770060CB48 /* ChromatismTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F0F05AD169C98770060CB48 /* ChromatismTests.m */; };
+		8F103C89169C9EDC000E8716 /* Menlo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F103C88169C9EDC000E8716 /* Menlo.ttf */; };
+		8F103C8A169C9EDC000E8716 /* Menlo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F103C88169C9EDC000E8716 /* Menlo.ttf */; };
+		8F15D048169D894A0040A698 /* JLTokenizer.m in Resources */ = {isa = PBXBuildFile; fileRef = 8F503F60169C99AE0064717A /* JLTokenizer.m */; };
+		8F15D04A169D8A180040A698 /* text.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8F15D049169D8A180040A698 /* text.txt */; };
+		8F5040A1169C99AE0064717A /* JLTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F503F60169C99AE0064717A /* JLTokenizer.m */; };
+		8F5040A2169C99AE0064717A /* JLTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F503F60169C99AE0064717A /* JLTokenizer.m */; };
+		8F5040A5169C99C60064717A /* JLTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5040A4169C99C60064717A /* JLTextView.m */; };
+		8F5040A6169C99C60064717A /* JLTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5040A4169C99C60064717A /* JLTextView.m */; };
+		8F5040AC169C9A5A0064717A /* TextLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5040AB169C9A5A0064717A /* TextLineCell.m */; };
+		8F5040AD169C9A5A0064717A /* TextLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5040AB169C9A5A0064717A /* TextLineCell.m */; };
+		8F5040B1169C9AFF0064717A /* Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5040B0169C9AFF0064717A /* Helpers.m */; };
+		8F5040B2169C9AFF0064717A /* Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5040B0169C9AFF0064717A /* Helpers.m */; };
+		8F5040B4169C9B240064717A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F5040B3169C9B240064717A /* CoreText.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +73,17 @@
 		8F0F05AA169C98770060CB48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8F0F05AC169C98770060CB48 /* ChromatismTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChromatismTests.h; sourceTree = "<group>"; };
 		8F0F05AD169C98770060CB48 /* ChromatismTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChromatismTests.m; sourceTree = "<group>"; };
+		8F103C88169C9EDC000E8716 /* Menlo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Menlo.ttf; sourceTree = "<group>"; };
+		8F15D049169D8A180040A698 /* text.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = text.txt; sourceTree = "<group>"; };
+		8F503F5F169C99AE0064717A /* JLTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTokenizer.h; sourceTree = "<group>"; };
+		8F503F60169C99AE0064717A /* JLTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTokenizer.m; sourceTree = "<group>"; };
+		8F5040A3169C99C60064717A /* JLTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTextView.h; sourceTree = "<group>"; };
+		8F5040A4169C99C60064717A /* JLTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTextView.m; sourceTree = "<group>"; };
+		8F5040AA169C9A5A0064717A /* TextLineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLineCell.h; sourceTree = "<group>"; };
+		8F5040AB169C9A5A0064717A /* TextLineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLineCell.m; sourceTree = "<group>"; };
+		8F5040AF169C9AFF0064717A /* Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Helpers.h; sourceTree = "<group>"; };
+		8F5040B0169C9AFF0064717A /* Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Helpers.m; sourceTree = "<group>"; };
+		8F5040B3169C9B240064717A /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F5040B4169C9B240064717A /* CoreText.framework in Frameworks */,
 				8F0F057A169C98770060CB48 /* UIKit.framework in Frameworks */,
 				8F0F057C169C98770060CB48 /* Foundation.framework in Frameworks */,
 				8F0F057E169C98770060CB48 /* CoreGraphics.framework in Frameworks */,
@@ -108,6 +133,7 @@
 		8F0F0578169C98770060CB48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8F5040B3169C9B240064717A /* CoreText.framework */,
 				8F0F0579169C98770060CB48 /* UIKit.framework */,
 				8F0F057B169C98770060CB48 /* Foundation.framework */,
 				8F0F057D169C98770060CB48 /* CoreGraphics.framework */,
@@ -119,6 +145,7 @@
 		8F0F057F169C98770060CB48 /* Chromatism */ = {
 			isa = PBXGroup;
 			children = (
+				8F5040AE169C9A660064717A /* Syntax Highlighting */,
 				8F0F0588169C98770060CB48 /* AppDelegate.h */,
 				8F0F0589169C98770060CB48 /* AppDelegate.m */,
 				8F0F0591169C98770060CB48 /* MainStoryboard_iPhone.storyboard */,
@@ -133,6 +160,8 @@
 		8F0F0580169C98770060CB48 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8F103C88169C9EDC000E8716 /* Menlo.ttf */,
+				8F15D049169D8A180040A698 /* text.txt */,
 				8F0F0581169C98770060CB48 /* Chromatism-Info.plist */,
 				8F0F0582169C98770060CB48 /* InfoPlist.strings */,
 				8F0F0585169C98770060CB48 /* main.m */,
@@ -161,6 +190,21 @@
 				8F0F05A9169C98770060CB48 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8F5040AE169C9A660064717A /* Syntax Highlighting */ = {
+			isa = PBXGroup;
+			children = (
+				8F503F5F169C99AE0064717A /* JLTokenizer.h */,
+				8F503F60169C99AE0064717A /* JLTokenizer.m */,
+				8F5040A3169C99C60064717A /* JLTextView.h */,
+				8F5040A4169C99C60064717A /* JLTextView.m */,
+				8F5040AA169C9A5A0064717A /* TextLineCell.h */,
+				8F5040AB169C9A5A0064717A /* TextLineCell.m */,
+				8F5040AF169C9AFF0064717A /* Helpers.h */,
+				8F5040B0169C9AFF0064717A /* Helpers.m */,
+			);
+			name = "Syntax Highlighting";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,12 +278,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F15D048169D894A0040A698 /* JLTokenizer.m in Resources */,
 				8F0F0584169C98770060CB48 /* InfoPlist.strings in Resources */,
 				8F0F058C169C98770060CB48 /* Default.png in Resources */,
 				8F0F058E169C98770060CB48 /* Default@2x.png in Resources */,
 				8F0F0590169C98770060CB48 /* Default-568h@2x.png in Resources */,
 				8F0F0593169C98770060CB48 /* MainStoryboard_iPhone.storyboard in Resources */,
 				8F0F0596169C98770060CB48 /* MainStoryboard_iPad.storyboard in Resources */,
+				8F103C89169C9EDC000E8716 /* Menlo.ttf in Resources */,
+				8F15D04A169D8A180040A698 /* text.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F0F05AB169C98770060CB48 /* InfoPlist.strings in Resources */,
+				8F103C8A169C9EDC000E8716 /* Menlo.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +325,10 @@
 				8F0F0586169C98770060CB48 /* main.m in Sources */,
 				8F0F058A169C98770060CB48 /* AppDelegate.m in Sources */,
 				8F0F0599169C98770060CB48 /* ViewController.m in Sources */,
+				8F5040A1169C99AE0064717A /* JLTokenizer.m in Sources */,
+				8F5040A5169C99C60064717A /* JLTextView.m in Sources */,
+				8F5040AC169C9A5A0064717A /* TextLineCell.m in Sources */,
+				8F5040B1169C9AFF0064717A /* Helpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,6 +337,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F0F05AE169C98770060CB48 /* ChromatismTests.m in Sources */,
+				8F5040A2169C99AE0064717A /* JLTokenizer.m in Sources */,
+				8F5040A6169C99C60064717A /* JLTextView.m in Sources */,
+				8F5040AD169C9A5A0064717A /* TextLineCell.m in Sources */,
+				8F5040B2169C9AFF0064717A /* Helpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -467,6 +523,7 @@
 				8F0F05B3169C98770060CB48 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8F0F05B4169C98770060CB48 /* Build configuration list for PBXNativeTarget "ChromatismTests" */ = {
 			isa = XCConfigurationList;
@@ -475,6 +532,7 @@
 				8F0F05B6169C98770060CB48 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
