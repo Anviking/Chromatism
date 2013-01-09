@@ -6,7 +6,7 @@ This is an experimation of a Syntax Highlighting textView using a tableView and 
 
 ##This is what happens when the text editor is created:
 
-1. The text is broken up into lines by a CTTypesetter on initialization and stored in an array.
+1. The text is broken up into lines by a CTTypesetter and stored in an array.
 2. The tableview asks for the lines that should be visible.
 3. The tableView creates UITableViewCells which draw the lines.
 
