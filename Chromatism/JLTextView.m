@@ -39,14 +39,12 @@
 
 #pragma mark –
 
-//Update the syntax highlighting if the text gets changed or the scrollview gets updated
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self.tableView setContentOffset:self.contentOffset];
 }
 
-//Helper method
+// Helper method
 - (void)setRange:(NSRange)range forLinenumber:(int)i
 {
     CTLineRef line = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)([self.attributedString attributedSubstringFromRange:range]));
@@ -88,18 +86,17 @@
     
     NSInteger i = [self lineNumberAtIndex:NSMaxRange(range)];
     
-     //Fix the ranges
-     for (int j = i+1; j < self.lineStartIndexes.count; j++) {
-         _lineStartIndexes[j] = @([(NSNumber *)[self.lineStartIndexes objectAtIndex:j] intValue]+text.length);
-     }
+    //Fix the ranges
+    for (int j = i+1; j < self.lineStartIndexes.count; j++) {
+        _lineStartIndexes[j] = @([(NSNumber *)[self.lineStartIndexes objectAtIndex:j] intValue]+text.length);
+    }
     
-     //Get range of line
-     NSString *string = self.attributedString.string;
-     CTLineRef currentLine = (__bridge CTLineRef)(self.lines[i]);
-     NSRange currentLineRange = NSMakeRange([(NSNumber *)self.lineStartIndexes[i] intValue], CTLineGetStringRange(currentLine).length+text.length - range.length);
-     NSRange newWord = NSMakeRange(options.range.location, options.replacementText.length);
+    //Get range of line
+    CTLineRef currentLine = (__bridge CTLineRef)(self.lines[i]);
+    NSRange currentLineRange = NSMakeRange([(NSNumber *)self.lineStartIndexes[i] intValue], CTLineGetStringRange(currentLine).length+text.length - range.length);
+    NSRange newWord = NSMakeRange(options.range.location, options.replacementText.length);
     
-
+    
     //BACKSPACE
     if ([text isEqualToString:@""] && range.length == 1)
     {
@@ -123,19 +120,35 @@
         return YES;
         
     }
-    //CHARACTER TYPED, and the line is not overflowing
-    NSString *lineString = [string substringWithRange:currentLineRange];
-    CGSize size = [lineString sizeWithFont:self.font constrainedToSize:CGSizeMake(self.frame.size.width-2*MARGIN, 2000) lineBreakMode:NSLineBreakByWordWrapping];
-    BOOL overflowing = size.height > _lineHeight*1.5;
     
-    if (text.length == 1 && range.length == 0 && !overflowing) {
+    float maxWidth = self.frame.size.width - 2*MARGIN;
+    float currentEstimatedWidth = currentLineRange.length * _charWidth;
+    
+    // This seems to estimate the lineWidth to be too large.
+    // If the estimatedWith is clearly less than the maxWidth there is no need to involve the typesetter.
+    if (currentEstimatedWidth < maxWidth) {
         [self setRange:currentLineRange forLinenumber:i];
-        return TRUE;
+        return YES;
     }
-    NSLog(@"Generating new lines, this should be concidered as failuere. Not good. Need to improve the stuff above.");
     
-    [self generateLines];
-    [self.tableView reloadData];
+    // We're not sure, but the line may be overflowing. Use the typesetter.
+    
+    NSAttributedString *currentLineString = [self.attributedString attributedSubstringFromRange:currentLineRange];
+    CTTypesetterRef typesetter = CTTypesetterCreateWithAttributedString((__bridge CFAttributedStringRef)(currentLineString));
+    CFIndex length = CTTypesetterSuggestLineBreak(typesetter, 0, self.frame.size.width-2*MARGIN);
+    
+    if (length < currentLineRange.length) {
+        NSRange range1 = NSMakeRange(currentLineRange.location, length);
+        NSRange range2 = NSMakeRange(NSMaxRange(range1), NSMaxRange(currentLineRange)-NSMaxRange(range1));
+        
+        [self setRange:range1 forLinenumber:i];
+        [self insertLineWithRange:range2 atIndex:i+1];
+        return YES;
+    }
+    else {
+        [self setRange:currentLineRange forLinenumber:i];
+        return YES;
+    }
     
 	return YES;
 }
