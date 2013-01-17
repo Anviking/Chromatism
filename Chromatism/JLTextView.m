@@ -52,6 +52,12 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
+- (void)deleteLineWithNumber:(int)i
+{
+    [self.lines removeObjectAtIndex:i];
+    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
 - (void)insertLineWithRange:(NSRange)range atIndex:(int)i
 {
     NSAttributedString *string;
@@ -91,13 +97,13 @@
         _lineStartIndexes[j] = @([(NSNumber *)[self.lineStartIndexes objectAtIndex:j] intValue]+text.length);
     }
     
-    //Get range of line
+    // Get range of line
     CTLineRef currentLine = (__bridge CTLineRef)(self.lines[i]);
     NSRange currentLineRange = NSMakeRange([(NSNumber *)self.lineStartIndexes[i] intValue], CTLineGetStringRange(currentLine).length+text.length - range.length);
     NSRange newWord = NSMakeRange(options.range.location, options.replacementText.length);
     
     
-    //BACKSPACE
+    // BACKSPACE
     if ([text isEqualToString:@""] && range.length == 1)
     {
         if (range.location >= currentLineRange.location)
@@ -106,9 +112,12 @@
             [self setRange:currentLineRange forLinenumber:i];
             return TRUE;
         }
+        else {
+            [self deleteLineWithNumber:i];
+        }
     }
     
-    //NEWLINE
+    // NEWLINE
     if ([text isEqualToString:@"\n"]) {
         
         NSRange range1 = NSMakeRange(currentLineRange.location, NSMaxRange(newWord) - currentLineRange.location);
