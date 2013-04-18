@@ -102,7 +102,12 @@
     NSRange currentLineRange = NSMakeRange([(NSNumber *)self.lineStartIndexes[i] intValue], CTLineGetStringRange(currentLine).length+text.length - range.length);
     NSRange newWord = NSMakeRange(options.range.location, options.replacementText.length);
     
-    
+
+    if (currentLineRange.length == INT_MAX || currentLineRange.length > self.text.length)
+    {
+        // This is bad
+        @throw [NSException exceptionWithName:@"JLTextViewException" reason:@"The range of the current line is incorrect" userInfo:nil];
+    }
     // BACKSPACE
     if ([text isEqualToString:@""] && range.length == 1)
     {
@@ -113,7 +118,14 @@
             return TRUE;
         }
         else {
-            [self deleteLineWithNumber:i];
+            [self deleteLineWithNumber:i+1];
+            [self setRange:currentLineRange forLinenumber:i];
+            
+            NSRange deleteLineRange = NSMakeRange([(NSNumber *)self.lineStartIndexes[i+1] intValue], CTLineGetStringRange(currentLine).length+text.length - range.length);
+
+            
+            NSLog(@"Deleting line with number:%i",i+1);
+            NSLog(@"Length of deleted line:%i",deleteLineRange.length);
         }
     }
     
