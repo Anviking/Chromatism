@@ -63,7 +63,7 @@
     NSAttributedString *string;
     
     if (range.location != NSNotFound && range.length < self.attributedString.length) string = [self.attributedString attributedSubstringFromRange:range];
-    else [[NSException exceptionWithName:@"JLTextViewException" reason:@"A new line was created, but its assigned range is invalid" userInfo:nil] raise];
+    else @throw [NSException exceptionWithName:@"JLTextViewException" reason:@"A new line was created, but its assigned range is invalid" userInfo:nil];
     
     
     CTLineRef line = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)(string));
@@ -92,6 +92,8 @@
     
     NSInteger i = [self lineNumberAtIndex:NSMaxRange(range)];
     
+    NSLog(@"Current line: %i", i);
+    
     //Fix the ranges
     for (int j = i+1; j < self.lineStartIndexes.count; j++) {
         _lineStartIndexes[j] = @([(NSNumber *)[self.lineStartIndexes objectAtIndex:j] intValue]+text.length);
@@ -99,14 +101,27 @@
     
     // Get range of line
     CTLineRef currentLine = (__bridge CTLineRef)(self.lines[i]);
+    
+    NSAssert(currentLine != nil, @"The current line cannot be found");
+    
     NSRange currentLineRange = NSMakeRange([(NSNumber *)self.lineStartIndexes[i] intValue], CTLineGetStringRange(currentLine).length+text.length - range.length);
     NSRange newWord = NSMakeRange(options.range.location, options.replacementText.length);
     
+   /*
+    if (currentLineRange.length == 0)
+    {
+        [self deleteLineWithNumber:i];
+        return TRUE;
+    }
+    */
+    
+    NSLog(@"Length of current line #%i is: %i",i,currentLineRange.length);
+    NSLog(@"Current line contains \"%@\"", [self.text substringWithRange:currentLineRange]);
 
-    if (currentLineRange.length == INT_MAX || currentLineRange.length > self.text.length)
+    if (currentLineRange.length == INT_MAX || currentLineRange.length > self.text.length) // TODO: Cache the text.length???
     {
         // This is bad
-        @throw [NSException exceptionWithName:@"JLTextViewException" reason:@"The range of the current line is incorrect" userInfo:nil];
+        @throw [NSException exceptionWithName:@"JLTextViewException" reason:@"The range of the current line is incorrect" userInfo:@{@"Range" : NSStringFromRange(currentLineRange)}];
     }
     // BACKSPACE
     if ([text isEqualToString:@""] && range.length == 1)
@@ -118,14 +133,13 @@
             return TRUE;
         }
         else {
-            [self deleteLineWithNumber:i+1];
-            [self setRange:currentLineRange forLinenumber:i];
             
-            NSRange deleteLineRange = NSMakeRange([(NSNumber *)self.lineStartIndexes[i+1] intValue], CTLineGetStringRange(currentLine).length+text.length - range.length);
+            // TODO: Involve a typesetter here 
+            NSRange previousLineRange = NSMakeRange([(NSNumber *)self.lineStartIndexes[i-1] intValue], CTLineGetStringRange(currentLine).length+text.length - range.length);
+            NSRange mergedLineRange = NSMakeRange(previousLineRange.location, NSMaxRange(currentLineRange)-previousLineRange.location);
 
-            
-            NSLog(@"Deleting line with number:%i",i+1);
-            NSLog(@"Length of deleted line:%i",deleteLineRange.length);
+            //[self setRange:mergedLineRange forLinenumber:i-1];
+            [self deleteLineWithNumber:i];
         }
     }
     
