@@ -45,7 +45,7 @@
 }
 
 // Helper method
-- (void)setRange:(NSRange)range forLinenumber:(int)i
+- (void)setRange:(NSRange)range forLineWithIndex:(int)i
 {
     CTLineRef line = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)([self.attributedString attributedSubstringFromRange:range]));
     self.lines[i] = (__bridge id)(line);
@@ -129,7 +129,7 @@
         if (range.location >= currentLineRange.location)
         {
             // No text changes line
-            [self setRange:currentLineRange forLinenumber:i];
+            [self setRange:currentLineRange forLineWithIndex:i];
             return TRUE;
         }
         else {
