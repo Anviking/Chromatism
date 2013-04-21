@@ -149,16 +149,16 @@ NSString *const kTokenizerTypeOtherClassNames = @"other_class_names";
     return string;
 }
 
-#pragma mark - Pattern help
+#pragma mark - Pattern Helpers
+
+// TODO: Extend this
 
 - (NSString *)patternBetweenString:(NSString *)start andString:(NSString *)stop
 {
     return nil;
 }
 
-#pragma mark - Color shemes
-
-
+#pragma mark - Color Themes
 
 -(void)setTheme:(RegexHighlightViewTheme)theme
 {

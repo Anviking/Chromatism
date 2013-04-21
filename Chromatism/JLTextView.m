@@ -39,14 +39,9 @@
 }
 @synthesize attributes = _attributes, syntaxTokenizer = _syntaxTokenizer;
 
-#pragma mark –
+#pragma mark - Helpers
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    [self.tableView setContentOffset:self.contentOffset];
-}
-
-// Helper method
+// Updates the range of a given line
 - (void)setRange:(NSRange)range forLineWithIndex:(int)i
 {
     CTLineRef line = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)([self.attributedString attributedSubstringFromRange:range]));
@@ -62,6 +57,7 @@
     self.lines[index] = (__bridge id)(line);
 }
 
+// Deletes the given line
 - (void)deleteLineWithNumber:(int)i
 {
     [self.lines removeObjectAtIndex:i];
@@ -69,6 +65,7 @@
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
 }
 
+// Inserts a new line with given range and index. 
 - (void)insertLineWithRange:(NSRange)range atIndex:(int)i
 {
     NSAttributedString *string;
@@ -84,6 +81,7 @@
     [self.lineStartIndexes insertObject:@(range.location) atIndex:i];
 }
 
+// Retrieves the range of a given line
 - (NSRange)rangeOfLineWithIndex:(int)index
 {
     CTLineRef currentLine = (__bridge CTLineRef)(self.lines[index]);
@@ -91,6 +89,7 @@
     return range;
 }
 
+// Adjustes the range locations of lines after the index, as well as the index line itself, with a given offset.
 - (void)offsetLineRangeLocationsFromLine:(int)index offset:(int)offset
 {
     for (int j = index; j < self.lineStartIndexes.count; j++) {
@@ -98,6 +97,65 @@
     }
 }
 
+// Retrieves the index of the line, that contains the given character-index.
+- (NSUInteger)lineNumberAtIndex:(NSUInteger)index
+{
+    for (int i = 0; i < self.lineStartIndexes.count; i++) {
+        if ([(NSNumber *)self.lineStartIndexes[i] intValue] > index) return i-1;
+    }
+    return 0;
+}
+
+NS_INLINE NSRange NSRangeFromCFRange(CFRange range) {
+    return NSMakeRange(range.location, range.length);
+}
+
+// Helper method to release our cached Core Text framesetter and frame
+- (void)clearPreviousLayoutInformation
+{
+    if (_framesetter != NULL) {
+        CFRelease(_framesetter);
+        _framesetter = NULL;
+    }
+}
+
+// This generates the lines from scratch. Use only if necessary.
+- (void)generateLines
+{
+    if (!self.attributedString) return;
+    
+    [self clearPreviousLayoutInformation];
+    self.lines = @[].mutableCopy;
+    self.lineStartIndexes = @[].mutableCopy;
+    
+    CFAttributedStringRef ref = (CFAttributedStringRef)CFBridgingRetain(self.attributedString);
+    _framesetter = CTFramesetterCreateWithAttributedString(ref);
+    
+    // Work out the geometry
+    CGRect insetBounds = CGRectInset([self bounds], MARGIN, MARGIN);
+    CGFloat boundsWidth = CGRectGetWidth(insetBounds);
+    
+    // Calculate the lines
+    CFIndex start = 0;
+    NSUInteger length = CFAttributedStringGetLength((__bridge CFAttributedStringRef)(self.attributedString));
+    while (start < length)
+    {
+        CTTypesetterRef typesetter = CTFramesetterGetTypesetter(_framesetter);
+        CFIndex count = CTTypesetterSuggestLineBreak(typesetter, start, boundsWidth);
+        CTLineRef line = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)([self.attributedString attributedSubstringFromRange:NSMakeRange(start, count)]));
+        
+        //NSString *string = [self.text substringWithRange:NSMakeRange(start, count)];
+        //if ([string rangeOfString:@"\n"].location != NSNotFound) NSLog(@"YES");
+        //else NSLog(@"NO");
+        
+        [self.lines addObject:(__bridge id)(line)];
+        [self.lineStartIndexes addObject:@(start)];
+        
+        start += count;
+    }
+}
+
+// This is what uses the helper methods above. It makes sure that the tableView is updated when the user changes the text. It should be called from -textView:shouldChangeTextInRange:replacementText:
 - (void)updatLineWithIndex:(int)i andRecentTextChange:(TextViewChange *)options
 {
     NSString *replacementText = options.replacementText;
@@ -202,20 +260,20 @@
     }
 }
 
+#pragma mark - TextView
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    //TODO: deactivate core-text overlay upon failure
-    //TODO: Nicer designflow
-    //TODO: Handle out of bound errors
-    
-    //Basic stuff, tokenize the string
+    // Create a TextViewChange to store range and replacementText
     TextViewChange *options = [[TextViewChange alloc] init];
     options.replacementText = text;
     options.range = range;
     
+    // Keep the attributedString up to date, and tokenize it.
     [self.attributedString replaceCharactersInRange:range withAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_attributes]];
     _attributedString = [self.syntaxTokenizer tokenizeAttributedString:self.attributedString withRecentTextViewChange:options];
     
+    // Get lineIndex of the current line
     NSInteger lineIndex = [self lineNumberAtIndex:NSMaxRange(range)];
     NSInteger offset = text.length - range.length;
     
@@ -226,15 +284,16 @@
         // TODO: Handle cases where the range reaches across multiple lines
     }
 
+    // When adding or removing characters in the text, the rangeLocations of the lines must be updated
     [self offsetLineRangeLocationsFromLine:lineIndex + 1 offset:offset];
+    
+    // This handles the setting of a new range for the current line, as well as newlines and backspace
     [self updatLineWithIndex:lineIndex andRecentTextChange:options];
     
 	return YES;
 }
 
 #pragma mark - TableView
-
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -266,64 +325,6 @@
 
 #pragma mark -
 
-// Helper method to release our cached Core Text framesetter and frame
-- (void)clearPreviousLayoutInformation
-{
-    if (_framesetter != NULL) {
-        CFRelease(_framesetter);
-        _framesetter = NULL;
-    }
-}
-
-- (NSUInteger)lineNumberAtIndex:(NSUInteger)index
-{
-    for (int i = 0; i < self.lineStartIndexes.count; i++) {
-        if ([(NSNumber *)self.lineStartIndexes[i] intValue] > index) return i-1;
-    }
-    return 0;
-}
-
-NS_INLINE NSRange NSRangeFromCFRange(CFRange range) {
-    return NSMakeRange(range.location, range.length);
-}
-
-- (void)generateLines
-{
-    if (!self.attributedString) return;
-    
-    [self clearPreviousLayoutInformation];
-    self.lines = @[].mutableCopy;
-    self.lineStartIndexes = @[].mutableCopy;
-    
-    CFAttributedStringRef ref = (CFAttributedStringRef)CFBridgingRetain(self.attributedString);
-    _framesetter = CTFramesetterCreateWithAttributedString(ref);
-    
-    // Work out the geometry
-    CGRect insetBounds = CGRectInset([self bounds], MARGIN, MARGIN);
-    CGFloat boundsWidth = CGRectGetWidth(insetBounds);
-    
-    // Calculate the lines
-    CFIndex start = 0;
-    NSUInteger length = CFAttributedStringGetLength((__bridge CFAttributedStringRef)(self.attributedString));
-    while (start < length)
-    {
-        CTTypesetterRef typesetter = CTFramesetterGetTypesetter(_framesetter);
-        CFIndex count = CTTypesetterSuggestLineBreak(typesetter, start, boundsWidth);
-        CTLineRef line = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)([self.attributedString attributedSubstringFromRange:NSMakeRange(start, count)]));
-        
-        //NSString *string = [self.text substringWithRange:NSMakeRange(start, count)];
-        //if ([string rangeOfString:@"\n"].location != NSNotFound) NSLog(@"YES");
-        //else NSLog(@"NO");
-        
-        [self.lines addObject:(__bridge id)(line)];
-        [self.lineStartIndexes addObject:@(start)];
-        
-        start += count;
-    }
-}
-
-#pragma mark -
-
 - (void)layoutSubviews
 {
     // This feels a bit strange. The tableview should maybe not be a subview of the tableView so that it doesn't move?
@@ -348,8 +349,13 @@ NS_INLINE NSRange NSRangeFromCFRange(CFRange range) {
     return _tableView;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self.tableView setContentOffset:self.contentOffset];
+}
 
-#pragma mark –
+
+#pragma mark
 
 - (void)setAttributedString:(NSMutableAttributedString *)attributedString
 {
