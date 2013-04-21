@@ -34,6 +34,8 @@
     
     UIView *_debugView;
     
+    NSUInteger textLength;
+    
 }
 @synthesize attributes = _attributes, syntaxTokenizer = _syntaxTokenizer;
 
@@ -52,10 +54,19 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
+// This is probably not helpful at all
+- (void)reloadLineWithIndex:(int)index
+{
+    NSRange range = [self rangeOfLineWithIndex:index];
+    CTLineRef line = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)([self.attributedString attributedSubstringFromRange:range]));
+    self.lines[index] = (__bridge id)(line);
+}
+
 - (void)deleteLineWithNumber:(int)i
 {
     [self.lines removeObjectAtIndex:i];
-    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.lineStartIndexes removeObjectAtIndex:i];
+    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
 }
 
 - (void)insertLineWithRange:(NSRange)range atIndex:(int)i
@@ -73,86 +84,91 @@
     [self.lineStartIndexes insertObject:@(range.location) atIndex:i];
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+- (NSRange)rangeOfLineWithIndex:(int)index
 {
-    //TODO: deactivate core-text overlay upon failure
-    //TODO: Nicer designflow
-    //TODO: Handle out of bound errors
-    
-    //Basic stuff, tokenize the string
-    TextViewChange *options = [[TextViewChange alloc] init];
-    options.replacementText = text;
-    options.range = range;
-    
-    [self.attributedString replaceCharactersInRange:range withAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_attributes]];
-    
-    _attributedString = [self.syntaxTokenizer tokenizeAttributedString:self.attributedString withRecentTextViewChange:options];
-    
-    
-    
-    NSInteger i = [self lineNumberAtIndex:NSMaxRange(range)];
-    
-    NSLog(@"Current line: %i", i);
-    
-    //Fix the ranges
-    for (int j = i+1; j < self.lineStartIndexes.count; j++) {
-        _lineStartIndexes[j] = @([(NSNumber *)[self.lineStartIndexes objectAtIndex:j] intValue]+text.length);
+    CTLineRef currentLine = (__bridge CTLineRef)(self.lines[index]);
+    NSRange range = NSMakeRange([(NSNumber *)self.lineStartIndexes[index] intValue], CTLineGetStringRange(currentLine).length);
+    return range;
+}
+
+- (void)offsetLineRangeLocationsFromLine:(int)index offset:(int)offset
+{
+    for (int j = index; j < self.lineStartIndexes.count; j++) {
+        _lineStartIndexes[j] = @([(NSNumber *)[self.lineStartIndexes objectAtIndex:j] intValue] + offset);
     }
+}
+
+- (void)updatLineWithIndex:(int)i andRecentTextChange:(TextViewChange *)options
+{
+    NSString *replacementText = options.replacementText;
+    NSRange range = options.range;
     
-    // Get range of line
     CTLineRef currentLine = (__bridge CTLineRef)(self.lines[i]);
-    
+    NSInteger offset = options.replacementText.length - options.range.length;
+
     NSAssert(currentLine != nil, @"The current line cannot be found");
     
-    NSRange currentLineRange = NSMakeRange([(NSNumber *)self.lineStartIndexes[i] intValue], CTLineGetStringRange(currentLine).length+text.length - range.length);
+    NSRange currentLineRange = [self rangeOfLineWithIndex:i];
+    currentLineRange.length += offset;
+    
     NSRange newWord = NSMakeRange(options.range.location, options.replacementText.length);
     
-   /*
+    // TEST
     if (currentLineRange.length == 0)
     {
         [self deleteLineWithNumber:i];
-        return TRUE;
+        return;
     }
-    */
     
-    NSLog(@"Length of current line #%i is: %i",i,currentLineRange.length);
-    NSLog(@"Current line contains \"%@\"", [self.text substringWithRange:currentLineRange]);
-
-    if (currentLineRange.length == INT_MAX || currentLineRange.length > self.text.length) // TODO: Cache the text.length???
+    //NSLog(@"Length of current line #%i is: %i",i,currentLineRange.length);
+    //NSLog(@"Current line contains \"%@\"", [self.attributedString attributedSubstringFromRange:currentLineRange]);
+    
+    if (currentLineRange.length == INT_MAX || currentLineRange.length > textLength)
     {
-        // This is bad
         @throw [NSException exceptionWithName:@"JLTextViewException" reason:@"The range of the current line is incorrect" userInfo:@{@"Range" : NSStringFromRange(currentLineRange)}];
     }
     // BACKSPACE
-    if ([text isEqualToString:@""] && range.length == 1)
+    if ([replacementText isEqualToString:@""] && range.length == 1)
     {
         if (range.location >= currentLineRange.location)
         {
             // No text changes line
             [self setRange:currentLineRange forLineWithIndex:i];
-            return TRUE;
+            return;
         }
         else {
             
-            // TODO: Involve a typesetter here 
-            NSRange previousLineRange = NSMakeRange([(NSNumber *)self.lineStartIndexes[i-1] intValue], CTLineGetStringRange(currentLine).length+text.length - range.length);
+            // TODO: Involve a typesetter here
+            
+            CTLineRef previousLine = (__bridge CTLineRef)(self.lines[i-1]);
+            NSAssert(previousLine != nil, @"The current line cannot be found");
+            
+            NSRange previousLineRange = [self rangeOfLineWithIndex:i-1];
             NSRange mergedLineRange = NSMakeRange(previousLineRange.location, NSMaxRange(currentLineRange)-previousLineRange.location);
-
-            //[self setRange:mergedLineRange forLinenumber:i-1];
+            /*
+            NSRange nextLineRange = [self rangeOfLineWithIndex:i+1];
+            
+            NSLog(@"Merging to line %i with range: %@ text:%@", i-1, NSStringFromRange(mergedLineRange),[self.attributedString.string substringWithRange:mergedLineRange]);
+            NSLog(@"Deleting line %i with range: %@ text:%@", i, NSStringFromRange(currentLineRange), [self.attributedString.string substringWithRange:currentLineRange]);
+            NSLog(@"Next line %i with range: %@ text:%@", i+1, NSStringFromRange(nextLineRange), [self.attributedString.string substringWithRange:nextLineRange]);
+            */
+            
+            [self setRange:mergedLineRange forLineWithIndex:i-1];
             [self deleteLineWithNumber:i];
+            return;
         }
     }
     
     // NEWLINE
-    if ([text isEqualToString:@"\n"]) {
+    if ([replacementText isEqualToString:@"\n"]) {
         
         NSRange range1 = NSMakeRange(currentLineRange.location, NSMaxRange(newWord) - currentLineRange.location);
         NSRange range2 = NSMakeRange(NSMaxRange(newWord), NSMaxRange(currentLineRange)-NSMaxRange(newWord));
         
-        [self setRange:range1 forLinenumber:i];
+        [self setRange:range1 forLineWithIndex:i];
         [self insertLineWithRange:range2 atIndex:i+1];
         
-        return YES;
+        return;
         
     }
     
@@ -162,8 +178,8 @@
     // This seems to estimate the lineWidth to be too large.
     // If the estimatedWith is clearly less than the maxWidth there is no need to involve the typesetter.
     if (currentEstimatedWidth < maxWidth) {
-        [self setRange:currentLineRange forLinenumber:i];
-        return YES;
+        [self setRange:currentLineRange forLineWithIndex:i];
+        return;
     }
     
     // We're not sure, but the line may be overflowing. Use the typesetter.
@@ -176,14 +192,42 @@
         NSRange range1 = NSMakeRange(currentLineRange.location, length);
         NSRange range2 = NSMakeRange(NSMaxRange(range1), NSMaxRange(currentLineRange)-NSMaxRange(range1));
         
-        [self setRange:range1 forLinenumber:i];
+        [self setRange:range1 forLineWithIndex:i];
         [self insertLineWithRange:range2 atIndex:i+1];
-        return YES;
+        return;
     }
     else {
-        [self setRange:currentLineRange forLinenumber:i];
-        return YES;
+        [self setRange:currentLineRange forLineWithIndex:i];
+        return;
     }
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    //TODO: deactivate core-text overlay upon failure
+    //TODO: Nicer designflow
+    //TODO: Handle out of bound errors
+    
+    //Basic stuff, tokenize the string
+    TextViewChange *options = [[TextViewChange alloc] init];
+    options.replacementText = text;
+    options.range = range;
+    
+    [self.attributedString replaceCharactersInRange:range withAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_attributes]];
+    _attributedString = [self.syntaxTokenizer tokenizeAttributedString:self.attributedString withRecentTextViewChange:options];
+    
+    NSInteger lineIndex = [self lineNumberAtIndex:NSMaxRange(range)];
+    NSInteger offset = text.length - range.length;
+    
+    // Check if multiple lines are changed
+    if (range.length > 1)
+    {
+        NSInteger firstLine = [self lineNumberAtIndex:range.location];
+        // TODO: Handle cases where the range reaches across multiple lines
+    }
+
+    [self offsetLineRangeLocationsFromLine:lineIndex + 1 offset:offset];
+    [self updatLineWithIndex:lineIndex andRecentTextChange:options];
     
 	return YES;
 }
@@ -266,6 +310,11 @@ NS_INLINE NSRange NSRangeFromCFRange(CFRange range) {
         CTTypesetterRef typesetter = CTFramesetterGetTypesetter(_framesetter);
         CFIndex count = CTTypesetterSuggestLineBreak(typesetter, start, boundsWidth);
         CTLineRef line = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)([self.attributedString attributedSubstringFromRange:NSMakeRange(start, count)]));
+        
+        //NSString *string = [self.text substringWithRange:NSMakeRange(start, count)];
+        //if ([string rangeOfString:@"\n"].location != NSNotFound) NSLog(@"YES");
+        //else NSLog(@"NO");
+        
         [self.lines addObject:(__bridge id)(line)];
         [self.lineStartIndexes addObject:@(start)];
         
@@ -304,6 +353,7 @@ NS_INLINE NSRange NSRangeFromCFRange(CFRange range) {
 
 - (void)setAttributedString:(NSMutableAttributedString *)attributedString
 {
+    textLength = attributedString.length;
     _attributedString = attributedString;
     [self generateLines];
     [self.tableView reloadData];
