@@ -22,6 +22,11 @@ This is an experimation of a Syntax Highlighting textView using a tableView and 
 
 The tokenizing itself uses regex to modify an attributed string. The tokenizer tries to tokenizer as little as possible. If the user types a letter most regex patterns are going to be applied to the current line.
 
+##Performance
+Performance is the whole reason Chromatism was created.
+
+###Screenshot of Time Profiling:
+![Alt text](http://anviking.com/Time.png "Performance")
 
 
 
