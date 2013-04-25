@@ -145,7 +145,7 @@ NS_INLINE NSRange NSRangeFromCFRange(CFRange range) {
         CTLineRef line = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)([self.attributedString attributedSubstringFromRange:NSMakeRange(start, count)]));
         
         //NSString *string = [self.text substringWithRange:NSMakeRange(start, count)];
-        //if ([string rangeOfString:@"\n"].location != NSNotFound) NSLog(@"YES");
+        //NSLog(@"Generating Line:\"%@\"",string);
         //else NSLog(@"NO");
         
         [self.lines addObject:(__bridge id)(line)];
@@ -154,6 +154,67 @@ NS_INLINE NSRange NSRangeFromCFRange(CFRange range) {
         start += count;
     }
 }
+
+- (void)wordWrapLineWithIndex:(int)index
+{
+    NSRange lineRange = [self rangeOfLineWithIndex:index];
+    NSLog(@"Word wrapping on line:\"%@\"",[self.attributedString.string substringWithRange:lineRange]);
+    
+    CGRect insetBounds = CGRectInset([self bounds], MARGIN, MARGIN);
+    CGFloat boundsWidth = CGRectGetWidth(insetBounds);
+
+    // Calculate the lines
+    CFIndex start = lineRange.location;
+    CFIndex currentIndex = index;
+    NSUInteger length = CFAttributedStringGetLength((__bridge CFAttributedStringRef)(self.attributedString));
+    
+    NSLog(@"Deleting the first line with an index of %li", currentIndex);
+    [self deleteLineWithNumber:index];
+    
+    // This is very time-consuming, but reusing the old framesetter seem to cause trouble.
+    CTTypesetterRef typesetter = CTTypesetterCreateWithAttributedString((__bridge CFAttributedStringRef)(self.attributedString));
+    
+    while (start < length)
+    {
+        CFIndex count = CTTypesetterSuggestLineBreak(typesetter, start, boundsWidth);
+        NSRange range = NSMakeRange(start, count);
+
+        
+        // Check if hard or soft linebreak
+        if ([self.attributedString.string rangeOfString:@"\n" options:NSBackwardsSearch range:range].location != NSNotFound)
+        {
+            // This line contains a hard return. Stop.
+            NSLog(@"Inserting the last line to an index of :%li and string of \"%@\"", currentIndex, [self.attributedString.string substringWithRange:range]);
+            [self insertLineWithRange:range atIndex:currentIndex];
+            
+            // Avoid duplicate lines
+            int maxRange = count + start;
+            for (int i = currentIndex + 1;; i++) {
+                int location = [(NSNumber *)self.lineStartIndexes[i] intValue];
+                if (location < maxRange)
+                {
+                    NSLog(@"Deleting Line With Index: %i, because it has a start location of %i while the refreshed maxRange is %i", i, location, maxRange);
+                    [self deleteLineWithNumber:i];
+                }
+                else break;
+            }
+            return;
+            
+        }
+        else
+        {
+            // This line contains a soft return. Continue.
+            NSLog(@"Inserting line to an index of :%li with text of \"%@\"", currentIndex, [self.attributedString.string substringWithRange:range]);
+            [self insertLineWithRange:range atIndex:currentIndex];
+            
+            start += count;
+            currentIndex++;
+        }
+    }
+    
+    return;
+}
+
 
 // This is what uses the helper methods above. It makes sure that the tableView is updated when the user changes the text. It should be called from -textView:shouldChangeTextInRange:replacementText:
 - (void)updatLineWithIndex:(int)i andRecentTextChange:(TextViewChange *)options
@@ -213,6 +274,8 @@ NS_INLINE NSRange NSRangeFromCFRange(CFRange range) {
             
             [self setRange:mergedLineRange forLineWithIndex:i-1];
             [self deleteLineWithNumber:i];
+            
+            [self wordWrapLineWithIndex:i-1];
             return;
         }
     }
