@@ -3,6 +3,8 @@ Chromatism
 
 This is an experimation of a Syntax Highlighting textView using a tableView and CoreText. It consists of a UITextView with a UITableVIew overlay. The UITextView has its textColor set to `[UIColor clearColor]` and ints only purpose is to provide a textinput. Ontop of the textView there is a `UITableView`, which render the lines currently visible.
 
+## Bugs
+At this moment there are *a lot* of bugs that need fixing. This is an experiment and a work in progress. 
 
 ##This is what happens when the text editor is created:
 
