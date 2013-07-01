@@ -10,6 +10,13 @@
 
 @implementation JLTokenPattern
 
++ (instancetype)tokenPatternWithPatternAndColor:(UIColor *)color
+{
+    JLTokenPattern *tokenPattern = [JLTokenPattern new];
+    tokenPattern.color = color;
+    return tokenPattern;
+}
+
 - (void)setExpression:(NSRegularExpression *)expression
 {
     _expression = expression;

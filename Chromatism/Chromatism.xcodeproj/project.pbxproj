@@ -392,6 +392,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DSTROOT = /tmp/Chromatism.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Chromatism/Chromatism-Prefix.pch";
@@ -406,6 +407,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DSTROOT = /tmp/Chromatism.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Chromatism/Chromatism-Prefix.pch";
@@ -419,6 +421,7 @@
 		8F3AB93F1781C0BB0023348A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -432,6 +435,7 @@
 				);
 				INFOPLIST_FILE = "ChromatismTests/ChromatismTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -439,6 +443,7 @@
 		8F3AB9401781C0BB0023348A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -448,6 +453,7 @@
 				GCC_PREFIX_HEADER = "Chromatism/Chromatism-Prefix.pch";
 				INFOPLIST_FILE = "ChromatismTests/ChromatismTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;

@@ -47,7 +47,7 @@
     XCTAssertEqualObjects(subscope3.scope, scope, @"");
     XCTAssertEqualObjects(subscope4.scope, scope, @"");
     
-    XCTAssertEquals(scope.subscopes.class, [NSMutableArray class], @"subscopes should be of type NSMutableArray");
+    XCTAssertTrue([scope.subscopes isKindOfClass:[NSMutableArray class]], @"subscopes should be of type NSMutableArray");
 }
 
 @end
