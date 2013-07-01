@@ -7,7 +7,6 @@
 //
 
 #import "Helpers.h"
-#import <CoreText/CoreText.h>
 
 @implementation NSString (Helper)
 
@@ -132,6 +131,21 @@
 - (NSString *)description
 {
     return self.string;
+}
+
+@end
+
+@implementation NSDate (Helper)
+
+- (NSString *)iso8601String
+{
+    static NSDateFormatter* dateFormatter;
+    if (!dateFormatter)
+    {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
+    }
+    return [dateFormatter stringFromDate:self];
 }
 
 @end
