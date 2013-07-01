@@ -66,8 +66,10 @@
 {
     // First, remove old attributes
     [self clearColorAttributesInRange:range textStorage:storage];
-    
-    JLScope *scope = [JLScope scopeWithTextStorage:storage];
+
+    JLScope *documentScope = [JLScope scopeWithTextStorage:storage];
+    JLScope *rangeScope = [JLScope scopeWithRange:range inTextStorage:storage];
+
     NSDictionary *colors = self.colors;
  
     // Two types of comments
@@ -77,7 +79,7 @@
     // Preprocessor macros
     JLTokenPattern *preprocessor = [JLTokenPattern tokenPatternWithPattern:@"#.*+\n" andColor:colors[JLTokenTypePreprocessor]];
     
-    // Stringss
+    // Strings
     JLTokenPattern *strings = [JLTokenPattern tokenPatternWithPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andColor:colors[JLTokenTypeString]];
     
     // Numbers
@@ -103,9 +105,10 @@
     JLTokenPattern *keywords1 = [JLTokenPattern tokenPatternWithPattern:@"(?<=\\b)(?>true|false|yes|no|TRUE|FALSE|bool|BOOL|nil|id|void|self|NULL|if|else|strong|weak|nonatomic|atomic|assign|copy|typedef|enum|auto|break|case|const|char|continue|do|default|double|extern|float|for|goto|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|volatile|while|nonatomic|atomic|readonly)(\\b)" andColor:colors[JLTokenTypeKeyword]];
     JLTokenPattern *keywords2 = [JLTokenPattern tokenPatternWithPattern:@"@[a-zA-Z0-9_]+" andColor:colors[JLTokenTypeKeyword]];
     
-    scope.subscopes = @[comments1, comments2, preprocessor, strings, numbers, literals, functions, dots, methods1, methods2, appleClassNames, keywords1, keywords2];
+    documentScope.subscopes = @[comments1, rangeScope];
+    rangeScope.subscopes = @[comments2, preprocessor, strings, numbers, literals, functions, dots, methods1, methods2, appleClassNames, keywords1, keywords2];
     
-    [scope perform];
+    [documentScope perform];
 }
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;

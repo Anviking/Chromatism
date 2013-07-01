@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface JLScope : NSMutableIndexSet
+@interface JLScope : NSObject
 
 // Designated initializors
 + (instancetype)scopeWithRange:(NSRange)range inTextStorage:(NSTextStorage *)textStorage;
 + (instancetype)scopeWithTextStorage:(NSTextStorage *)textStorage;
 
+@property (nonatomic, strong) NSMutableIndexSet *set;
 /**
  *  Causes the every scope to perform cascadingly
  */
@@ -33,6 +34,12 @@
 - (void)addSubscope:(JLScope *)subscope;
 - (void)removeSubscope:(JLScope *)subscope;
 
+/**
+ *  Creates a copy of the instance, and adds 
+ */
+
+- (void)addScope:(JLScope *)scope;
+
 
 /**
  *  A weak reference to a textStorage in which the scope is operating. Will be passed down to subscopes.
@@ -45,7 +52,7 @@
 @property (nonatomic, readonly, strong) NSString *string;
 
 /**
- *  Describes wether the instance removes it's indexes from the containg scope. Default is FALSE for JLScope and TRUE for JLTokenPattern.
+ *  Describes wether the instance removes it's indexes from the containg scope. Default is YES.
  */
 @property (nonatomic, assign, getter = isOpaque) BOOL opaque;
 

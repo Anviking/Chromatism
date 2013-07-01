@@ -8,6 +8,10 @@
 
 #import "JLTokenPattern.h"
 
+@interface JLScope ()
+@property (nonatomic, readwrite, strong) NSString *string;
+@end
+
 @implementation JLTokenPattern
 
 #pragma mark - Initialization
@@ -48,14 +52,41 @@
 
 - (void)perform
 {
-    [self.scope enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
+    [self.scope.set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
         [self.expression enumerateMatchesInString:self.string options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
             [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.color range:[result range]];
-            [self addIndexesInRange:[result range]];
+            [self.set addIndexesInRange:[result range]];
         }];
     }];
     
-    [super perform];
+    NSMutableIndexSet *archivedSet = self.set.mutableCopy;
+    for (JLScope *scope in self.subscopes) {
+        
+        scope.textStorage = self.textStorage;
+        scope.string = self.string;
+        
+        [scope perform];
+    }
+    self.set = archivedSet;
+    
+    if (self.scope && self.opaque == YES)
+    {
+        [self.scope.set removeIndexes:self.set];
+    }}
+
+#pragma mark - NSCopying Protocol
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    JLTokenPattern *pattern = [[self.class allocWithZone:zone] init];
+    for (JLScope *subscope in self.subscopes) {
+        [pattern addSubscope:subscope.copy];
+    }
+    pattern.textStorage = self.textStorage;
+    pattern.expression = self.expression;
+    pattern.set = self.set.mutableCopy;
+
+    return pattern;
 }
 
 @end

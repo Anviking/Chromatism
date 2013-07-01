@@ -147,5 +147,17 @@
     }
     return [dateFormatter stringFromDate:self];
 }
+@end
+@implementation NSIndexSet (GSIndexSetAdditions)
+
+- (NSMutableIndexSet *)intersectionWithSet:(NSIndexSet *)otherSet
+{
+    NSMutableIndexSet *finalSet = [NSMutableIndexSet indexSet];
+    [self enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
+        if ([otherSet containsIndex:index]) [finalSet addIndex:index];
+    }];
+    
+    return finalSet;
+}
 
 @end

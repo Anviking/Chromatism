@@ -44,5 +44,11 @@
 
 @end
 
+@interface NSIndexSet (GSIndexSetAdditions)
+
+- (NSMutableIndexSet *)intersectionWithSet:(NSIndexSet *)otherSet;
+
+@end
+
 
 

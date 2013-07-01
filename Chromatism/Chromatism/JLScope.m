@@ -7,6 +7,11 @@
 //
 
 #import "JLScope.h"
+#import "Helpers.h"
+
+@interface JLScope ()
+@property (nonatomic, readwrite, strong) NSString *string;
+@end
 
 @implementation JLScope
 {
@@ -18,7 +23,8 @@
 
 + (instancetype)scopeWithRange:(NSRange)range inTextStorage:(NSTextStorage *)textStorage
 {
-    JLScope *scope = [[JLScope alloc] initWithIndexesInRange:range];
+    JLScope *scope = [JLScope new];
+    scope.set = [NSMutableIndexSet indexSetWithIndexesInRange:range];
     scope.textStorage = textStorage;
     return scope;
 }
@@ -27,7 +33,7 @@
 {
     self = [super init];
     if (self) {
-        self.opaque = NO;
+        self.opaque = YES;
     }
     return self;
 }
@@ -39,16 +45,25 @@
 
 - (void)perform
 {
-    if (self.scope && self.opaque == YES)
-    {
-        [self.scope removeIndexes:self];
+    if (self.scope) {
+        
+        // Intersect with scope
+        self.set = [self.set intersectionWithSet:self.scope.set];
     }
+    
+    NSMutableIndexSet *archivedSet = self.set.mutableCopy;
     for (JLScope *scope in self.subscopes) {
         
-        scope->_textStorage = self.textStorage;
-        scope->_string = self.string;
+        scope.textStorage = self.textStorage;
+        scope.string = self.string;
         
         [scope perform];
+    }
+    self.set = archivedSet;
+
+    if (self.scope && self.opaque == YES)
+    {
+        [self.scope.set removeIndexes:self.set];
     }
 }
 
@@ -90,6 +105,29 @@
 {
     _textStorage = textStorage;
     _string = textStorage.string;
+}
+
+- (NSMutableIndexSet *)set
+{
+    if (!_set) _set = [NSMutableIndexSet indexSet];
+    return _set;
+}
+
+#pragma mark - NSCopying Protocol
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    JLScope *scope = [[self.class allocWithZone:zone] init];
+    for (JLScope *subscope in self.subscopes) {
+        [scope addSubscope:subscope.copy];
+    }
+    scope.textStorage = self.textStorage;
+    return scope;
+}
+
+- (void)addScope:(JLScope *)scope
+{
+    [scope addSubscope:self.copy];
 }
 
 @end
