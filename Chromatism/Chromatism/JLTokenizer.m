@@ -38,6 +38,8 @@
 
 #import "JLTokenizer.h"
 #import "JLTextViewController.h" 
+#import "JLScope.h"
+#import "JLTokenPattern.h"
 
 
 @interface NSMutableAttributedString (Regex)
@@ -65,57 +67,45 @@
     // First, remove old attributes
     [self clearColorAttributesInRange:range textStorage:storage];
     
-    NSIndexSet *stringIndexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, storage.length)];
-    NSMutableIndexSet *set = [[NSIndexSet alloc] initWithIndexesInRange:range].mutableCopy;
-    
+    JLScope *scope = [JLScope scopeWithTextStorage:storage];
     NSDictionary *colors = self.colors;
  
-    UIColor *color = color = colors[JLTokenTypeComment];
-    NSMutableIndexSet *comments1 = [storage addRegularExpressionWithPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" withColor:color indexSet:stringIndexes andDescription:@"Comments"];
-    [set removeIndexes:comments1];
+    // Two types of comments
+    JLTokenPattern *comments1 = [JLTokenPattern tokenPatternWithPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andColor:colors[JLTokenTypeComment]];
+    JLTokenPattern *comments2 = [JLTokenPattern tokenPatternWithPattern:@"//.*+\n" andColor:colors[JLTokenTypeComment]];
     
-    NSMutableIndexSet *comments2 = [storage addRegularExpressionWithPattern:@"//.*+\n" withColor:color indexSet:set andDescription:@"Comments"];
-    [set removeIndexes:comments2];
+    // Preprocessor macros
+    JLTokenPattern *preprocessor = [JLTokenPattern tokenPatternWithPattern:@"#.*+\n" andColor:colors[JLTokenTypePreprocessor]];
     
-    color = colors[JLTokenTypePreprocessor];
-    NSMutableIndexSet *preprocessor = [storage addRegularExpressionWithPattern:@"#.*+\n" withColor:color indexSet:set andDescription:@"Preprocessor"];
-    [set removeIndexes:preprocessor];
+    // Stringss
+    JLTokenPattern *strings = [JLTokenPattern tokenPatternWithPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andColor:colors[JLTokenTypeString]];
     
-    color = colors[JLTokenTypeString];
-    NSMutableIndexSet *strings1 = [storage addRegularExpressionWithPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" withColor:color indexSet:set andDescription:@"Strings"];
-    [set removeIndexes:strings1];
-    NSMutableIndexSet *strings2 = [storage addRegularExpressionWithPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" withColor:color indexSet:preprocessor andDescription:@"Strings"];
-    [set removeIndexes:strings2];
+    // Numbers
+    JLTokenPattern *numbers = [JLTokenPattern tokenPatternWithPattern:@"(?<=\\s)\\d+" andColor:colors[JLTokenTypeNumber]];
     
-    color = colors[JLTokenTypeNumber];
-    [storage addRegularExpressionWithPattern:@"(?<=\\s)\\d+" withColor:color indexSet:set  andDescription:@"Numbers"];
+    // New literals, for example @[]
+    JLTokenPattern *literals = [JLTokenPattern tokenPatternWithPattern:@"@\\s*[\(|\{|\[]" andColor:colors[JLTokenTypeNumber]]; // New literals
     
-    [storage addRegularExpressionWithPattern:@"@\\s*[\(|\{|\[]" withColor:color indexSet:set andDescription:@"New literals"];
+    // C function names
+    JLTokenPattern *functions = [JLTokenPattern tokenPatternWithPattern:@"\\w+\\s*(?>\\(.*\\)" andColor:colors[JLTokenTypeOtherMethodNames]];
     
-    //C – functions and similiar
-    color = colors[JLTokenTypeOtherMethodNames];
-    [storage addRegularExpressionWithPattern:@"\\w+\\s*(?>\\(.*\\)" withColor:color group:1 indexSet:set andDescription:@"C function names"];
+    // Dot notation
+    JLTokenPattern *dots = [JLTokenPattern tokenPatternWithPattern:@"\\.(\\w+)" andColor:colors[JLTokenTypeOtherMethodNames]];
     
-    //Dot notation
-    [storage addRegularExpressionWithPattern:@"\\.(\\w+)" withColor:color group:1 indexSet:set andDescription:@"Dot notation"];
+    // Method Calls
+    JLTokenPattern *methods1 = [JLTokenPattern tokenPatternWithPattern:@"\\[\\w+\\s+(\\w+)\\]" andColor:colors[JLTokenTypeOtherMethodNames]];
     
-    //Method calls
-    [storage addRegularExpressionWithPattern:@"\\[\\w+\\s+(\\w+)\\]" withColor:color group:1 indexSet:set andDescription:@"Method calls"];
-    [storage addRegularExpressionWithPattern:@"(?<=\\w+):\\s*[^\\s;\\]]+" withColor:color group:1 indexSet:set andDescription:@"Method calls parts"];
+    // Method call parts
+    JLTokenPattern *methods2 = [JLTokenPattern tokenPatternWithPattern:@"(?<=\\w+):\\s*[^\\s;\\]]+" andColor:colors[JLTokenTypeOtherMethodNames]];
     
-    color = colors[JLTokenTypeOtherClassNames];
-    [storage addRegularExpressionWithPattern:@"(\\b(?>NS|UI))\\w+\\b" withColor:color indexSet:set andDescription:@"UIKit and NS"];
+    // NS and UI prefixes words
+    JLTokenPattern *appleClassNames = [JLTokenPattern tokenPatternWithPattern:@"(\\b(?>NS|UI))\\w+\\b" andColor:colors[JLTokenTypeOtherClassNames]];
+    JLTokenPattern *keywords1 = [JLTokenPattern tokenPatternWithPattern:@"(?<=\\b)(?>true|false|yes|no|TRUE|FALSE|bool|BOOL|nil|id|void|self|NULL|if|else|strong|weak|nonatomic|atomic|assign|copy|typedef|enum|auto|break|case|const|char|continue|do|default|double|extern|float|for|goto|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|volatile|while|nonatomic|atomic|readonly)(\\b)" andColor:colors[JLTokenTypeKeyword]];
+    JLTokenPattern *keywords2 = [JLTokenPattern tokenPatternWithPattern:@"@[a-zA-Z0-9_]+" andColor:colors[JLTokenTypeKeyword]];
     
-    color = colors[JLTokenTypeKeyword];
-    [storage addRegularExpressionWithPattern:@"(?<=\\b)(?>true|false|yes|no|TRUE|FALSE|bool|BOOL|nil|id|void|self|NULL|if|else|strong|weak|nonatomic|atomic|assign|copy|typedef|enum|auto|break|case|const|char|continue|do|default|double|extern|float|for|goto|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|volatile|while|nonatomic|atomic|readonly)(\\b)" withColor:color indexSet:set andDescription:@"Keywords"];
+    scope.subscopes = @[comments1, comments2, preprocessor, strings, numbers, literals, functions, dots, methods1, methods2, appleClassNames, keywords1, keywords2];
     
-    
-    [storage addRegularExpressionWithPattern:@"@[a-zA-Z0-9_]+" withColor:color indexSet:set andDescription:@"@things"];
-    
-
-    
-
-    
+    [scope perform];
 }
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;

@@ -10,7 +10,7 @@
 
 @interface JLTokenPattern : JLScope
 
-+ (instancetype)tokenPatternWithPatternAndColor:(UIColor *)color;
++ (instancetype)tokenPatternWithPattern:(NSString *)pattern andColor:(UIColor *)color;
 
 // The color
 @property (nonatomic, strong) UIColor *color;
@@ -19,7 +19,9 @@
 @property (nonatomic, strong) NSRegularExpression *expression;
 @property (nonatomic, copy) NSString *pattern;
 
+
 /// Describes if the pattern search for matches in indexes marked as unclear. If false, the search will happen in the scopes clearIndexes. If true, the serach will happen in the scope itself. Default: FALSE.
-@property (nonatomic, assign) BOOL dirtySearch;
+//@property (nonatomic, assign) BOOL dirtySearch;
+// NOT IMPLEMENTED
 
 @end

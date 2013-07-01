@@ -40,12 +40,13 @@
 @property (nonatomic, weak) NSTextStorage *textStorage;
 
 /**
- *  Describes wether the pattern matches will remove indexes from the clearIndexes property. Default is FALSE for JLScope and TRUE for JLTokenPattern.
+ *  A shared instance of the textStorage's string.
+ */
+@property (nonatomic, readonly, strong) NSString *string;
+
+/**
+ *  Describes wether the instance removes it's indexes from the containg scope. Default is FALSE for JLScope and TRUE for JLTokenPattern.
  */
 @property (nonatomic, assign, getter = isOpaque) BOOL opaque;
 
-/**
- *  Indexes where there are no opaque subscopes.
- */
-@property (nonatomic, strong) NSMutableIndexSet *clearIndexes;
 @end

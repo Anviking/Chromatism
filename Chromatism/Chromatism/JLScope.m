@@ -14,11 +14,22 @@
 }
 @synthesize subscopes = _subscopes;
 
+#pragma mark - Initialization
+
 + (instancetype)scopeWithRange:(NSRange)range inTextStorage:(NSTextStorage *)textStorage
 {
     JLScope *scope = [[JLScope alloc] initWithIndexesInRange:range];
     scope.textStorage = textStorage;
     return scope;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.opaque = NO;
+    }
+    return self;
 }
 
 + (instancetype)scopeWithTextStorage:(NSTextStorage *)textStorage
@@ -28,7 +39,15 @@
 
 - (void)perform
 {
+    if (self.scope && self.opaque == YES)
+    {
+        [self.scope removeIndexes:self];
+    }
     for (JLScope *scope in self.subscopes) {
+        
+        scope->_textStorage = self.textStorage;
+        scope->_string = self.string;
+        
         [scope perform];
     }
 }
@@ -65,6 +84,12 @@
 - (void)removeSubscope:(JLScope *)subscope
 {
     [(NSMutableArray *)self.subscopes removeObject:subscope];
+}
+
+- (void)setTextStorage:(NSTextStorage *)textStorage
+{
+    _textStorage = textStorage;
+    _string = textStorage.string;
 }
 
 @end

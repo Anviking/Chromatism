@@ -10,12 +10,27 @@
 
 @implementation JLTokenPattern
 
-+ (instancetype)tokenPatternWithPatternAndColor:(UIColor *)color
+#pragma mark - Initialization
+
++ (instancetype)tokenPatternWithPattern:(NSString *)pattern andColor:(UIColor *)color
 {
     JLTokenPattern *tokenPattern = [JLTokenPattern new];
     tokenPattern.color = color;
+    tokenPattern.pattern = pattern;
     return tokenPattern;
 }
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+//        self.dirtySearch = NO;
+        self.opaque = YES;
+    }
+    return self;
+}
+
+#pragma mark - Properties
 
 - (void)setExpression:(NSRegularExpression *)expression
 {
@@ -33,7 +48,14 @@
 
 - (void)perform
 {
+    [self.scope enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
+        [self.expression enumerateMatchesInString:self.string options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+            [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.color range:[result range]];
+            [self addIndexesInRange:[result range]];
+        }];
+    }];
     
+    [super perform];
 }
 
 @end

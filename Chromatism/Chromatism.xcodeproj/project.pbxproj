@@ -134,6 +134,8 @@
 				8F3AB9221781C0BA0023348A /* Chromatism.m */,
 				8F3AB94D1781C1250023348A /* Helpers.h */,
 				8F3AB94E1781C1250023348A /* Helpers.m */,
+				8F3AB9571781C1250023348A /* JLTokenPattern.h */,
+				8F3AB9581781C1250023348A /* JLTokenPattern.m */,
 				8F3AB94F1781C1250023348A /* JLScope.h */,
 				8F3AB9501781C1250023348A /* JLScope.m */,
 				8F3AB9511781C1250023348A /* JLTextStorage.h */,
@@ -142,8 +144,6 @@
 				8F3AB9541781C1250023348A /* JLTextViewController.m */,
 				8F3AB9551781C1250023348A /* JLTokenizer.h */,
 				8F3AB9561781C1250023348A /* JLTokenizer.m */,
-				8F3AB9571781C1250023348A /* JLTokenPattern.h */,
-				8F3AB9581781C1250023348A /* JLTokenPattern.m */,
 				8F3AB91E1781C0BA0023348A /* Supporting Files */,
 			);
 			path = Chromatism;
