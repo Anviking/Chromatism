@@ -81,6 +81,7 @@
     
     // Strings
     JLTokenPattern *strings = [JLTokenPattern tokenPatternWithPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andColor:colors[JLTokenTypeString]];
+    [strings addScope:preprocessor];
     
     // Numbers
     JLTokenPattern *numbers = [JLTokenPattern tokenPatternWithPattern:@"(?<=\\s)\\d+" andColor:colors[JLTokenTypeNumber]];
@@ -108,7 +109,9 @@
     documentScope.subscopes = @[comments1, rangeScope];
     rangeScope.subscopes = @[comments2, preprocessor, strings, numbers, literals, functions, dots, methods1, methods2, appleClassNames, keywords1, keywords2];
     
+    NSDate *date = [NSDate date];
     [documentScope perform];
+    NSLog(@"Chromatism done tokenizing with time of %fms",ABS([date timeIntervalSinceNow]*1000));
 }
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;

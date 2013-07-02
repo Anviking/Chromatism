@@ -93,7 +93,8 @@
 
 - (void)addSubscope:(JLScope *)subscope
 {
-    subscope.scope = self;
+    [(NSMutableArray *)self.subscopes addObject:subscope];
+    subscope->_scope = self;
 }
 
 - (void)removeSubscope:(JLScope *)subscope

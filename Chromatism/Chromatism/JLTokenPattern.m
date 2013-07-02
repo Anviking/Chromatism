@@ -85,6 +85,7 @@
     pattern.textStorage = self.textStorage;
     pattern.expression = self.expression;
     pattern.set = self.set.mutableCopy;
+    pattern.color = self.color;
 
     return pattern;
 }
