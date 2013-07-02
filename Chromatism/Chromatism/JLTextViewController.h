@@ -32,7 +32,7 @@ FOUNDATION_EXPORT NSString *const JLTokenTypeOtherMethodNames;
 @interface JLTextViewController : UIViewController <UITextViewDelegate>
 
 @property (nonatomic, strong) NSDictionary *defaultAttributes;
-@property (nonatomic, strong) UITextView *textView;
+@property (nonatomic, strong) IBOutlet UITextView *textView;
 @property (nonatomic, strong) JLTokenizer *tokenizer;
 
 @property (nonatomic, strong) UIColor *highlightColor;

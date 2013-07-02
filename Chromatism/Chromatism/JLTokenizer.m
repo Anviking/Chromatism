@@ -41,21 +41,6 @@
 #import "JLScope.h"
 #import "JLTokenPattern.h"
 
-
-@interface NSMutableAttributedString (Regex)
-- (void)addRanges:(NSArray *)array withColor:(UIColor *)color;
-- (void)addRanges:(NSArray *)array withAttributes:(NSDictionary *)colors;
-- (NSArray *)allMatchesOfPattern:(NSString *)pattern inString:(NSString *)string;
-
-- (NSMutableIndexSet *)addRegularExpressionWithPattern:(NSString *)pattern withColor:(UIColor *)color group:(int)index indexSet:(NSIndexSet *)indexSet andDescription:(NSString *)description;
-- (NSMutableIndexSet *)addRegularExpressionWithPattern:(NSString *)pattern withColor:(UIColor *)color indexSet:(NSIndexSet *)indexSet andDescription:(NSString *)description;
-
-- (void)addRegularExpressionWithPattern:(NSString *)pattern withColor:(UIColor *)color andDescription:(NSString *)description;
-- (void)addRegularExpressionWithPattern:(NSString *)pattern withColor:(UIColor *)color range:(NSRange)range andDescription:(NSString *)description;
-- (void)addRegularExpressionWithPattern:(NSString *)pattern withColor:(UIColor *)color group:(int)index range:(NSRange)range andDescription:(NSString *)description;
-- (void)removeAttribute:(NSString *)name withValue:(id)compareValue range:(NSRange)range;
-@end
-
 @interface JLTokenizer ()
 
 @end
@@ -64,6 +49,9 @@
 
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
 {
+    // Measure performance
+    NSDate *date = [NSDate date];
+    
     // First, remove old attributes
     [self clearColorAttributesInRange:range textStorage:storage];
 
@@ -91,15 +79,19 @@
     
     // C function names
     JLTokenPattern *functions = [JLTokenPattern tokenPatternWithPattern:@"\\w+\\s*(?>\\(.*\\)" andColor:colors[JLTokenTypeOtherMethodNames]];
+    functions.captureGroup = 1;
     
     // Dot notation
     JLTokenPattern *dots = [JLTokenPattern tokenPatternWithPattern:@"\\.(\\w+)" andColor:colors[JLTokenTypeOtherMethodNames]];
+    dots.captureGroup = 1;
     
     // Method Calls
     JLTokenPattern *methods1 = [JLTokenPattern tokenPatternWithPattern:@"\\[\\w+\\s+(\\w+)\\]" andColor:colors[JLTokenTypeOtherMethodNames]];
+    methods1.captureGroup = 1;
     
     // Method call parts
     JLTokenPattern *methods2 = [JLTokenPattern tokenPatternWithPattern:@"(?<=\\w+):\\s*[^\\s;\\]]+" andColor:colors[JLTokenTypeOtherMethodNames]];
+    methods2.captureGroup = 1;
     
     // NS and UI prefixes words
     JLTokenPattern *appleClassNames = [JLTokenPattern tokenPatternWithPattern:@"(\\b(?>NS|UI))\\w+\\b" andColor:colors[JLTokenTypeOtherClassNames]];
@@ -109,130 +101,14 @@
     documentScope.subscopes = @[comments1, rangeScope];
     rangeScope.subscopes = @[comments2, preprocessor, strings, numbers, literals, functions, dots, methods1, methods2, appleClassNames, keywords1, keywords2];
     
-    NSDate *date = [NSDate date];
     [documentScope perform];
     NSLog(@"Chromatism done tokenizing with time of %fms",ABS([date timeIntervalSinceNow]*1000));
 }
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 {
-    //Clear the comments to later be rebuilt
-    UIColor *compareColor = self.colors[JLTokenTypeComment];
-    [storage removeAttribute:NSForegroundColorAttributeName withValue:compareColor range:range];
-    
     [storage removeAttribute:NSForegroundColorAttributeName range:range];
     [storage addAttribute:NSForegroundColorAttributeName value:self.colors[JLTokenTypeText] range:range];
 }
-
-#pragma mark - Pattern Helpers
-
-// TODO: Extend this
-
-- (NSString *)patternBetweenString:(NSString *)start andString:(NSString *)stop
-{
-    return nil;
-}
-
-
-@end
-
-#pragma mark - Regex Helpers
-
-
-@implementation NSTextStorage (Regex)
-
-- (void)removeAttribute:(NSString *)name withValue:(id)compareValue range:(NSRange)range
-{
-    [self enumerateAttribute:NSForegroundColorAttributeName inRange:range options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {
-        if ([value isEqual:compareValue]) {
-            [self removeAttribute:NSForegroundColorAttributeName range:range];
-        }
-        
-    }];
-}
-
-
-- (void)addRanges:(NSArray *)array withColor:(UIColor *)color
-{
-    for (NSValue *value in array) {
-        NSAssert(value.rangeValue.location < self.string.length, @"Range should be within the string");
-        [self removeAttribute:NSForegroundColorAttributeName range:value.rangeValue];
-        [self addAttribute:NSForegroundColorAttributeName value:color range:value.rangeValue];
-    }
-}
-
-- (void)addRanges:(NSArray *)array withAttributes:(NSDictionary *)dic
-{
-    for (NSValue *value in array) {
-        if (value.rangeValue.location + value.rangeValue.length <= self.length){
-            NSAssert(value.rangeValue.location < self.string.length, @"Range should be within the string");
-            [self removeAttribute:NSForegroundColorAttributeName range:value.rangeValue];
-            [self addAttributes:dic range:value.rangeValue];
-        }
-    }
-}
-
-- (NSArray *)allMatchesOfPattern:(NSString *)pattern inString:(NSString *)string
-{
-    NSArray *mathces = [[NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil] matchesInString:string options:0 range:NSMakeRange(0, string.length)];
-    
-    return mathces;
-}
-
-- (void)addRegularExpressionWithPattern:(NSString *)pattern withColor:(UIColor *)color group:(int)index range:(NSRange)range andDescription:(NSString *)description
-{
-    NSString *string = self.string;
-    
-    
-    NSRegularExpression* expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
-    
-    [expression enumerateMatchesInString:string options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-        NSAssert(range.location < string.length, @"Range should be within the string");
-        [self addAttribute:NSForegroundColorAttributeName value:color range:[result rangeAtIndex:index]];
-    }];
-}
-
-// indexSet is a indexset containing the available indexes for tokenizing
-- (NSMutableIndexSet *)addRegularExpressionWithPattern:(NSString *)pattern withColor:(UIColor *)color indexSet:(NSMutableIndexSet **)indexSet andDescription:(NSString *)description
-{
-    __block NSMutableIndexSet *restultSet = [NSIndexSet indexSet].mutableCopy;
-    NSRegularExpression* expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
-    __weak typeof(self) _self = self;
-
-    [*indexSet enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
-        [expression enumerateMatchesInString:self.string options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-            NSAssert(range.location < self.length, @"Range should be within the string");
-            [_self addAttribute:NSForegroundColorAttributeName value:color range:[result range]];
-            [restultSet addIndexesInRange:[result range]];
-        }];
-    }];
-    
-    [*indexSet removeIndexes:restultSet];
-    return restultSet;
-}
-
-- (NSMutableIndexSet *)addRegularExpressionWithPattern:(NSString *)pattern withColor:(UIColor *)color group:(int)index indexSet:(NSMutableIndexSet **)indexSet andDescription:(NSString *)description
-{
-    NSString *string = self.string;
-    __block NSMutableIndexSet *restultSet = [NSIndexSet indexSet].mutableCopy;
-    __weak typeof(self) _self = self;
-    
-    NSRegularExpression* expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
-    [*indexSet enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
-        [expression enumerateMatchesInString:string options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-            NSAssert(range.location < string.length, @"Range should be within the string");
-            [_self addAttribute:NSForegroundColorAttributeName value:color range:[result rangeAtIndex:index]];
-            [restultSet addIndexesInRange:[result rangeAtIndex:index]];
-        }];
-    }];
-    [*indexSet removeIndexes:restultSet];
-    return restultSet;
-}
-
-- (void)addRegularExpressionWithPattern:(NSString *)pattern withColor:(UIColor *)color andDescription:(NSString *)description
-{
-    [self addRegularExpressionWithPattern:pattern withColor:color range:NSMakeRange(0, self.length) andDescription:description];
-}
-
 
 @end

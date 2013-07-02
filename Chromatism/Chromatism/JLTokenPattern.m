@@ -30,6 +30,7 @@
     if (self) {
 //        self.dirtySearch = NO;
         self.opaque = YES;
+        self.captureGroup = 0;
     }
     return self;
 }
@@ -54,8 +55,8 @@
 {
     [self.scope.set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
         [self.expression enumerateMatchesInString:self.string options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-            [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.color range:[result range]];
-            [self.set addIndexesInRange:[result range]];
+            [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.color range:[result rangeAtIndex:self.captureGroup]];
+            [self.set addIndexesInRange:[result rangeAtIndex:self.captureGroup]];
         }];
     }];
     
