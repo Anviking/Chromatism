@@ -48,13 +48,13 @@
 {
     _pattern = pattern;
     
-    _expression = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+    _expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
 }
 
 - (void)perform
 {
     [self.scope.set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
-        [self.expression enumerateMatchesInString:self.string options:0 range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        [self.expression enumerateMatchesInString:self.string options:self.matchingOptions range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
             [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.color range:[result rangeAtIndex:self.captureGroup]];
             [self.set addIndexesInRange:[result rangeAtIndex:self.captureGroup]];
         }];

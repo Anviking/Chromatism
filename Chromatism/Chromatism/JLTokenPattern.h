@@ -19,6 +19,8 @@
 @property (nonatomic, strong) NSRegularExpression *expression;
 @property (nonatomic, copy) NSString *pattern;
 
+@property (nonatomic, assign) NSMatchingOptions matchingOptions;
+
 /**
  *  The index of the capture group which will be used as result from the regex search. Default is 0.
  */
