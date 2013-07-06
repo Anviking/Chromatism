@@ -13,5 +13,6 @@
 @class TextViewChange, JLTextView;
 @interface JLTokenizer : NSObject <JLTextStorageTokenizer>
 
+- (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 @property (nonatomic, strong) NSDictionary *colors;
 @end
