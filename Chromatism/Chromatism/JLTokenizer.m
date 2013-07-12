@@ -62,10 +62,10 @@
  
     // Two types of comments
     JLTokenPattern *comments1 = [JLTokenPattern tokenPatternWithPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andColor:colors[JLTokenTypeComment]];
-    JLTokenPattern *comments2 = [JLTokenPattern tokenPatternWithPattern:@"//.*+\n" andColor:colors[JLTokenTypeComment]];
+    JLTokenPattern *comments2 = [JLTokenPattern tokenPatternWithPattern:@"//.*+$" andColor:colors[JLTokenTypeComment]];
     
     // Preprocessor macros
-    JLTokenPattern *preprocessor = [JLTokenPattern tokenPatternWithPattern:@"#.*+\n" andColor:colors[JLTokenTypePreprocessor]];
+    JLTokenPattern *preprocessor = [JLTokenPattern tokenPatternWithPattern:@"#.*+$" andColor:colors[JLTokenTypePreprocessor]];
     
     // Strings
     JLTokenPattern *strings = [JLTokenPattern tokenPatternWithPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andColor:colors[JLTokenTypeString]];

@@ -1,3 +1,28 @@
 {
-    "language" : "objective-c"
+    "import" : "c", // imports c.json
+    "language" : "objective-c", //
+    "filetypes" : ["m" "h"],
+    "patterns" : [
+                  {
+                  "name" : "blockComments",
+                  "color" : "JLTokenTypeComment",
+                  "regex" : "/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/",
+                  },
+                  {
+                  "name" : "lineComments",
+                  "color" : "JLTokenTypeComment",
+                  "regex" : "//.*+\n",
+                  },
+                  {
+                  "name" : "block comments",
+                  "color" : "JLTokenTypeComment",
+                  "regex" : "/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/",
+                  },
+                  {
+                  "name" : "block comments",
+                  "color" : "JLTokenTypeComment",
+                  "regex" : "/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/",
+                  },
+                  ],
+    
 }

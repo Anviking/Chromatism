@@ -12,9 +12,6 @@
 
 + (instancetype)tokenPatternWithPattern:(NSString *)pattern andColor:(UIColor *)color;
 
-/// The color
-@property (nonatomic, strong) UIColor *color;
-
 // Setting either expression or pattern causes the other one to update.
 @property (nonatomic, strong) NSRegularExpression *expression;
 @property (nonatomic, copy) NSString *pattern;

@@ -20,6 +20,9 @@
  */
 - (void)perform;
 
+/// The color
+@property (nonatomic, strong) UIColor *color;
+
 /**
  *  Array of nested JLScopes and JLTokenPatterns. Reverse realationship to scope, setting one causes the other to update. No not mutate. 
  */
