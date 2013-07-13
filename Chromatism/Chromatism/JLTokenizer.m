@@ -105,6 +105,13 @@
     NSLog(@"Chromatism done tokenizing with time of %fms",ABS([date timeIntervalSinceNow]*1000));
 }
 
+- (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
+{
+    NSMutableAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:attributes].mutableCopy;
+    [self tokenizeTextStorage:(NSTextStorage *)attributedString withRange:NSMakeRange(0, string.length)];
+    return attributedString;
+}
+
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 {
     [storage removeAttribute:NSForegroundColorAttributeName range:range];
