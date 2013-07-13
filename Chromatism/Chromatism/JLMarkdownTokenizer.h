@@ -10,4 +10,8 @@
 
 @interface JLMarkdownTokenizer : JLTokenizer
 
+@property (nonatomic, strong) UIFont *font;
+@property (nonatomic, strong) UIFont *boldFont;
+@property (nonatomic, strong) UIFont *italicFont;
+@property (nonatomic, strong) UIFont *monospaceFont;
 @end

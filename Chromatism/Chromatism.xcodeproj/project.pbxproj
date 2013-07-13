@@ -30,8 +30,12 @@
 		8F54EF221781CD87008C1609 /* JLTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9541781C1250023348A /* JLTextViewController.m */; };
 		8F54EF231781CD87008C1609 /* JLTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9561781C1250023348A /* JLTokenizer.m */; };
 		8F54EF241781CD87008C1609 /* JLTokenPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9581781C1250023348A /* JLTokenPattern.m */; };
-		8FA091A41791E62600179325 /* JLMarkdownTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FA091A21791E62600179325 /* JLMarkdownTokenizer.h */; };
+		8FA091A41791E62600179325 /* JLMarkdownTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FA091A21791E62600179325 /* JLMarkdownTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8FA091A51791E62600179325 /* JLMarkdownTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA091A31791E62600179325 /* JLMarkdownTokenizer.m */; };
+		8FA091A81791E99900179325 /* NSMutableAttributedString+Mush.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FA091A61791E99900179325 /* NSMutableAttributedString+Mush.h */; };
+		8FA091A91791E99900179325 /* NSMutableAttributedString+Mush.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA091A71791E99900179325 /* NSMutableAttributedString+Mush.m */; };
+		8FA091AD17921A4300179325 /* JLCodeAttatchment.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FA091AB17921A4300179325 /* JLCodeAttatchment.h */; };
+		8FA091AE17921A4300179325 /* JLCodeAttatchment.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA091AC17921A4300179325 /* JLCodeAttatchment.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +78,11 @@
 		8F3AB9611781C26A0023348A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8FA091A21791E62600179325 /* JLMarkdownTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLMarkdownTokenizer.h; sourceTree = "<group>"; };
 		8FA091A31791E62600179325 /* JLMarkdownTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLMarkdownTokenizer.m; sourceTree = "<group>"; };
+		8FA091A61791E99900179325 /* NSMutableAttributedString+Mush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Mush.h"; sourceTree = "<group>"; };
+		8FA091A71791E99900179325 /* NSMutableAttributedString+Mush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Mush.m"; sourceTree = "<group>"; };
+		8FA091AA17921A1600179325 /* code.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = code.png; sourceTree = "<group>"; };
+		8FA091AB17921A4300179325 /* JLCodeAttatchment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLCodeAttatchment.h; sourceTree = "<group>"; };
+		8FA091AC17921A4300179325 /* JLCodeAttatchment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLCodeAttatchment.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +146,8 @@
 				8F3AB9561781C1250023348A /* JLTokenizer.m */,
 				8FA091A21791E62600179325 /* JLMarkdownTokenizer.h */,
 				8FA091A31791E62600179325 /* JLMarkdownTokenizer.m */,
+				8FA091A61791E99900179325 /* NSMutableAttributedString+Mush.h */,
+				8FA091A71791E99900179325 /* NSMutableAttributedString+Mush.m */,
 				8F3AB94A1781C1180023348A /* CHLayoutManager.h */,
 				8F3AB94B1781C1180023348A /* CHLayoutManager.m */,
 				8F3AB9201781C0BA0023348A /* Chromatism.h */,
@@ -151,6 +162,8 @@
 				8F3AB9521781C1250023348A /* JLTextStorage.m */,
 				8F3AB9531781C1250023348A /* JLTextViewController.h */,
 				8F3AB9541781C1250023348A /* JLTextViewController.m */,
+				8FA091AB17921A4300179325 /* JLCodeAttatchment.h */,
+				8FA091AC17921A4300179325 /* JLCodeAttatchment.m */,
 				8F3AB91E1781C0BA0023348A /* Supporting Files */,
 			);
 			path = Chromatism;
@@ -159,6 +172,7 @@
 		8F3AB91E1781C0BA0023348A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8FA091AA17921A1600179325 /* code.png */,
 				8F3AB95F1781C12F0023348A /* test.json */,
 				8F3AB91F1781C0BA0023348A /* Chromatism-Prefix.pch */,
 			);
@@ -197,6 +211,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FA091A81791E99900179325 /* NSMutableAttributedString+Mush.h in Headers */,
 				8F54EF0E1781C776008C1609 /* Chromatism.h in Headers */,
 				8F54EF0F1781C788008C1609 /* CHLayoutManager.h in Headers */,
 				8F54EF101781C788008C1609 /* Helpers.h in Headers */,
@@ -206,6 +221,7 @@
 				8F54EF141781C788008C1609 /* JLTokenizer.h in Headers */,
 				8FA091A41791E62600179325 /* JLMarkdownTokenizer.h in Headers */,
 				8F54EF151781C788008C1609 /* JLTokenPattern.h in Headers */,
+				8FA091AD17921A4300179325 /* JLCodeAttatchment.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,6 +306,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FA091A91791E99900179325 /* NSMutableAttributedString+Mush.m in Sources */,
+				8FA091AE17921A4300179325 /* JLCodeAttatchment.m in Sources */,
 				8F54EF241781CD87008C1609 /* JLTokenPattern.m in Sources */,
 				8F54EF201781CD87008C1609 /* JLScope.m in Sources */,
 				8FA091A51791E62600179325 /* JLMarkdownTokenizer.m in Sources */,

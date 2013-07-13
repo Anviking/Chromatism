@@ -12,6 +12,7 @@
 #import "JLTextViewController.h"
 #import "JLTokenPattern.h"
 #import "JLTextStorage.h"
+#import "JLMarkdownTokenizer.h"
 
 @interface Chromatism : NSObject
 
