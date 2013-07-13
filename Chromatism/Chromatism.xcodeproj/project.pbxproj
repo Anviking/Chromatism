@@ -30,6 +30,8 @@
 		8F54EF221781CD87008C1609 /* JLTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9541781C1250023348A /* JLTextViewController.m */; };
 		8F54EF231781CD87008C1609 /* JLTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9561781C1250023348A /* JLTokenizer.m */; };
 		8F54EF241781CD87008C1609 /* JLTokenPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9581781C1250023348A /* JLTokenPattern.m */; };
+		8FA0919F1791E2CF00179325 /* MGMushParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FA0919D1791E2CF00179325 /* MGMushParser.h */; };
+		8FA091A01791E2CF00179325 /* MGMushParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA0919E1791E2CF00179325 /* MGMushParser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +72,8 @@
 		8F3AB9581781C1250023348A /* JLTokenPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTokenPattern.m; sourceTree = "<group>"; };
 		8F3AB95F1781C12F0023348A /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		8F3AB9611781C26A0023348A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		8FA0919D1791E2CF00179325 /* MGMushParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MGMushParser.h; path = Chromatism/MGMushParser.h; sourceTree = "<group>"; };
+		8FA0919E1791E2CF00179325 /* MGMushParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MGMushParser.m; path = Chromatism/MGMushParser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,7 @@
 		8F3AB90F1781C0BA0023348A = {
 			isa = PBXGroup;
 			children = (
+				8FA091A11791E2D900179325 /* External */,
 				8F3AB91D1781C0BA0023348A /* Chromatism */,
 				8F3AB9311781C0BB0023348A /* ChromatismTests */,
 				8F3AB91A1781C0BA0023348A /* Frameworks */,
@@ -176,6 +181,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		8FA091A11791E2D900179325 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				8FA0919D1791E2CF00179325 /* MGMushParser.h */,
+				8FA0919E1791E2CF00179325 /* MGMushParser.m */,
+			);
+			name = External;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -190,6 +204,7 @@
 				8F54EF121781C788008C1609 /* JLTextStorage.h in Headers */,
 				8F54EF131781C788008C1609 /* JLTextViewController.h in Headers */,
 				8F54EF141781C788008C1609 /* JLTokenizer.h in Headers */,
+				8FA0919F1791E2CF00179325 /* MGMushParser.h in Headers */,
 				8F54EF151781C788008C1609 /* JLTokenPattern.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,6 +295,7 @@
 				8F54EF1F1781CD87008C1609 /* Helpers.m in Sources */,
 				8F54EF211781CD87008C1609 /* JLTextStorage.m in Sources */,
 				8F54EF221781CD87008C1609 /* JLTextViewController.m in Sources */,
+				8FA091A01791E2CF00179325 /* MGMushParser.m in Sources */,
 				8F54EF231781CD87008C1609 /* JLTokenizer.m in Sources */,
 				8F54EF1E1781CD87008C1609 /* Chromatism.m in Sources */,
 				8F54EF1D1781CD87008C1609 /* CHLayoutManager.m in Sources */,
