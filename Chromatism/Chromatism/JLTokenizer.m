@@ -43,9 +43,12 @@
 
 @interface JLTokenizer ()
 
++ (NSDictionary *)colorsFromTheme:(JLTokenizerTheme)theme;
+
 @end
 
 @implementation JLTokenizer
+@synthesize theme = _theme, themes = _themes, colors = _colors;
 
 #pragma mark NSTextStorageDelegate
 
@@ -56,7 +59,12 @@
 
 - (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
-    if (editedMask == NSTextStorageEditedCharacters) {
+    if (editedMask == NSTextStorageEditedCharacters)
+    {
+        [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
+    }
+    else
+    {
         [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
     }
 }
@@ -133,6 +141,96 @@
 {
     [storage removeAttribute:NSForegroundColorAttributeName range:range];
     [storage addAttribute:NSForegroundColorAttributeName value:self.colors[JLTokenTypeText] range:range];
+}
+
+#pragma mark - Color Themes
+
+- (NSDictionary *)defaultAttributes
+{
+    if (!_defaultAttributes) _defaultAttributes = @{NSForegroundColorAttributeName: self.colors[JLTokenTypeText], NSFontAttributeName : [UIFont fontWithName:@"Menlo" size:12]};
+    return _defaultAttributes;
+}
+
+-(void)setTheme:(JLTokenizerTheme)theme
+{
+    self.colors = [self.class colorsFromTheme:theme];
+    self.textView.typingAttributes = @{ NSForegroundColorAttributeName : self.colors[JLTokenTypeText]};
+    _theme = theme;
+    
+    //Set font, text color and background color back to default
+    UIColor *backgroundColor = self.colors[JLTokenTypeBackground];
+    [self.textView setBackgroundColor:backgroundColor ? backgroundColor : [UIColor whiteColor] ];
+}
+
+- (NSDictionary *)colors
+{
+    if (!_colors) {
+        self.colors = [self.class colorsFromTheme:self.theme];
+    }
+    return _colors;
+}
+
+- (void)setColors:(NSDictionary *)colors
+{
+    _colors = colors;
+}
+
+- (NSArray *)themes
+{
+    if (!_themes) _themes = @[@(JLTokenizerThemeDefault),@(JLTokenizerThemeDusk)];
+    return _themes;
+}
+
+- (JLTokenizerTheme)theme
+{
+    if (!_theme) _theme = JLTokenizerThemeDefault;
+    return _theme;
+}
+
+// Just a bunch of colors
++ (NSDictionary *)colorsFromTheme:(JLTokenizerTheme)theme
+{
+    NSDictionary* colors;
+    switch(theme) {
+        case JLTokenizerThemeDefault:
+            colors = @{JLTokenTypeText: [UIColor colorWithRed:0.0/255 green:0.0/255 blue:0.0/255 alpha:1],
+                       JLTokenTypeBackground: [UIColor colorWithRed:255.0/255 green:255.0/255 blue:255.0/255 alpha:1],
+                       JLTokenTypeComment: [UIColor colorWithRed:0.0/255 green:131.0/255 blue:39.0/255 alpha:1],
+                       JLTokenTypeDocumentationComment: [UIColor colorWithRed:0.0/255 green:131.0/255 blue:39.0/255 alpha:1],
+                       JLTokenTypeDocumentationCommentKeyword: [UIColor colorWithRed:0.0/255 green:76.0/255 blue:29.0/255 alpha:1],
+                       JLTokenTypeString: [UIColor colorWithRed:211.0/255 green:45.0/255 blue:38.0/255 alpha:1],
+                       JLTokenTypeCharacter: [UIColor colorWithRed:40.0/255 green:52.0/255 blue:206.0/255 alpha:1],
+                       JLTokenTypeNumber: [UIColor colorWithRed:40.0/255 green:52.0/255 blue:206.0/255 alpha:1],
+                       JLTokenTypeKeyword: [UIColor colorWithRed:188.0/255 green:49.0/255 blue:156.0/255 alpha:1],
+                       JLTokenTypePreprocessor: [UIColor colorWithRed:120.0/255 green:72.0/255 blue:48.0/255 alpha:1],
+                       JLTokenTypeURL: [UIColor colorWithRed:21.0/255 green:67.0/255 blue:244.0/255 alpha:1],
+                       JLTokenTypeOther: [UIColor colorWithRed:113.0/255 green:65.0/255 blue:163.0/255 alpha:1],
+                       JLTokenTypeOtherMethodNames :  [UIColor colorWithHex:@"7040a6" alpha:1],
+                       JLTokenTypeOtherClassNames :  [UIColor colorWithHex:@"7040a6" alpha:1]
+                       
+                       
+                       
+                       };
+            break;
+        case JLTokenizerThemeDusk:
+            colors = @{JLTokenTypeText: [UIColor whiteColor],
+                       JLTokenTypeBackground: [UIColor colorWithRed:30.0/255.0 green:32.0/255.0 blue:40.0/255.0 alpha:1],
+                       JLTokenTypeComment: [UIColor colorWithRed:72.0/255 green:190.0/255 blue:102.0/255 alpha:1],
+                       JLTokenTypeDocumentationComment: [UIColor colorWithRed:72.0/255 green:190.0/255 blue:102.0/255 alpha:1],
+                       JLTokenTypeDocumentationCommentKeyword: [UIColor colorWithRed:72.0/255 green:190.0/255 blue:102.0/255 alpha:1],
+                       JLTokenTypeString: [UIColor colorWithRed:230.0/255 green:66.0/255 blue:75.0/255 alpha:1],
+                       JLTokenTypeCharacter: [UIColor colorWithRed:139.0/255 green:134.0/255 blue:201.0/255 alpha:1],
+                       JLTokenTypeNumber: [UIColor colorWithRed:139.0/255 green:134.0/255 blue:201.0/255 alpha:1],
+                       JLTokenTypeKeyword: [UIColor colorWithRed:195.0/255 green:55.0/255 blue:149.0/255 alpha:1],
+                       JLTokenTypePreprocessor: [UIColor colorWithRed:198.0/255.0 green:124.0/255.0 blue:72.0/255.0 alpha:1],
+                       JLTokenTypeURL: [UIColor colorWithRed:35.0/255 green:63.0/255 blue:208.0/255 alpha:1],
+                       JLTokenTypeOther: [UIColor colorWithRed:0.0/255 green:175.0/255 blue:199.0/255 alpha:1],
+                       JLTokenTypeOtherClassNames :  [UIColor colorWithHex:@"04afc8" alpha:1],
+                       JLTokenTypeOtherMethodNames :  [UIColor colorWithHex:@"04afc8" alpha:1]
+                       };
+            break;
+    }
+    return colors;
 }
 
 @end
