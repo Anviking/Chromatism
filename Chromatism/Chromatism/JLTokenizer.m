@@ -50,7 +50,7 @@
 @implementation JLTokenizer
 @synthesize theme = _theme, themes = _themes, colors = _colors;
 
-#pragma mark NSTextStorageDelegate
+#pragma mark - NSTextStorageDelegate
 
 - (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
@@ -59,15 +59,18 @@
 
 - (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
-    if (editedMask == NSTextStorageEditedCharacters)
-    {
+    if (editedMask == NSTextStorageEditedAttributes) {
+        // Do nothing
+    }
+    else if (editedMask == NSTextStorageEditedCharacters) {
         [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
     }
-    else
-    {
+    else {
         [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
     }
 }
+
+#pragma mark - Tokenizing
 
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
 {
