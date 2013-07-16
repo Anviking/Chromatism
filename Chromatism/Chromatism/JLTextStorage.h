@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol JLTextStorageTokenizer;
+@protocol JLTextStorageDelegate;
 @interface JLTextStorage : NSTextStorage
 
-@property (nonatomic, weak) id <JLTextStorageTokenizer> tokenizer;
+@property (nonatomic, weak) id <JLTextStorageDelegate> delegate;
 
 @end
 
-@protocol JLTextStorageTokenizer <NSObject>
+@protocol JLTextStorageDelegate <NSObject>
 
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range;
 

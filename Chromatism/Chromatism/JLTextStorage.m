@@ -49,29 +49,4 @@
     [self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
 }
 
-- (void)processEditing
-{
-    if (_dynamicTextNeedsUpdate) {
-        _dynamicTextNeedsUpdate = NO;
-        [self preformReplacementsForCharacterChangeInRange:[self editedRange]];
-    }
-    
-    [super processEditing];
-}
-
-- (void)preformReplacementsForCharacterChangeInRange:(NSRange)range
-{
-    NSRange extendedRange = NSUnionRange(range, [[_backingStore string] lineRangeForRange:NSMakeRange(NSMaxRange(range), 0)]);
-    
-    [self tokenizeRange:extendedRange];
-}
-
-- (void)tokenizeRange:(NSRange)range
-{
-    if (self.tokenizer && [self.tokenizer conformsToProtocol:@protocol(JLTextStorageTokenizer)])
-    {
-        [self.tokenizer tokenizeTextStorage:self withRange:range];
-    }
-}
-
 @end

@@ -47,6 +47,20 @@
 
 @implementation JLTokenizer
 
+#pragma mark NSTextStorageDelegate
+
+- (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
+{
+    
+}
+
+- (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
+{
+    if (editedMask == NSTextStorageEditedCharacters) {
+        [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
+    }
+}
+
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
 {
     // Measure performance

@@ -32,8 +32,6 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
 @interface JLTextViewController ()
 
 + (NSDictionary *)colorsFromTheme:(JLTokenizerTheme)theme;
-
-@property (nonatomic, strong) JLTextStorage *textStorage;
 @end
 
 @implementation JLTextViewController
@@ -54,16 +52,12 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
     self.tokenizer = [JLTokenizer new];
     self.tokenizer.colors = self.colors;
     
-    self.textStorage = [JLTextStorage new];
-    _textStorage.tokenizer = _tokenizer;
-    
     CHLayoutManager *layoutManager = [[CHLayoutManager alloc] init];
     layoutManager.allowsNonContiguousLayout = YES;
         
     NSTextContainer *container = [[NSTextContainer alloc] initWithSize:CGSizeMake(self.textView.frame.size.width, CGFLOAT_MAX)];
     container.widthTracksTextView = YES;
     [layoutManager addTextContainer:container];
-    [_textStorage addLayoutManager:layoutManager];
     
     _textView = [[UITextView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] textContainer:container];
     _textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -73,6 +67,11 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
     _textView.autocorrectionType = UITextAutocorrectionTypeNo;
     _textView.delegate = self;
     _textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
+    [_textView.textStorage addLayoutManager:layoutManager];
+    layoutManager.textStorage = [NSTextStorage new];
+    layoutManager.textStorage.delegate = self.tokenizer;
+
     
     self.theme = JLTokenizerThemeDusk;
     

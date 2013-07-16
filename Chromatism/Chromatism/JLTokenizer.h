@@ -11,7 +11,7 @@
 #import "Helpers.h"
 
 @class TextViewChange, JLTextView;
-@interface JLTokenizer : NSObject <JLTextStorageTokenizer>
+@interface JLTokenizer : NSObject <NSTextStorageDelegate>
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
