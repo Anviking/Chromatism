@@ -10,7 +10,7 @@
 
 @class JLTokenizer, JLTextView;
 
-@interface JLTextViewController : UIViewController <UITextViewDelegate>
+@interface JLTextViewController : UIViewController
 
 @property (nonatomic, strong) IBOutlet JLTextView *textView;
 

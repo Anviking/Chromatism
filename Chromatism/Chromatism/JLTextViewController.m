@@ -129,18 +129,4 @@
     [UIView commitAnimations];
 }
 
-#pragma mark - UITextViewDelegate
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
-    
-}
-
-
-
 @end
