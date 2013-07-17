@@ -45,11 +45,14 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
 
 - (void)loadView
 {
+    UIView *view = [[UIView alloc] init];
     JLTextView *textView = [[JLTextView alloc] init];
     
     textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
-    [self setView:textView];
+    [view addSubview:textView];
+    
+    [self setView:view];
     [self setTextView:textView];
 }
 
@@ -69,7 +72,7 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
 {
     [super viewDidAppear:animated];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShown:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
@@ -84,37 +87,63 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)moveTextViewForKeyboard:(NSNotification*)aNotification up:(BOOL)up {
-    NSDictionary* userInfo = [aNotification userInfo];
+#pragma mark - Responding to keyboard events
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    
+    /*
+     Reduce the size of the text view so that it's not obscured by the keyboard.
+     Animate the resize so that it's in sync with the appearance of the keyboard.
+     */
+    
+    NSDictionary *userInfo = [notification userInfo];
+    
+    // Get the origin of the keyboard when it's displayed.
+    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    
+    // Get the top of the keyboard as the y coordinate of its origin in self's view's
+    // coordinate system. The bottom of the text view's frame should align with the top
+    // of the keyboard's final position.
+    //
+    CGRect keyboardRect = [aValue CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    
+    CGFloat keyboardTop = keyboardRect.origin.y;
+    CGRect newTextViewFrame = self.view.bounds;
+    newTextViewFrame.size.height = keyboardTop - self.view.bounds.origin.y;
+    
+    // Get the duration of the animation.
+    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSTimeInterval animationDuration;
-    UIViewAnimationCurve animationCurve;
-    CGRect keyboardEndFrame;
+    [animationDurationValue getValue:&animationDuration];
     
-    [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
-    [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
-    [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
-    
-    [UIView beginAnimations:nil context:nil];
+    // Animate the resize of the text view's frame in sync with the keyboard's appearance.
+    [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:animationDuration];
-    [UIView setAnimationCurve:animationCurve];
     
-    CGRect newFrame = self.textView.frame;
-    CGRect keyboardFrame = [self.view convertRect:keyboardEndFrame toView:nil];
-    keyboardFrame.size.height -= self.tabBarController.tabBar.frame.size.height;
-    newFrame.size.height -= keyboardFrame.size.height * (up?1:-1);
-    self.textView.frame = newFrame;
+    self.textView.frame = newTextViewFrame;
     
     [UIView commitAnimations];
 }
 
-- (void)keyboardWillShown:(NSNotification*)aNotification
-{
-    [self moveTextViewForKeyboard:aNotification up:YES];
-}
-
-- (void)keyboardWillHide:(NSNotification*)aNotification
-{
-    [self moveTextViewForKeyboard:aNotification up:NO];
+- (void)keyboardWillHide:(NSNotification *)notification {
+    
+    NSDictionary *userInfo = [notification userInfo];
+    
+    /*
+     Restore the size of the text view (fill self's view).
+     Animate the resize so that it's in sync with the disappearance of the keyboard.
+     */
+    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval animationDuration;
+    [animationDurationValue getValue:&animationDuration];
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:animationDuration];
+    
+    self.textView.frame = self.view.bounds;
+    
+    [UIView commitAnimations];
 }
 
 #pragma mark - UITextViewDelegate
