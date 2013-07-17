@@ -46,6 +46,7 @@
     self.syntaxTokenizer = [[JLTokenizer alloc] init];
     self.syntaxTokenizer.textView = self;
     self.textStorage.delegate = self.syntaxTokenizer;
+    self.delegate = self.syntaxTokenizer;
     self.syntaxTokenizer.theme = JLTokenizerThemeDusk;
     
     // Set default properties
@@ -54,7 +55,6 @@
     self.font = [UIFont fontWithName:@"Menlo" size:12];
     self.autocorrectionType = UITextAutocorrectionTypeNo;
     self.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    
 }
 
 

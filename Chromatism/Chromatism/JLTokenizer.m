@@ -42,6 +42,9 @@
 #import "JLTokenPattern.h"
 
 @interface JLTokenizer ()
+{
+    NSString *_oldString;
+}
 
 + (NSDictionary *)colorsFromTheme:(JLTokenizerTheme)theme;
 
@@ -49,6 +52,80 @@
 
 @implementation JLTokenizer
 @synthesize theme = _theme, themes = _themes, colors = _colors;
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    _oldString = nil;
+    
+    if (range.length == 0 && text.length == 1) {
+        // A normal character typed
+    }
+    else if (range.length == 1 && text.length == 0) {
+        // Backspace
+    }
+    else {
+        // Multicharacter edit
+    }
+    
+    if ([text isEqualToString:@"\n"]) {
+        // Return
+        // Start the new line with as many tabs or white spaces as the previous one.
+        NSRange lineRange = [textView.text lineRangeForRange:range];
+        NSRange prefixRange = [textView.text rangeOfString:@"[\\t| ]*" options:NSRegularExpressionSearch range:lineRange];
+        NSString *prefixString = [textView.text substringWithRange:prefixRange];
+        
+        UITextPosition *beginning = textView.beginningOfDocument;
+        UITextPosition *start = [textView positionFromPosition:beginning offset:range.location];
+        UITextPosition *stop = [textView positionFromPosition:start offset:range.length];
+        
+        UITextRange *textRange = [textView textRangeFromPosition:start toPosition:stop];
+        
+        [textView replaceRange:textRange withText:[NSString stringWithFormat:@"\n%@",prefixString]];
+        
+        return NO;
+    }
+    
+    if (range.length > 0)
+    {
+        _oldString = [textView.text substringWithRange:range];
+    }
+    
+    return YES;
+}
+
+#pragma mark - Scopes
+
+//
+// NOT COMPLETED
+//
+//- (void)refreshScopesInTextStorage:(NSTextStorage *)textStorage;
+//{
+//    NSString *string = textStorage.string;
+//    __block NSUInteger scope = 0;
+//    
+//    
+//    NSString *pattern = @"\\{|\\}";
+//    NSError *error;
+//    NSString *attribute = @"ChromatismScopeAttributeName";
+//    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+//
+//    NSAssert(!error, @"%@",error);
+//    
+//    [expression enumerateMatchesInString:string options:0 range:NSMakeRange(0, textStorage.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+//        NSString *substring = [string substringWithRange:result.range];
+//        if ([substring isEqualToString:@"{"]) {
+//            scope++;
+//        }
+//        else scope--;
+//        NSLog(@"Scope is %i",scope);
+//        float f = 0.3 + ((float)scope/10);
+//        NSLog(@"Color is :%f",f);
+//        UIColor *color = [UIColor colorWithWhite:f alpha:1];
+//        [textStorage addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(result.range.location, string.length - result.range.location)];
+//    }];
+//}
 
 #pragma mark - NSTextStorageDelegate
 
@@ -59,15 +136,7 @@
 
 - (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
-    if (editedMask == NSTextStorageEditedAttributes) {
-        // Do nothing
-    }
-    else if (editedMask == NSTextStorageEditedCharacters) {
-        [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
-    }
-    else {
-        [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
-    }
+   [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
 }
 
 #pragma mark - Tokenizing

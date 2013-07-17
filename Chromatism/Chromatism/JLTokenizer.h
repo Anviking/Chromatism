@@ -30,7 +30,10 @@ FOUNDATION_EXPORT NSString *const JLTokenTypeOtherClassNames;
 FOUNDATION_EXPORT NSString *const JLTokenTypeOtherMethodNames;
 
 @class TextViewChange, JLTextView;
-@interface JLTokenizer : NSObject <NSTextStorageDelegate>
+@interface JLTokenizer : NSObject <UITextViewDelegate, NSTextStorageDelegate>
+
+// Override to create your own syntax highlighting
+- (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range;
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
