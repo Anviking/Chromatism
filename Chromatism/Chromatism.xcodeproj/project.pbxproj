@@ -102,7 +102,6 @@
 		8F3AB90F1781C0BA0023348A = {
 			isa = PBXGroup;
 			children = (
-				8FA091A11791E2D900179325 /* External */,
 				8F3AB91D1781C0BA0023348A /* Chromatism */,
 				8F3AB9311781C0BB0023348A /* ChromatismTests */,
 				8F3AB91A1781C0BA0023348A /* Frameworks */,
@@ -133,24 +132,24 @@
 		8F3AB91D1781C0BA0023348A /* Chromatism */ = {
 			isa = PBXGroup;
 			children = (
-				8F3AB9551781C1250023348A /* JLTokenizer.h */,
-				8F3AB9561781C1250023348A /* JLTokenizer.m */,
-				8FA091A21791E62600179325 /* JLMarkdownTokenizer.h */,
-				8FA091A31791E62600179325 /* JLMarkdownTokenizer.m */,
-				8FA091A61791E99900179325 /* NSMutableAttributedString+Mush.h */,
-				8FA091A71791E99900179325 /* NSMutableAttributedString+Mush.m */,
 				8F3AB9201781C0BA0023348A /* Chromatism.h */,
 				8F3AB9221781C0BA0023348A /* Chromatism.m */,
-				8F3AB94D1781C1250023348A /* Helpers.h */,
-				8F3AB94E1781C1250023348A /* Helpers.m */,
-				8F3AB9571781C1250023348A /* JLTokenPattern.h */,
-				8F3AB9581781C1250023348A /* JLTokenPattern.m */,
-				8F3AB94F1781C1250023348A /* JLScope.h */,
-				8F3AB9501781C1250023348A /* JLScope.m */,
+				8F3AB9551781C1250023348A /* JLTokenizer.h */,
+				8F3AB9561781C1250023348A /* JLTokenizer.m */,
 				8F3AB9531781C1250023348A /* JLTextViewController.h */,
 				8F3AB9541781C1250023348A /* JLTextViewController.m */,
 				8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */,
 				8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */,
+				8FA091A21791E62600179325 /* JLMarkdownTokenizer.h */,
+				8FA091A31791E62600179325 /* JLMarkdownTokenizer.m */,
+				8FA091A61791E99900179325 /* NSMutableAttributedString+Mush.h */,
+				8FA091A71791E99900179325 /* NSMutableAttributedString+Mush.m */,
+				8F3AB94D1781C1250023348A /* Helpers.h */,
+				8F3AB94E1781C1250023348A /* Helpers.m */,
+				8F3AB94F1781C1250023348A /* JLScope.h */,
+				8F3AB9501781C1250023348A /* JLScope.m */,
+				8F3AB9571781C1250023348A /* JLTokenPattern.h */,
+				8F3AB9581781C1250023348A /* JLTokenPattern.m */,
 				8F3AB91E1781C0BA0023348A /* Supporting Files */,
 			);
 			path = Chromatism;
@@ -181,13 +180,6 @@
 				8F3AB9341781C0BB0023348A /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		8FA091A11791E2D900179325 /* External */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = External;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

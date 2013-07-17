@@ -43,6 +43,8 @@
     return [self scopeWithRange:NSMakeRange(0, textStorage.length) inTextStorage:textStorage];
 }
 
+#pragma mark - Perform
+
 - (void)perform
 {
     if (self.scope) {

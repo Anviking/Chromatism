@@ -13,7 +13,7 @@
 
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
 {
-    [NSException raise:@"Chromatism bad task" format:@"%@ cannot handle live syntax highlighting", self.class];
+    [NSException raise:@"Chromatism Exception" format:@"%@ cannot handle live syntax highlighting", self.class];
 }
 
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes

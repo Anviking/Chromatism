@@ -11,23 +11,6 @@
 #import "JLTokenizer.h"
 #import "JLTextView.h"
 
-NSString *const JLTokenTypeText = @"text";
-NSString *const JLTokenTypeBackground = @"background";
-NSString *const JLTokenTypeComment = @"comment";
-NSString *const JLTokenTypeDocumentationComment = @"documentation_comment";
-NSString *const JLTokenTypeDocumentationCommentKeyword = @"documentation_comment_keyword";
-NSString *const JLTokenTypeString = @"string";
-NSString *const JLTokenTypeCharacter = @"character";
-NSString *const JLTokenTypeNumber = @"number";
-NSString *const JLTokenTypeKeyword = @"keyword";
-NSString *const JLTokenTypePreprocessor = @"preprocessor";
-NSString *const JLTokenTypeURL = @"url";
-NSString *const JLTokenTypeAttribute = @"attribute";
-NSString *const JLTokenTypeProject = @"project";
-NSString *const JLTokenTypeOther = @"other";
-NSString *const JLTokenTypeOtherMethodNames = @"other_method_names";
-NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
-
 @interface JLTextViewController ()
 
 @end

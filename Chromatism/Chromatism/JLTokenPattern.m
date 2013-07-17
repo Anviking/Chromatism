@@ -28,14 +28,13 @@
 {
     self = [super init];
     if (self) {
-//        self.dirtySearch = NO;
         self.opaque = YES;
         self.captureGroup = 0;
     }
     return self;
 }
 
-#pragma mark - Properties
+#pragma mark - Regular Expression
 
 - (void)setExpression:(NSRegularExpression *)expression
 {
@@ -50,6 +49,8 @@
     
     _expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
 }
+
+#pragma mark - Perform
 
 - (void)perform
 {
