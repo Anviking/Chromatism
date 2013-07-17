@@ -10,6 +10,7 @@
 
 @interface JLScope ()
 @property (nonatomic, readwrite, strong) NSString *string;
+- (void)iterateSubscopes;
 @end
 
 @implementation JLTokenPattern
@@ -61,15 +62,7 @@
         }];
     }];
     
-    NSMutableIndexSet *archivedSet = self.set.mutableCopy;
-    for (JLScope *scope in self.subscopes) {
-        
-        scope.textStorage = self.textStorage;
-        scope.string = self.string;
-        
-        [scope perform];
-    }
-    self.set = archivedSet;
+    [self iterateSubscopes];
     
     if (self.scope && self.opaque == YES)
     {

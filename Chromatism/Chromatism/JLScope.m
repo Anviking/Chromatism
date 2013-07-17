@@ -11,6 +11,9 @@
 
 @interface JLScope ()
 @property (nonatomic, readwrite, strong) NSString *string;
+
+- (void)iterateSubscopes;
+
 @end
 
 @implementation JLScope
@@ -45,24 +48,29 @@
 
 #pragma mark - Perform
 
-- (void)perform
+- (void)iterateSubscopes
 {
-    if (self.scope) {
-        
-        // Intersect with scope
-        self.set = [self.set intersectionWithSet:self.scope.set];
-    }
-    
     NSMutableIndexSet *archivedSet = self.set.mutableCopy;
     for (JLScope *scope in self.subscopes) {
         
+        if (scope == self) NSAssert(NO, @"%@ can under no circumstances have itself as a subscope.", self);
         scope.textStorage = self.textStorage;
         scope.string = self.string;
         
         [scope perform];
     }
     self.set = archivedSet;
+}
 
+- (void)perform
+{
+    if (self.scope) {
+        // Intersect with scope
+        self.set = [self.set intersectionWithSet:self.scope.set];
+    }
+    
+    [self iterateSubscopes];
+    
     if (self.scope && self.opaque == YES)
     {
         [self.scope.set removeIndexes:self.set];
@@ -87,10 +95,10 @@
 
 - (void)setScope:(JLScope *)scope
 {
-    [(NSMutableArray *)_scope.subscopes removeObject:scope];
+    [(NSMutableArray *)_scope.subscopes removeObject:self];
     _scope = scope;
     
-    [(NSMutableArray *)_scope.subscopes addObject:scope];
+    [(NSMutableArray *)_scope.subscopes addObject:self];
 }
 
 - (void)addSubscope:(JLScope *)subscope

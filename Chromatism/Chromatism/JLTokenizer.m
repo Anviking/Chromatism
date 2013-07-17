@@ -179,6 +179,12 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
     // Preprocessor macros
     JLTokenPattern *preprocessor = [JLTokenPattern tokenPatternWithPattern:@"#.*+$" andColor:colors[JLTokenTypePreprocessor]];
     
+    // #import <Library/Library.h> - thing.
+    JLTokenPattern *importAngleBrackets = [JLTokenPattern tokenPatternWithPattern:@"<.*?>" andColor:colors[JLTokenTypeString]];
+    
+    // In xcode it only works for #import and #include, not all preprocessor statements.
+    importAngleBrackets.scope = preprocessor;
+    
     // Strings
     JLTokenPattern *strings = [JLTokenPattern tokenPatternWithPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andColor:colors[JLTokenTypeString]];
     [strings addScope:preprocessor];
