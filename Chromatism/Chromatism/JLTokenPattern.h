@@ -23,9 +23,4 @@
  */
 @property (nonatomic, assign) NSUInteger captureGroup;
 
-
-/// Describes if the pattern search for matches in indexes marked as unclear. If false, the search will happen in the scopes clearIndexes. If true, the serach will happen in the scope itself. Default: FALSE.
-//@property (nonatomic, assign) BOOL dirtySearch;
-// NOT IMPLEMENTED
-
 @end
