@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3260A15417A8845F008792E6 /* Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB94E1781C1250023348A /* Helpers.m */; };
 		8F3AB92A1781C0BA0023348A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB9291781C0BA0023348A /* XCTest.framework */; };
 		8F3AB92B1781C0BB0023348A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB91B1781C0BA0023348A /* Foundation.framework */; };
 		8F3AB92D1781C0BB0023348A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB92C1781C0BB0023348A /* UIKit.framework */; };
@@ -299,6 +300,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F3AB9381781C0BB0023348A /* ChromatismTests.m in Sources */,
+				3260A15417A8845F008792E6 /* Helpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

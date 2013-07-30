@@ -65,7 +65,7 @@
 - (void)perform
 {
     if (self.scope) {
-        // Intersect with scope
+        NSAssert(self.set.count != 0, @"A scope that is not the root-scope must have indexes before -perform:");
         self.set = [self.set intersectionWithSet:self.scope.set];
     }
     
