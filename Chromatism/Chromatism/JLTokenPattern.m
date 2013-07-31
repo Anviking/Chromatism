@@ -53,9 +53,9 @@
 
 #pragma mark - Perform
 
-- (void)perform
+- (void)performInIndexSet:(NSIndexSet *)set
 {
-    [self.scope.set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
+    [set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
         [self.expression enumerateMatchesInString:self.string options:self.matchingOptions range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
             [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.color range:[result rangeAtIndex:self.captureGroup]];
             [self.set addIndexesInRange:[result rangeAtIndex:self.captureGroup]];
@@ -63,11 +63,7 @@
     }];
     
     [self iterateSubscopes];
-    
-    if (self.scope && self.opaque == YES)
-    {
-        [self.scope.set removeIndexes:self.set];
-    }}
+}
 
 #pragma mark - NSCopying Protocol
 

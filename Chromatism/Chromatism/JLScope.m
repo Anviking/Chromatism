@@ -50,31 +50,35 @@
 
 - (void)iterateSubscopes
 {
-    NSMutableIndexSet *archivedSet = self.set.mutableCopy;
+    NSMutableIndexSet *set = (self.empty) ? self.scope.set.mutableCopy :self.set.mutableCopy;
     for (JLScope *scope in self.subscopes) {
         
-        if (scope == self) NSAssert(NO, @"%@ can under no circumstances have itself as a subscope.", self);
+        NSAssert(scope != self, @"%@ can under no circumstances have itself as a subscope.", self);
         scope.textStorage = self.textStorage;
         scope.string = self.string;
         
-        [scope perform];
+        [scope performInIndexSet:set];
+        
+        if (scope.opaque) {
+            [set removeIndexes:scope.set];
+            if (self.empty) {
+                [self.set addIndexes:scope.set];
+            }
+        }
     }
-    self.set = archivedSet;
 }
 
 - (void)perform
 {
-    if (self.scope) {
-        NSAssert(self.set.count != 0, @"A scope that is not the root-scope must have indexes before -perform:");
-        self.set = [self.set intersectionWithSet:self.scope.set];
-    }
-    
+    NSAssert(!self.scope, @"Only call -perform to a rootlevel scope");
     [self iterateSubscopes];
-    
-    if (self.scope && self.opaque == YES)
-    {
-        [self.scope.set removeIndexes:self.set];
-    }
+}
+
+- (void)performInIndexSet:(NSIndexSet *)set
+{
+    NSParameterAssert(set);
+    self.set = [self.set intersectionWithSet:set];
+    [self iterateSubscopes];
 }
 
 #pragma mark - Scope Hierarchy Management

@@ -19,6 +19,7 @@
  *  Causes the every scope to perform cascadingly
  */
 - (void)perform;
+- (void)performInIndexSet:(NSIndexSet *)set;
 
 /// The color
 @property (nonatomic, strong) UIColor *color;
@@ -58,5 +59,10 @@
  *  Describes wether the instance removes it's indexes from the containg scope. Default is YES.
  */
 @property (nonatomic, assign, getter = isOpaque) BOOL opaque;
+
+/**
+ *  If TRUE, the instance will act as if its subscopes where connected directly to the instance's parent's scope. 
+ */
+@property (nonatomic, assign, getter = isEmpty) BOOL empty;
 
 @end
