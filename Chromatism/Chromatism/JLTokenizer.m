@@ -140,6 +140,20 @@
 
 #pragma mark - Tokenizing
 
+- (JLTokenPattern *)addToken:(NSString *)type withPattern:(NSString *)pattern andScope:(JLScope *)scope
+{
+    NSParameterAssert(type);
+    NSParameterAssert(pattern);
+    NSParameterAssert(scope);
+    UIColor *color = self.colors[type];
+    
+    NSAssert(color, @"%@ didn't return a color in color dictionary %@", type, self.colors);
+    
+    JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern andColor:self.colors[type]];
+    [scope addSubscope:token];
+    return token;
+}
+
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
 {
     // Measure performance
@@ -150,59 +164,47 @@
 
     JLScope *documentScope = [JLScope scopeWithTextStorage:storage];
     JLScope *rangeScope = [JLScope scopeWithRange:range inTextStorage:storage];
-
-    NSDictionary *colors = self.colors;
  
-    // Two types of comments
-    JLTokenPattern *comments1 = [JLTokenPattern tokenPatternWithPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andColor:colors[JLTokenTypeComment]];
-    JLTokenPattern *comments2 = [JLTokenPattern tokenPatternWithPattern:@"//.*+$" andColor:colors[JLTokenTypeComment]];
+    // Block and line comments
+    [self addToken:JLTokenTypeComment withPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andScope:documentScope];
+    [self addToken:JLTokenTypeComment withPattern:@"//.*+$" andScope:rangeScope];
     
     // Preprocessor macros
-    JLTokenPattern *preprocessor = [JLTokenPattern tokenPatternWithPattern:@"#.*+$" andColor:colors[JLTokenTypePreprocessor]];
+    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withPattern:@"#.*+$" andScope:rangeScope];
     
-    // #import <Library/Library.h> - thing.
-    JLTokenPattern *importAngleBrackets = [JLTokenPattern tokenPatternWithPattern:@"<.*?>" andColor:colors[JLTokenTypeString]];
-    
+    // #import <Library/Library.h>
     // In xcode it only works for #import and #include, not all preprocessor statements.
-    importAngleBrackets.scope = preprocessor;
+    [self addToken:JLTokenTypeString withPattern:@"<.*?>" andScope:preprocessor];
     
     // Strings
-    JLTokenPattern *strings = [JLTokenPattern tokenPatternWithPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andColor:colors[JLTokenTypeString]];
-    [strings addScope:preprocessor];
+    [[self addToken:JLTokenTypeString withPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andScope:rangeScope] addScope:preprocessor];
     
     // Numbers
-    JLTokenPattern *numbers = [JLTokenPattern tokenPatternWithPattern:@"(?<=\\s)\\d+" andColor:colors[JLTokenTypeNumber]];
+    [self addToken:JLTokenTypeNumber withPattern:@"(?<=\\s)\\d+" andScope:rangeScope];
     
     // New literals, for example @[]
-    JLTokenPattern *literals = [JLTokenPattern tokenPatternWithPattern:@"@[\\(|\\{|\\[][^\\(\\{\\[]+[\\)|\\}|\\]]" andColor:colors[JLTokenTypeNumber]]; // New literals
-    
     // TODO: Literals don't search through multiple lines. Nor does it keep track of nested things.
-    literals.opaque = NO;
+    [[self addToken:JLTokenTypeNumber withPattern:@"@[\\(|\\{|\\[][^\\(\\{\\[]+[\\)|\\}|\\]]" andScope:rangeScope] setOpaque:NO];
     
     // C function names
-    JLTokenPattern *functions = [JLTokenPattern tokenPatternWithPattern:@"\\w+\\s*(?>\\(.*\\)" andColor:colors[JLTokenTypeOtherMethodNames]];
-    functions.captureGroup = 1;
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\w+\\s*(?>\\(.*\\)" andScope:rangeScope] setCaptureGroup:1];
     
     // Dot notation
-    JLTokenPattern *dots = [JLTokenPattern tokenPatternWithPattern:@"\\.(\\w+)" andColor:colors[JLTokenTypeOtherMethodNames]];
-    dots.captureGroup = 1;
-    
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\.(\\w+)" andScope:rangeScope] setCaptureGroup:1];
+
     // Method Calls
-    JLTokenPattern *methods1 = [JLTokenPattern tokenPatternWithPattern:@"\\[\\w+\\s+(\\w+)\\]" andColor:colors[JLTokenTypeOtherMethodNames]];
-    methods1.captureGroup = 1;
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\[\\w+\\s+(\\w+)\\]" andScope:rangeScope] setCaptureGroup:1];
     
     // Method call parts
-    JLTokenPattern *methods2 = [JLTokenPattern tokenPatternWithPattern:@"(?<=\\w+):\\s*[^\\s;\\]]+" andColor:colors[JLTokenTypeOtherMethodNames]];
-    methods2.captureGroup = 1;
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(?<=\\w+):\\s*[^\\s;\\]]+" andScope:rangeScope] setCaptureGroup:1];
     
     // NS and UI prefixes words
-    JLTokenPattern *appleClassNames = [JLTokenPattern tokenPatternWithPattern:@"(\\b(?>NS|UI))\\w+\\b" andColor:colors[JLTokenTypeOtherClassNames]];
-    JLTokenPattern *keywords1 = [JLTokenPattern tokenPatternWithPattern:@"(?<=\\b)(?>true|false|yes|no|TRUE|FALSE|bool|BOOL|nil|id|void|self|NULL|if|else|strong|weak|nonatomic|atomic|assign|copy|typedef|enum|auto|break|case|const|char|continue|do|default|double|extern|float|for|goto|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|volatile|while|nonatomic|atomic|nonatomic|readonly|super )(\\b)" andColor:colors[JLTokenTypeKeyword]];
-    JLTokenPattern *keywords2 = [JLTokenPattern tokenPatternWithPattern:@"@[a-zA-Z0-9_]+" andColor:colors[JLTokenTypeKeyword]];
+    [self addToken:JLTokenTypeOtherClassNames withPattern:@"(\\b(?>NS|UI))\\w+\\b" andScope:rangeScope];
     
-    documentScope.subscopes = @[comments1, rangeScope];
-    rangeScope.subscopes = @[comments2, preprocessor, strings, numbers, literals, functions, dots, methods1, methods2, appleClassNames, keywords1, keywords2];
+    [self addToken:JLTokenTypeKeyword withPattern:@"(?<=\\b)(?>true|false|yes|no|TRUE|FALSE|bool|BOOL|nil|id|void|self|NULL|if|else|strong|weak|nonatomic|atomic|assign|copy|typedef|enum|auto|break|case|const|char|continue|do|default|double|extern|float|for|goto|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|volatile|while|nonatomic|atomic|nonatomic|readonly|super )(\\b)" andScope:rangeScope];
+    [self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:rangeScope];
     
+    [documentScope addSubscope:rangeScope];
     [documentScope perform];
     NSLog(@"Chromatism done tokenizing with time of %fms",ABS([date timeIntervalSinceNow]*1000));
 }
