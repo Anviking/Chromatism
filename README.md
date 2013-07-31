@@ -48,8 +48,8 @@ JLTokenPattern *importAngleBrackets = [JLTokenPattern tokenPatternWithPattern:@"
 importAngleBrackets.scope = preprocessor;
 
 JLTokenPattern *strings = [JLTokenPattern tokenPatternWithPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andColor:colors[JLTokenTypeString]];
-// This pattern should search where there is nothing else, *and* in the results of the preprocessor pattern. `-addScope` copies `strings` and adds the copy as a subscope of `preprocessor`.
-[strings addScope:preprocessor];
+// This pattern should search where there is nothing else, *and* in the results of the preprocessor pattern.
+[strings addScope:preprocessor]; // Equivalent to [preprocessor addSubscope:strings.copy]
 
 JLTokenPattern *literals = [JLTokenPattern tokenPatternWithPattern:@"@[\\(|\\{|\\[][^\\(\\{\\[]+[\\)|\\}|\\]]" andColor:colors[JLTokenTypeNumber]];
 literals.opaque = NO; // Scopes and patterns are opaque per default. Setting this to NO makes it that patterns that follow in the same scope can search and overwrite the results from this pattern.
