@@ -171,7 +171,7 @@
     [self addToken:JLTokenTypeComment withPattern:@"//.*+$" andScope:rangeScope];
     
     // Preprocessor macros
-    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withPattern:@"#.*+$" andScope:rangeScope];
+    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withPattern:@"^#.*+$" andScope:rangeScope];
     
     // #import <Library/Library.h>
     // In xcode it only works for #import and #include, not all preprocessor statements.
