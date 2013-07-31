@@ -12,26 +12,30 @@
 #import "JLTextView.h"
 
 @interface JLTextViewController ()
-
+/// Only set from -initWithText: and directly set to nil in -loadView
+@property (nonatomic, strong) NSString *defaultText;
 @end
 
 @implementation JLTextViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (instancetype)initWithText:(NSString *)text
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super init];
     if (self) {
-        // Custom initialization
+        _defaultText = text;
     }
     return self;
 }
-
 - (void)loadView
 {
     UIView *view = [[UIView alloc] init];
     JLTextView *textView = [[JLTextView alloc] init];
-    
     textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    
+    if (self.defaultText) {
+        textView.text = self.defaultText;
+        self.defaultText = nil;
+    }
     
     [view addSubview:textView];
     

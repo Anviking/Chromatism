@@ -12,6 +12,8 @@
 
 @interface JLTextViewController : UIViewController
 
+- (instancetype)initWithText:(NSString *)text;
+
 @property (nonatomic, strong) IBOutlet JLTextView *textView;
 
 // Convenience property for self.textView.syntaxTokenizer

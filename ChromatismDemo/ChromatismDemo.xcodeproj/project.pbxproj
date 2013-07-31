@@ -20,6 +20,7 @@
 		3260A18717A88BA9008792E6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3260A18517A88BA9008792E6 /* InfoPlist.strings */; };
 		3260A18917A88BA9008792E6 /* ChromatismDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3260A18817A88BA9008792E6 /* ChromatismDemoTests.m */; };
 		3260A19D17A88BC8008792E6 /* libChromatism.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3260A19817A88BB8008792E6 /* libChromatism.a */; };
+		3260A1A517A88EF4008792E6 /* demo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3260A1A417A88EF4008792E6 /* demo.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		3260A18617A88BA9008792E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3260A18817A88BA9008792E6 /* ChromatismDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChromatismDemoTests.m; sourceTree = "<group>"; };
 		3260A19217A88BB7008792E6 /* Chromatism.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Chromatism.xcodeproj; path = ../Chromatism/Chromatism.xcodeproj; sourceTree = "<group>"; };
+		3260A1A417A88EF4008792E6 /* demo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = demo.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 		3260A16A17A88BA9008792E6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3260A1A417A88EF4008792E6 /* demo.txt */,
 				3260A16B17A88BA9008792E6 /* ChromatismDemo-Info.plist */,
 				3260A16C17A88BA9008792E6 /* InfoPlist.strings */,
 				3260A16F17A88BA9008792E6 /* main.m */,
@@ -278,6 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3260A16E17A88BA9008792E6 /* InfoPlist.strings in Resources */,
+				3260A1A517A88EF4008792E6 /* demo.txt in Resources */,
 				3260A17617A88BA9008792E6 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

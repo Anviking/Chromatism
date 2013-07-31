@@ -15,11 +15,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    // Load demo text
-    NSURL *URL = [[NSBundle mainBundle] URLForResource:@"demo" withExtension:@"txt"];
-    NSString *string = [[NSString alloc] initWithData:[NSData dataWithContentsOfURL:URL] encoding:NSUTF8StringEncoding];
-    
-    JLTextViewController *viewController = [[JLTextViewController alloc] initWithText:string];
+    JLTextViewController *viewController = [[JLTextViewController alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     viewController.title = @"Chromatism";
     
