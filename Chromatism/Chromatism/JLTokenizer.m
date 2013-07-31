@@ -199,11 +199,11 @@
     // Method call parts
     [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(?<=\\w+):\\s*[^\\s;\\]]+" andScope:rangeScope] setCaptureGroup:1];
     
-    // NS and UI prefixes words
-    [self addToken:JLTokenTypeOtherClassNames withPattern:@"(\\b(?>NS|UI))\\w+\\b" andScope:rangeScope];
-    
-    [self addToken:JLTokenTypeKeyword withPattern:@"(?<=\\b)(?>true|false|yes|no|TRUE|FALSE|bool|BOOL|nil|id|void|self|NULL|if|else|strong|weak|nonatomic|atomic|assign|copy|typedef|enum|auto|break|case|const|char|continue|do|default|double|extern|float|for|goto|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|volatile|while|nonatomic|atomic|nonatomic|readonly|super )(\\b)" andScope:rangeScope];
+    [self addToken:JLTokenTypeKeyword withPattern:@"\\b(true|false|yes|no|TRUE|FALSE|bool|BOOL|nil|id|void|self|NULL|if|else|strong|weak|nonatomic|atomic|assign|copy|typedef|enum|auto|break|case|const|char|continue|do|default|double|extern|float|for|goto|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|volatile|while|nonatomic|atomic|nonatomic|readonly|super)\\b" andScope:rangeScope];
     [self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:rangeScope];
+    
+    // Other Class Names
+    [self addToken:JLTokenTypeOtherClassNames withPattern:@"\\b[A-Z]{3}[a-zA-Z]*\\b" andScope:rangeScope];
     
     [documentScope addSubscope:rangeScope];
     [documentScope perform];
