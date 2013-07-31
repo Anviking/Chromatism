@@ -508,6 +508,7 @@
 				3260A18E17A88BA9008792E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3260A18F17A88BA9008792E6 /* Build configuration list for PBXNativeTarget "ChromatismDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -516,6 +517,7 @@
 				3260A19117A88BA9008792E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

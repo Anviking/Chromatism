@@ -8,6 +8,7 @@
 
 #import "JLTextView.h"
 #import "JLTokenizer.h"
+#import "Chromatism.h"
 
 @implementation JLTextView
 

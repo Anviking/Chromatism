@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		32102EE117A948F900CFA161 /* Chromatism+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 32102EE017A948F900CFA161 /* Chromatism+Internal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3260A15417A8845F008792E6 /* Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB94E1781C1250023348A /* Helpers.m */; };
 		3260A15617A884EC008792E6 /* JLTokenizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3260A15517A884EC008792E6 /* JLTokenizerTests.m */; };
 		8F3AB92A1781C0BA0023348A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB9291781C0BA0023348A /* XCTest.framework */; };
@@ -47,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		32102EE017A948F900CFA161 /* Chromatism+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Chromatism+Internal.h"; sourceTree = "<group>"; };
 		3260A15517A884EC008792E6 /* JLTokenizerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTokenizerTests.m; sourceTree = "<group>"; };
 		8F3AB9181781C0BA0023348A /* libChromatism.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChromatism.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F3AB91B1781C0BA0023348A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -136,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				8F3AB9201781C0BA0023348A /* Chromatism.h */,
+				32102EE017A948F900CFA161 /* Chromatism+Internal.h */,
 				8F3AB9221781C0BA0023348A /* Chromatism.m */,
 				8F3AB9551781C1250023348A /* JLTokenizer.h */,
 				8F3AB9561781C1250023348A /* JLTokenizer.m */,
@@ -193,6 +196,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32102EE117A948F900CFA161 /* Chromatism+Internal.h in Headers */,
 				8FA091A81791E99900179325 /* NSMutableAttributedString+Mush.h in Headers */,
 				8FA0CB0F1795F41B00FF8EB1 /* JLTextView.h in Headers */,
 				8F54EF0E1781C776008C1609 /* Chromatism.h in Headers */,
