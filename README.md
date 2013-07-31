@@ -12,12 +12,12 @@ How to add Chromatism to your application:
 
 ## Classes
 - `JLTextView` is a textView with a syntaxTokenixer property to a `JLTokenizer`
-- `JLTokenizer` is the class in which everything happens. It uses scopes and tokenPatterns to appropriately tokenize a textStorage or a string. It is a `NSTextStorage` and `UITextView`-delegate.
+- `JLTokenizer` is the work horse of Chromatism. It uses scopes and tokenPatterns to appropriately tokenize a textStorage or a string. It is a delegate of `NSTextStorage` and `UITextView`.
 - `JLScope` has a `NSMutableIndexSet`-property that corresponds to ranges in the textStorage. Scopes can be arranged in a hierarchy. A scope's children is stored in the `subscopes` property, and a scopes parent is simply called its `scope`. A scope can be executed via the `-perform`-method. The method causes subscopes to perform cascadingly. 
 - `JLTokenPattern` is a subclass of `JLScope`. It has a regex-pattern that in `-perform` searches through the ranges of its parent scope.
 
 ## Scopes and Patterns
-Scopes and patters can ensure that every regex pattern searches in the right places. To understand how they work, it is helpful to know what happens in the `-perform` method.
+Scopes and patters can ensure that regex patterns search in the right place. To understand how they work, it is helpful to know what happens in the `-perform` method.
 
 1. A scope may contain ranges before it's performed. When it's performed, the scope's set is intersected with the parent scope set. A scope can never contain more indexes that its parent scope.
 2. The scope calls perform on its subscopes.
