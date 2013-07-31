@@ -131,4 +131,55 @@
     
 }
 
+- (NSTimeInterval)timeOfTokenizingString:(NSString *)string multiplied:(NSInteger)multiplier
+{
+    string = [string stringByPaddingToLength:(string.length * multiplier) withString:string startingAtIndex:0];
+    NSTextStorage *storage = [[NSTextStorage alloc] initWithString:string];
+    NSDate *date = [NSDate date];
+    [tokenizer tokenizeTextStorage:storage withRange:NSMakeRange(0, string.length)];
+    return ABS([date timeIntervalSinceNow]);
+}
+
+- (NSTimeInterval)timeOfTokenizingString:(NSString *)string range:(NSRange)range multiplied:(NSInteger)multiplier
+{
+    string = [string stringByPaddingToLength:(string.length * multiplier) withString:string startingAtIndex:0];
+    NSTextStorage *storage = [[NSTextStorage alloc] initWithString:string];
+    NSDate *date = [NSDate date];
+    [tokenizer tokenizeTextStorage:storage withRange:range];
+    return ABS([date timeIntervalSinceNow]);
+}
+
+/*
+- (void)testAndPlotLater
+{
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSURL *URL = [bundle URLForResource:@"demo" withExtension:@"txt"];
+    NSString *string = [[NSString alloc] initWithData:[NSData dataWithContentsOfURL:URL] encoding:NSUTF8StringEncoding];
+    NSMutableString *result = [[NSMutableString alloc] init];
+    for (int i = 1; i<50; i++) {
+        NSTimeInterval interval = [self timeOfTokenizingString:string multiplied:i];
+        [result appendFormat:@"%f,",interval];
+    }
+    NSLog(@"Result:%@",result);
+}
+ */
+
+- (void)testLargeFilePerformance
+{
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSURL *URL = [bundle URLForResource:@"demo" withExtension:@"txt"];
+    NSString *string = [[NSString alloc] initWithData:[NSData dataWithContentsOfURL:URL] encoding:NSUTF8StringEncoding];
+    NSTimeInterval interval = [self timeOfTokenizingString:string multiplied:10];
+    NSLog(@"\n\nLarge file tokenizing: %fms\n\n", interval*1000);
+}
+
+- (void)testSmallEditPerformance
+{
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSURL *URL = [bundle URLForResource:@"demo" withExtension:@"txt"];
+    NSString *string = [[NSString alloc] initWithData:[NSData dataWithContentsOfURL:URL] encoding:NSUTF8StringEncoding];
+    NSTimeInterval interval = [self timeOfTokenizingString:string range:[string lineRangeForRange:NSMakeRange(500, 5)] multiplied:1];
+    NSLog(@"\n\nLine edit Performance: %fms\n\n", interval*1000);
+}
+
 @end

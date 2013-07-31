@@ -135,7 +135,10 @@
 
 - (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
+    // Measure performance
+    NSDate *date = [NSDate date];
    [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
+    NSLog(@"Chromatism done tokenizing with time of %fms",ABS([date timeIntervalSinceNow]*1000));
 }
 
 #pragma mark - Tokenizing
@@ -157,9 +160,6 @@
 
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
 {
-    // Measure performance
-    NSDate *date = [NSDate date];
-    
     // First, remove old attributes
     [self clearColorAttributesInRange:range textStorage:storage];
 
@@ -207,7 +207,6 @@
     
     [documentScope addSubscope:rangeScope];
     [documentScope perform];
-    NSLog(@"Chromatism done tokenizing with time of %fms",ABS([date timeIntervalSinceNow]*1000));
 }
 
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
