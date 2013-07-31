@@ -128,6 +128,14 @@
     return _set;
 }
 
+#pragma mark - Debugging
+
+- (NSString *)description
+{
+    NSString *subscopes = [[[[self.subscopes valueForKey:@"description"] componentsJoinedByString:@"\n"] componentsSeparatedByString:@"\n"] componentsJoinedByString:@"\n\t\t"];
+    return [NSString stringWithFormat:@"%@, %@, nopaque: %i, nindexesSet:%@, \n subscopes, %@", NSStringFromClass(self.class), _descriptionName, _opaque, _set, subscopes];
+}
+
 #pragma mark - NSCopying Protocol
 
 - (id)copyWithZone:(NSZone *)zone

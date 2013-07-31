@@ -150,6 +150,7 @@
     NSAssert(color, @"%@ didn't return a color in color dictionary %@", type, self.colors);
     
     JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern andColor:self.colors[type]];
+    token.descriptionName = type;
     [scope addSubscope:token];
     return token;
 }

@@ -65,6 +65,14 @@
     [self iterateSubscopes];
 }
 
+#pragma mark - Debugging
+
+- (NSString *)description
+{
+    NSString *subscopes = [[[[self.subscopes valueForKey:@"description"] componentsJoinedByString:@"\n"] componentsSeparatedByString:@"\n"] componentsJoinedByString:@"\n\t\t"];
+    return [NSString stringWithFormat:@"%@, %@, Regex Pattern: %@, opaque: %i, indexesSet:%@ \nsubscopes, %@", NSStringFromClass(self.class), self.descriptionName, self.pattern, self.opaque, self.set, subscopes];
+}
+
 #pragma mark - NSCopying Protocol
 
 - (id)copyWithZone:(NSZone *)zone

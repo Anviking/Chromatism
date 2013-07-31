@@ -65,4 +65,9 @@
  */
 @property (nonatomic, assign, getter = isEmpty) BOOL empty;
 
+/**
+ *  A short description of the scope
+ */
+@property (nonatomic, copy) NSString *descriptionName;
+
 @end
