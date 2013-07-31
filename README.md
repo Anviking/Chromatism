@@ -3,6 +3,13 @@ Chromatism
 
 This is the beginning of a syntax highlighting `UITextView` for iOS. Currently it only knows about Obj-C. Previously Chromatism used a combination of `CoreText` and `UITableView` for performance, but luckily that is not needed anymore.
 
+How to add Chromatism to your application:
+
+1. Drag and drop `Chromatism.xcodeproj` to your project.
+2. Add `Chromatism` as a target dependency and link to `libChromatism.a`
+3. Make sure you have the `-ObjC` flag on the `Other Linker Flags` build setting.
+4. Add `"$(BUILT_PRODUCTS_DIR)/../../Headers"` to the `Header Search Paths` build setting.
+
 ## Classes
 - `JLTextView` is a textView with a syntaxTokenixer property to a `JLTokenizer`
 - `JLTokenizer` is the class in which everything happens. It uses scopes and tokenPatterns to appropriately tokenize a textStorage or a string. It is a `NSTextStorage` and `UITextView`-delegate.
