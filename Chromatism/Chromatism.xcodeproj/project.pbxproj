@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		32102EE117A948F900CFA161 /* Chromatism+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 32102EE017A948F900CFA161 /* Chromatism+Internal.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		32102EED17A95E2900CFA161 /* demo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 32102EEB17A95E2900CFA161 /* demo.txt */; };
+		32102EEE17A95E2900CFA161 /* description.txt in Resources */ = {isa = PBXBuildFile; fileRef = 32102EEC17A95E2900CFA161 /* description.txt */; };
 		3260A15417A8845F008792E6 /* Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB94E1781C1250023348A /* Helpers.m */; };
 		3260A15617A884EC008792E6 /* JLTokenizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3260A15517A884EC008792E6 /* JLTokenizerTests.m */; };
 		8F3AB92A1781C0BA0023348A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB9291781C0BA0023348A /* XCTest.framework */; };
@@ -49,6 +51,8 @@
 
 /* Begin PBXFileReference section */
 		32102EE017A948F900CFA161 /* Chromatism+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Chromatism+Internal.h"; sourceTree = "<group>"; };
+		32102EEB17A95E2900CFA161 /* demo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = demo.txt; path = bundle.bundle/demo.txt; sourceTree = "<group>"; };
+		32102EEC17A95E2900CFA161 /* description.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = description.txt; path = bundle.bundle/description.txt; sourceTree = "<group>"; };
 		3260A15517A884EC008792E6 /* JLTokenizerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTokenizerTests.m; sourceTree = "<group>"; };
 		8F3AB9181781C0BA0023348A /* libChromatism.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChromatism.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F3AB91B1781C0BA0023348A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -183,6 +187,8 @@
 		8F3AB9321781C0BB0023348A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				32102EEB17A95E2900CFA161 /* demo.txt */,
+				32102EEC17A95E2900CFA161 /* description.txt */,
 				8F3AB9331781C0BB0023348A /* ChromatismTests-Info.plist */,
 				8F3AB9341781C0BB0023348A /* InfoPlist.strings */,
 			);
@@ -280,6 +286,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F3AB9361781C0BB0023348A /* InfoPlist.strings in Resources */,
+				32102EEE17A95E2900CFA161 /* description.txt in Resources */,
+				32102EED17A95E2900CFA161 /* demo.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

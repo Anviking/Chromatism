@@ -1,0 +1,31 @@
+JLScope, (null), nopaque: 1, nindexesSet:<NSMutableIndexSet: 0x8c65da0>[number of indexes: 2466 (in 1 ranges), indexes: (0-2465)], 
+ subscopes, JLTokenPattern, comment, Regex Pattern: /\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/, opaque: 1, indexesSet:<NSMutableIndexSet: 0x892b970>(no indexes) 
+		subscopes, 
+		JLScope, (null), nopaque: 1, nindexesSet:<NSMutableIndexSet: 0x892b990>[number of indexes: 2466 (in 1 ranges), indexes: (0-2465)], 
+		 subscopes, JLTokenPattern, comment, Regex Pattern: //.*+$, opaque: 1, indexesSet:<NSMutableIndexSet: 0x895ab00>[number of indexes: 1355 (in 14 ranges), indexes: (0-1 3-19 21-38 40-41 43-80 82-134 136-137 923-1199 1205-1351 1429-1639 1645-1777 1856-2004 2079-2264 2337-2456)] 
+				subscopes, 
+				JLTokenPattern, preprocessor, Regex Pattern: #.*+$, opaque: 1, indexesSet:<NSMutableIndexSet: 0x8922820>[number of indexes: 56 (in 2 ranges), indexes: (140-162 164-196)] 
+				subscopes, JLTokenPattern, string, Regex Pattern: <.*?>, opaque: 1, indexesSet:<NSMutableIndexSet: 0x895ad30>[number of indexes: 25 (in 1 ranges), indexes: (172-196)] 
+						subscopes, 
+						JLTokenPattern, (null), Regex Pattern: ("|@")[^"\n]*(@"|"), opaque: 1, indexesSet:<NSMutableIndexSet: 0x893f280>[number of indexes: 15 (in 1 ranges), indexes: (148-162)] 
+						subscopes, 
+				JLTokenPattern, string, Regex Pattern: ("|@")[^"\n]*(@"|"), opaque: 1, indexesSet:<NSMutableIndexSet: 0x8935730>[number of indexes: 13 (in 1 ranges), indexes: (661-673)] 
+				subscopes, 
+				JLTokenPattern, number, Regex Pattern: (?<=\s)\d+, opaque: 1, indexesSet:<NSMutableIndexSet: 0x895a900>(no indexes) 
+				subscopes, 
+				JLTokenPattern, number, Regex Pattern: @[\(|\{|\[][^\(\{\[]+[\)|\}|\]], opaque: 0, indexesSet:<NSMutableIndexSet: 0x895ac60>(no indexes) 
+				subscopes, 
+				JLTokenPattern, other_method_names, Regex Pattern: \w+\s*(?>\(.*\), opaque: 1, indexesSet:<NSMutableIndexSet: 0x895acc0>(no indexes) 
+				subscopes, 
+				JLTokenPattern, other_method_names, Regex Pattern: \.(\w+), opaque: 1, indexesSet:<NSMutableIndexSet: 0x8955210>[number of indexes: 62 (in 7 ranges), indexes: (348-353 653-657 690-695 697-714 749-754 756-770 806-811)] 
+				subscopes, 
+				JLTokenPattern, other_method_names, Regex Pattern: \[\w+\s+(\w+)\], opaque: 1, indexesSet:<NSMutableIndexSet: 0x895a1f0>[number of indexes: 35 (in 5 ranges), indexes: (368-372 400-409 493-497 583-587 783-792)] 
+				subscopes, 
+				JLTokenPattern, other_method_names, Regex Pattern: (?<=\w+):\s*[^\s;\]]+, opaque: 1, indexesSet:<NSMutableIndexSet: 0x892fe10>(no indexes) 
+				subscopes, 
+				JLTokenPattern, other_class_names, Regex Pattern: (\b(?>NS|UI))\w+\b, opaque: 1, indexesSet:<NSMutableIndexSet: 0x8958b10>[number of indexes: 157 (in 12 ranges), indexes: (249-261 308-319 359-366 391-398 511-532 560-581 775-781 889-901 1395-1407 1822-1834 2045-2057 2303-2315)] 
+				subscopes, 
+				JLTokenPattern, keyword, Regex Pattern: (?<=\b)(?>true|false|yes|no|TRUE|FALSE|bool|BOOL|nil|id|void|self|NULL|if|else|strong|weak|nonatomic|atomic|assign|copy|typedef|enum|auto|break|case|const|char|continue|do|default|double|extern|float|for|goto|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|volatile|while|nonatomic|atomic|nonatomic|readonly|super )(\b), opaque: 1, indexesSet:<NSMutableIndexSet: 0x8951180>[number of indexes: 46 (in 11 ranges), indexes: (231-234 343-346 685-688 744-747 801-804 837-842 855-858 1359-1362 1785-1788 2012-2015 2272-2275)] 
+				subscopes, 
+				JLTokenPattern, keyword, Regex Pattern: @[a-zA-Z0-9_]+, opaque: 1, indexesSet:<NSMutableIndexSet: 0x8958fe0>[number of indexes: 19 (in 2 ranges), indexes: (199-213 2461-2464)] 
+				subscopes, 
