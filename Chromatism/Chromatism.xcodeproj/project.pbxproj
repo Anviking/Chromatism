@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3260A15417A8845F008792E6 /* Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB94E1781C1250023348A /* Helpers.m */; };
+		3260A15617A884EC008792E6 /* JLTokenizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3260A15517A884EC008792E6 /* JLTokenizerTests.m */; };
 		8F3AB92A1781C0BA0023348A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB9291781C0BA0023348A /* XCTest.framework */; };
 		8F3AB92B1781C0BB0023348A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB91B1781C0BA0023348A /* Foundation.framework */; };
 		8F3AB92D1781C0BB0023348A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB92C1781C0BB0023348A /* UIKit.framework */; };
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3260A15517A884EC008792E6 /* JLTokenizerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTokenizerTests.m; sourceTree = "<group>"; };
 		8F3AB9181781C0BA0023348A /* libChromatism.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChromatism.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F3AB91B1781C0BA0023348A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8F3AB91F1781C0BA0023348A /* Chromatism-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Chromatism-Prefix.pch"; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 		8F3AB9311781C0BB0023348A /* ChromatismTests */ = {
 			isa = PBXGroup;
 			children = (
+				3260A15517A884EC008792E6 /* JLTokenizerTests.m */,
 				8F3AB9371781C0BB0023348A /* ChromatismTests.m */,
 				8F3AB9321781C0BB0023348A /* Supporting Files */,
 			);
@@ -301,6 +304,7 @@
 			files = (
 				8F3AB9381781C0BB0023348A /* ChromatismTests.m in Sources */,
 				3260A15417A8845F008792E6 /* Helpers.m in Sources */,
+				3260A15617A884EC008792E6 /* JLTokenizerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

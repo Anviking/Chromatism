@@ -46,6 +46,8 @@
     NSTextStorage *storage = [[NSTextStorage alloc] initWithString:@"Test test test test"];
     JLScope *scope = [JLScope scopeWithTextStorage:storage];
     
+    XCTAssert(scope.opaque, @"scopes should be opaque per default");
+    
     JLScope *subscope1 = [JLScope scopeWithRange:NSMakeRange(0, 1) inTextStorage:nil];
     JLScope *subscope2 = [JLScope scopeWithRange:NSMakeRange(1, 1) inTextStorage:nil];
     JLScope *subscope3 = [JLScope scopeWithRange:NSMakeRange(2, 1) inTextStorage:nil];
