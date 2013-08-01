@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Chromatism+Internal.h"
+#import "JLTokenizer.h"
 
 @class JLTokenizer;
 
-@interface JLTextView : UITextView <UITextViewDelegate, NSLayoutManagerDelegate>
+@interface JLTextView : UITextView <UITextViewDelegate, NSLayoutManagerDelegate, JLTokenizerDataSource>
 
 @property (nonatomic, strong) JLTokenizer *syntaxTokenizer;
 @property (nonatomic, assign) JLTokenizerTheme theme;

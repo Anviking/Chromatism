@@ -119,16 +119,34 @@
     return token;
 }
 
+- (BOOL)characters:(NSString *)characters appearInString:(NSString *)string
+{
+    if (!characters && !string) return NO;
+    return ([string rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:characters]].location != NSNotFound);
+}
+
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
 {
     // First, remove old attributes
     [self clearColorAttributesInRange:range textStorage:storage];
-
+    
+    // Get the string with everything that has changed
+    NSString *newString = [storage.string substringWithRange:range];
+    NSString *oldString = [self.dataSource recentlyReplacedText];
+    
+    NSString *diffString;
+    if (newString && oldString) {
+        diffString = [newString stringByAppendingString:oldString];
+    }
+    
     JLScope *documentScope = [JLScope scopeWithTextStorage:storage];
     JLScope *rangeScope = [JLScope scopeWithRange:range inTextStorage:storage];
  
     // Block and line comments
-    [self addToken:JLTokenTypeComment withPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andScope:documentScope];
+    if ([self characters:@"/*" appearInString:diffString]) {
+        [self addToken:JLTokenTypeComment withPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andScope:documentScope];
+    }
+    
     [self addToken:JLTokenTypeComment withPattern:@"//.*+$" andScope:rangeScope];
     
     // Preprocessor macros

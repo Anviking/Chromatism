@@ -7,7 +7,6 @@
 //
 
 #import "JLTextView.h"
-#import "JLTokenizer.h"
 #import "Chromatism.h"
 
 @implementation JLTextView
@@ -52,6 +51,7 @@
     self.syntaxTokenizer = [[JLTokenizer alloc] init];
     self.textStorage.delegate = self.syntaxTokenizer;
     self.theme = JLTokenizerThemeDusk;
+    self.syntaxTokenizer.dataSource = self;
     
     // Set default properties
     self.scrollEnabled = YES;
@@ -122,8 +122,16 @@
     {
         _oldString = [textView.text substringWithRange:range];
     }
+    else _oldString = @"";
     
     return YES;
+}
+
+#pragma mark - JLTokenizer data source
+
+- (NSString *)recentlyReplacedText
+{
+    return _oldString;
 }
 
 #pragma mark - NSLayoutManager delegeate

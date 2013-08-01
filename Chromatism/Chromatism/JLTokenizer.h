@@ -13,7 +13,7 @@
 
 @class TextViewChange, JLTextView;
 
-@protocol JLTokenizerDelegate;
+@protocol JLTokenizerDelegate, JLTokenizerDataSource;
 
 @interface JLTokenizer : NSObject <NSTextStorageDelegate, JLScopeDelegate>
 
@@ -25,6 +25,14 @@
 
 @property (nonatomic, strong) NSDictionary *colors;
 @property (nonatomic, weak) id<JLTokenizerDelegate> delegate;
+@property (nonatomic, weak) id<JLTokenizerDataSource> dataSource;
+@end
+
+@protocol JLTokenizerDataSource <NSObject>
+
+/// Return the text that was replaced in the most recent text edit or an empty string if there is none.
+- (NSString *)recentlyReplacedText;
+
 @end
 
 @protocol JLTokenizerDelegate <NSObject>
