@@ -9,9 +9,11 @@
 #import "JLTokenPattern.h"
 
 @interface JLScope ()
-@property (nonatomic, readwrite, strong) NSString *string;
 - (void)iterateSubscopes;
 - (BOOL)shouldPerform;
+
+@property (nonatomic, readwrite, strong) NSString *string;
+
 @end
 
 @implementation JLTokenPattern
@@ -40,14 +42,12 @@
 - (void)setExpression:(NSRegularExpression *)expression
 {
     _expression = expression;
-    
-    self.pattern = expression.pattern;
+    _pattern = expression.pattern;
 }
 
 - (void)setPattern:(NSString *)pattern
 {
     _pattern = pattern;
-    
     _expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
 }
 
