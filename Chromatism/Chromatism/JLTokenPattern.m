@@ -18,10 +18,9 @@
 
 #pragma mark - Initialization
 
-+ (instancetype)tokenPatternWithPattern:(NSString *)pattern andColor:(UIColor *)color
++ (instancetype)tokenPatternWithPattern:(NSString *)pattern
 {
     JLTokenPattern *tokenPattern = [JLTokenPattern new];
-    tokenPattern.color = color;
     tokenPattern.pattern = pattern;
     return tokenPattern;
 }
@@ -57,9 +56,11 @@
 - (void)performInIndexSet:(NSIndexSet *)set
 {
     if (![self shouldPerform]) return;
+    NSDictionary *attributes = [self.delegate attributesForScope:self];
+    NSAssert(attributes, @"");
     [set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
         [self.expression enumerateMatchesInString:self.string options:self.matchingOptions range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-            [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.color range:[result rangeAtIndex:self.captureGroup]];
+            [self.textStorage addAttributes:attributes range:[result rangeAtIndex:self.captureGroup]];
             [self.set addIndexesInRange:[result rangeAtIndex:self.captureGroup]];
         }];
     }];
@@ -87,7 +88,9 @@
     pattern.textStorage = self.textStorage;
     pattern.expression = self.expression;
     pattern.set = self.set.mutableCopy;
-    pattern.color = self.color;
+    pattern.delegate = self.delegate;
+    pattern.type = self.type.copy;
+    pattern.identifier = self.identifier.copy;
 
     return pattern;
 }

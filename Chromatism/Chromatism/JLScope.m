@@ -175,6 +175,9 @@
         [scope addSubscope:subscope.copy];
     }
     scope.textStorage = self.textStorage;
+    scope.delegate = self.delegate;
+    scope.type = self.type.copy;
+    scope.identifier = self.identifier.copy;
     return scope;
 }
 

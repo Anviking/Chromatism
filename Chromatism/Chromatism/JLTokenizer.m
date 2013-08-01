@@ -158,6 +158,13 @@
     return nil;
 }
 
+- (NSDictionary *)attributesForScope:(JLScope *)scope
+{
+    UIColor *color = self.colors[scope.type];
+    NSAssert(color, @"Didn't get a color for type:%@ in colorDictionary: %@",scope.type, self.colors);
+    return @{ NSForegroundColorAttributeName : color };
+}
+
 #pragma mark - Tokenizing
 
 - (BOOL)characters:(NSString *)characters appearInString:(NSString *)string
@@ -203,7 +210,7 @@
     
     NSAssert(color, @"%@ didn't return a color in color dictionary %@", type, self.colors);
     
-    JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern andColor:self.colors[type]];
+    JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern];
     token.identifier = identifier;
     token.type = type;
     token.delegate = self;

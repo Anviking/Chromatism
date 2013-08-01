@@ -10,7 +10,7 @@
 
 @interface JLTokenPattern : JLScope
 
-+ (instancetype)tokenPatternWithPattern:(NSString *)pattern andColor:(UIColor *)color;
++ (instancetype)tokenPatternWithPattern:(NSString *)pattern;
 
 // Setting either expression or pattern causes the other one to update.
 @property (nonatomic, strong) NSRegularExpression *expression;
