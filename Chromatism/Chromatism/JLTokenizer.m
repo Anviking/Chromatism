@@ -167,10 +167,9 @@
 
 #pragma mark - Tokenizing
 
-- (BOOL)characters:(NSString *)characters appearInString:(NSString *)string
+- (void)tokenizeTextStorage:(NSTextStorage *)storage
 {
-    if (!characters && !string) return NO;
-    return ([string rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:characters]].location != NSNotFound);
+    [self tokenizeTextStorage:storage withRange:NSMakeRange(0, storage.length)];
 }
 
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
