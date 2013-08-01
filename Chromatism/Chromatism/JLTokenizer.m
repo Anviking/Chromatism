@@ -42,6 +42,9 @@
 #import "JLTokenPattern.h"
 #import "Chromatism.h"
 
+#define BLOCK_COMMENT @"blockComment"
+#define LINE_COMMENT @"lineComment"
+
 @interface JLTokenizer ()
 
 @property (nonatomic, strong) JLScope *documentScope;
@@ -50,6 +53,10 @@
 @end
 
 @implementation JLTokenizer
+{
+    NSRange _editedRange;
+    NSRange _editedLineRange;
+}
 
 #pragma mark - Setup
 
@@ -59,12 +66,13 @@
     JLScope *lineScope = [JLScope new];
     
     // Block and line comments
-    [self addToken:JLTokenTypeComment withPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andScope:documentScope];
+    JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withIdentifier:BLOCK_COMMENT pattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andScope:documentScope];
+    blockComment.triggeringCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"/*"];
     
-    [self addToken:JLTokenTypeComment withPattern:@"//.*+$" andScope:lineScope];
+    [self addToken:JLTokenTypeComment withIdentifier:LINE_COMMENT pattern:@"//.*+$" andScope:lineScope];
     
     // Preprocessor macros
-    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withPattern:@"^#.*+$" andScope:lineScope];
+    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withIdentifier:nil pattern:@"^#.*+$" andScope:lineScope];
     
     // #import <Library/Library.h>
     // In xcode it only works for #import and #include, not all preprocessor statements.
@@ -116,24 +124,6 @@
     return _lineScope;
 }
 
-//// Get the string with everything that has changed
-//NSString *newString = [storage.string substringWithRange:range];
-//NSString *oldString = [self.dataSource recentlyReplacedText];
-//
-//NSString *diffString;
-//if (newString && oldString) {
-//    diffString = [newString stringByAppendingString:oldString];
-//}
-//
-//JLScope *documentScope = [JLScope scopeWithTextStorage:storage];
-//JLScope *rangeScope = [JLScope scopeWithRange:range inTextStorage:storage];
-//
-//// Block and line comments
-//if ([self characters:@"/*" appearInString:diffString]) {
-//    [self addToken:JLTokenTypeComment withPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andScope:documentScope];
-//}
-
-
 #pragma mark - NSTextStorageDelegate
 
 - (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
@@ -143,9 +133,11 @@
 
 - (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
+    _editedRange = editedRange;
+    _editedLineRange = [textStorage.string lineRangeForRange:editedRange];
     // Measure performance
     NSDate *date = [NSDate date];
-   [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
+   [self tokenizeTextStorage:textStorage withRange:_editedLineRange];
     NSLog(@"Chromatism done tokenizing with time of %fms",ABS([date timeIntervalSinceNow]*1000));
 }
 
@@ -156,22 +148,17 @@
     if ([self.delegate respondsToSelector:@selector(scope:didFinishProcessing:)]) [self.delegate scope:scope didFinishProcessing:self];
 }
 
-#pragma mark - Tokenizing
-
-- (JLTokenPattern *)addToken:(NSString *)type withPattern:(NSString *)pattern andScope:(JLScope *)scope
+- (NSString *)mergedModifiedStringForScope:(JLScope *)scope
 {
-    NSParameterAssert(type);
-    NSParameterAssert(pattern);
-    NSParameterAssert(scope);
-    UIColor *color = self.colors[type];
-    
-    NSAssert(color, @"%@ didn't return a color in color dictionary %@", type, self.colors);
-    
-    JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern andColor:self.colors[type]];
-    token.identifier = type;
-    [scope addSubscope:token];
-    return token;
+    NSString *oldString = [self.dataSource recentlyReplacedText];
+    NSString *newString = [scope.string substringWithRange:_editedLineRange];
+    if (oldString && newString) {
+        return [oldString stringByAppendingString:newString];
+    }
+    return nil;
 }
+
+#pragma mark - Tokenizing
 
 - (BOOL)characters:(NSString *)characters appearInString:(NSString *)string
 {
@@ -198,6 +185,31 @@
     NSMutableAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:attributes].mutableCopy;
     [self tokenizeTextStorage:(NSTextStorage *)attributedString withRange:NSMakeRange(0, string.length)];
     return attributedString;
+}
+
+#pragma mark - Helpers
+
+- (JLTokenPattern *)addToken:(NSString *)type withPattern:(NSString *)pattern andScope:(JLScope *)scope
+{
+    return [self addToken:type withIdentifier:type pattern:pattern andScope:scope];
+}
+
+- (JLTokenPattern *)addToken:(NSString *)type withIdentifier:(NSString *)identifier pattern:(NSString *)pattern andScope:(JLScope *)scope
+{
+    NSParameterAssert(type);
+    NSParameterAssert(pattern);
+    NSParameterAssert(scope);
+    UIColor *color = self.colors[type];
+    
+    NSAssert(color, @"%@ didn't return a color in color dictionary %@", type, self.colors);
+    
+    JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern andColor:self.colors[type]];
+    token.identifier = identifier;
+    token.type = type;
+    token.delegate = self;
+    [scope addSubscope:token];
+    
+    return token;
 }
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;

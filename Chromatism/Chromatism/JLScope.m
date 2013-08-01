@@ -10,10 +10,10 @@
 #import "Helpers.h"
 
 @interface JLScope ()
-@property (nonatomic, readwrite, strong) NSString *string;
 
 - (void)iterateSubscopes;
 
+@property (nonatomic, readwrite, strong) NSString *string;
 @end
 
 @implementation JLScope
@@ -71,15 +71,19 @@
 - (void)perform
 {
     NSAssert(!self.scope, @"Only call -perform to a rootlevel scope");
+    if (![self shouldPerform]) return;
     [self iterateSubscopes];
+    
     if ([self.delegate respondsToSelector:@selector(scopeDidFinishPerforming:)]) [self.delegate scopeDidFinishPerforming:self];
 }
 
 - (void)performInIndexSet:(NSIndexSet *)set
 {
     NSParameterAssert(set);
+    if (![self shouldPerform]) return;
     self.set = [self.set intersectionWithSet:set];
     [self iterateSubscopes];
+    
     if ([self.delegate respondsToSelector:@selector(scopeDidFinishPerforming:)]) [self.delegate scopeDidFinishPerforming:self];
 }
 
@@ -89,6 +93,21 @@
     for (JLScope *scope in self.subscopes) {
         [scope reset];
     }
+}
+
+- (BOOL)shouldPerform
+{
+    if ([self.delegate respondsToSelector:@selector(scopeShouldPerform:)]) return [self.delegate scopeShouldPerform:self];
+
+    if (self.triggeringCharacterSet) {
+        NSString *string = [self.delegate mergedModifiedStringForScope:self];
+        if (!string) return YES;
+        if ([string rangeOfCharacterFromSet:self.triggeringCharacterSet].location == NSNotFound) {
+            return NO;
+        }
+        return YES;
+    }
+    return YES;
 }
 
 #pragma mark - Scope Hierarchy Management
@@ -126,12 +145,13 @@
     [(NSMutableArray *)self.subscopes removeObject:subscope];
 }
 
-- (void)setTextStorage:(NSTextStorage *)textStorage
-{
-    _textStorage = textStorage;
-    _string = textStorage.string;
-}
+#pragma mark - Properties
 
+- (NSString *)string
+{
+    if (!_string) _string = self.textStorage.string;
+    return _string;
+}
 - (NSMutableIndexSet *)set
 {
     if (!_set) _set = [NSMutableIndexSet indexSet];

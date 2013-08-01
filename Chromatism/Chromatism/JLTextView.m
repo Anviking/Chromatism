@@ -118,8 +118,7 @@
         return NO;
     }
     
-    if (range.length > 0)
-    {
+    if (range.length > 0) {
         _oldString = [textView.text substringWithRange:range];
     }
     else _oldString = @"";

@@ -69,19 +69,32 @@
 @property (nonatomic, assign, getter = isEmpty) BOOL empty;
 
 /**
- *  A identifier of the scope
+ *  An unique identifier of the scope
  */
-@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, assign) NSString *identifier;
+
+/**
+ *  What kind of scope is this?
+ */
+@property (nonatomic, copy) NSString *type;
 
 /**
  *  A simple delegate
  */
 @property (nonatomic, weak) id<JLScopeDelegate> delegate;
 
+/**
+ *  If provided, the scope will only perform when matches of the set is found in the string returned from the -mergedModifiedStringForScope: delegate method.
+ */
+@property (nonatomic, strong) NSCharacterSet *triggeringCharacterSet;
+
 @end
 
 @protocol JLScopeDelegate <NSObject>
-
+@optional
+/// @see JLTokenizer and -triggeringCharacterSet
+- (NSString *)mergedModifiedStringForScope:(JLScope *)scope;
+- (BOOL)scopeShouldPerform:(JLScope *)scope;
 - (void)scopeDidFinishPerforming:(JLScope *)scope;
 
 @end

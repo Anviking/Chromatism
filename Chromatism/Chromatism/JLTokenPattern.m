@@ -11,6 +11,7 @@
 @interface JLScope ()
 @property (nonatomic, readwrite, strong) NSString *string;
 - (void)iterateSubscopes;
+- (BOOL)shouldPerform;
 @end
 
 @implementation JLTokenPattern
@@ -55,6 +56,7 @@
 
 - (void)performInIndexSet:(NSIndexSet *)set
 {
+    if (![self shouldPerform]) return;
     [set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
         [self.expression enumerateMatchesInString:self.string options:self.matchingOptions range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
             [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.color range:[result rangeAtIndex:self.captureGroup]];
