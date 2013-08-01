@@ -100,7 +100,9 @@
     // Method call parts
     [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(?<=\\w+):\\s*[^\\s;\\]]+" andScope:lineScope] setCaptureGroup:1];
     
-    [self addToken:JLTokenTypeKeyword withPattern:@"\\b(true|false|yes|no|TRUE|FALSE|bool|BOOL|nil|id|void|self|NULL|if|else|strong|weak|nonatomic|atomic|assign|copy|typedef|enum|auto|break|case|const|char|continue|do|default|double|extern|float|for|goto|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|volatile|while|nonatomic|atomic|nonatomic|readonly|super)\\b" andScope:lineScope];
+    NSString *keywords = @"true false yes no TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super";
+    
+    [self addToken:JLTokenTypeKeyword withKeywords:keywords andScope:lineScope];
     [self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:lineScope];
     
     // Other Class Names
@@ -205,9 +207,6 @@
     NSParameterAssert(type);
     NSParameterAssert(pattern);
     NSParameterAssert(scope);
-    UIColor *color = self.colors[type];
-    
-    NSAssert(color, @"%@ didn't return a color in color dictionary %@", type, self.colors);
     
     JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern];
     token.identifier = identifier;
@@ -216,6 +215,12 @@
     [scope addSubscope:token];
     
     return token;
+}
+
+- (JLTokenPattern *)addToken:(NSString *)type withKeywords:(NSString *)keywords andScope:(JLScope *)scope
+{
+    NSString *pattern = [NSString stringWithFormat:@"\\b(%@)\\b", [[keywords componentsSeparatedByString:@" "] componentsJoinedByString:@"|"]];
+    return [self addToken:type withPattern:pattern andScope:scope];
 }
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
