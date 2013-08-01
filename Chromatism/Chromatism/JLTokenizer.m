@@ -94,6 +94,30 @@
     return YES;
 }
 
+- (void)setTextView:(UITextView *)textView
+{
+    _textView = textView;
+    _textView.layoutManager.delegate = self;
+}
+
+#pragma mark - NSLayoutManager delegeate
+/*
+ *  TODO: Find out a way to set intendation for entire paragraphs.
+ */
+
+- (CGFloat)layoutManager:(NSLayoutManager *)layoutManager paragraphSpacingBeforeGlyphAtIndex:(NSUInteger)glyphIndex withProposedLineFragmentRect:(CGRect)rect
+{
+    return 0;
+}
+
+- (BOOL)layoutManager:(NSLayoutManager *)layoutManager shouldBreakLineByWordBeforeCharacterAtIndex:(NSUInteger)charIndex
+{
+    NSString *character = [layoutManager.textStorage.string substringWithRange:NSMakeRange(charIndex, 1)];
+    // NSLog(@"Asked about linebreak: %@",character);
+    if ([character isEqualToString:@"*"]) return NO;
+    return YES;
+}
+
 #pragma mark - Scopes
 
 //
