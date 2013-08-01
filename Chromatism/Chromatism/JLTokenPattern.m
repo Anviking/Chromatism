@@ -63,6 +63,7 @@
     }];
     
     [self iterateSubscopes];
+    if ([self.delegate respondsToSelector:@selector(scopeDidFinishPerforming:)]) [self.delegate scopeDidFinishPerforming:self];
 }
 
 #pragma mark - Debugging
@@ -70,7 +71,7 @@
 - (NSString *)description
 {
     NSString *subscopes = [[[[self.subscopes valueForKey:@"description"] componentsJoinedByString:@"\n"] componentsSeparatedByString:@"\n"] componentsJoinedByString:@"\n\t\t"];
-    return [NSString stringWithFormat:@"%@, %@, Regex Pattern: %@, opaque: %i, indexesSet:%@ \nsubscopes, %@", NSStringFromClass(self.class), self.descriptionName, self.pattern, self.opaque, self.set, subscopes];
+    return [NSString stringWithFormat:@"%@, %@, Regex Pattern: %@, opaque: %i, indexesSet:%@ \nsubscopes, %@", NSStringFromClass(self.class), self.identifier, self.pattern, self.opaque, self.set, subscopes];
 }
 
 #pragma mark - NSCopying Protocol

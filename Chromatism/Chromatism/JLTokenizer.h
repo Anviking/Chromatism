@@ -9,9 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "Helpers.h"
 #import "Chromatism+Internal.h"
+#import "JLScope.h"
 
 @class TextViewChange, JLTextView;
-@interface JLTokenizer : NSObject <NSTextStorageDelegate>
+
+@protocol JLTokenizerDelegate;
+
+@interface JLTokenizer : NSObject <NSTextStorageDelegate, JLScopeDelegate>
 
 // Override to create your own syntax highlighting
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range;
@@ -20,4 +24,11 @@
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
 
 @property (nonatomic, strong) NSDictionary *colors;
+@property (nonatomic, weak) id<JLTokenizerDelegate> delegate;
+@end
+
+@protocol JLTokenizerDelegate <NSObject>
+
+- (void)scope:(JLScope *)scope didFinishProcessing:(JLTokenizer *)tokenizer;
+
 @end

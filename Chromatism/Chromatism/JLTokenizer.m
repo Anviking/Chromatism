@@ -95,6 +95,13 @@
     NSLog(@"Chromatism done tokenizing with time of %fms",ABS([date timeIntervalSinceNow]*1000));
 }
 
+#pragma mark - JLScope delegate
+
+- (void)scopeDidFinishPerforming:(JLScope *)scope
+{
+    if ([self.delegate respondsToSelector:@selector(scope:didFinishProcessing:)]) [self.delegate scope:scope didFinishProcessing:self];
+}
+
 #pragma mark - Tokenizing
 
 - (JLTokenPattern *)addToken:(NSString *)type withPattern:(NSString *)pattern andScope:(JLScope *)scope
@@ -107,7 +114,7 @@
     NSAssert(color, @"%@ didn't return a color in color dictionary %@", type, self.colors);
     
     JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern andColor:self.colors[type]];
-    token.descriptionName = type;
+    token.identifier = type;
     [scope addSubscope:token];
     return token;
 }
