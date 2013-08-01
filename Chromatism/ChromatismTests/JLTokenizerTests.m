@@ -29,6 +29,7 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
     tokenizer = [[JLTokenizer alloc] init];
+    tokenizer.colors = [Chromatism colorsForTheme:JLTokenizerThemeDefault];
 }
 
 - (void)tearDown
