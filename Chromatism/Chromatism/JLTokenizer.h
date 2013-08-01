@@ -11,7 +11,7 @@
 #import "Chromatism+Internal.h"
 
 @class TextViewChange, JLTextView;
-@interface JLTokenizer : NSObject <UITextViewDelegate, NSTextStorageDelegate, NSLayoutManagerDelegate>
+@interface JLTokenizer : NSObject <NSTextStorageDelegate>
 
 // Override to create your own syntax highlighting
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range;
@@ -20,10 +20,4 @@
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
 
 @property (nonatomic, strong) NSDictionary *colors;
-@property (nonatomic, strong) NSDictionary *defaultAttributes;
-
-@property (nonatomic, strong) UIColor *highlightColor;
-@property (nonatomic, assign) JLTokenizerTheme theme;
-@property (nonatomic, strong, readonly) NSArray *themes;
-@property (nonatomic, weak) UITextView *textView;
 @end

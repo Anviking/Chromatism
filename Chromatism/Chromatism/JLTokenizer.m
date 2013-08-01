@@ -43,80 +43,10 @@
 #import "Chromatism.h"
 
 @interface JLTokenizer ()
-{
-    NSString *_oldString;
-}
 
 @end
 
 @implementation JLTokenizer
-@synthesize theme = _theme, themes = _themes, colors = _colors;
-
-#pragma mark - UITextViewDelegate
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    _oldString = nil;
-    
-    if (range.length == 0 && text.length == 1) {
-        // A normal character typed
-    }
-    else if (range.length == 1 && text.length == 0) {
-        // Backspace
-    }
-    else {
-        // Multicharacter edit
-    }
-    
-    if ([text isEqualToString:@"\n"]) {
-        // Return
-        // Start the new line with as many tabs or white spaces as the previous one.
-        NSRange lineRange = [textView.text lineRangeForRange:range];
-        NSRange prefixRange = [textView.text rangeOfString:@"[\\t| ]*" options:NSRegularExpressionSearch range:lineRange];
-        NSString *prefixString = [textView.text substringWithRange:prefixRange];
-        
-        UITextPosition *beginning = textView.beginningOfDocument;
-        UITextPosition *start = [textView positionFromPosition:beginning offset:range.location];
-        UITextPosition *stop = [textView positionFromPosition:start offset:range.length];
-        
-        UITextRange *textRange = [textView textRangeFromPosition:start toPosition:stop];
-        
-        [textView replaceRange:textRange withText:[NSString stringWithFormat:@"\n%@",prefixString]];
-        
-        return NO;
-    }
-    
-    if (range.length > 0)
-    {
-        _oldString = [textView.text substringWithRange:range];
-    }
-    
-    return YES;
-}
-
-- (void)setTextView:(UITextView *)textView
-{
-    _textView = textView;
-    _textView.layoutManager.delegate = self;
-}
-
-#pragma mark - NSLayoutManager delegeate
-/*
- *  TODO: Find out a way to set intendation for entire paragraphs.
- */
-
-- (CGFloat)layoutManager:(NSLayoutManager *)layoutManager paragraphSpacingBeforeGlyphAtIndex:(NSUInteger)glyphIndex withProposedLineFragmentRect:(CGRect)rect
-{
-    return 0;
-}
-
-- (BOOL)layoutManager:(NSLayoutManager *)layoutManager shouldBreakLineByWordBeforeCharacterAtIndex:(NSUInteger)charIndex
-{
-    NSString *character = [layoutManager.textStorage.string substringWithRange:NSMakeRange(charIndex, 1)];
-    // NSLog(@"Asked about linebreak: %@",character);
-    if ([character isEqualToString:@"*"]) return NO;
-    return YES;
-}
 
 #pragma mark - Scopes
 
@@ -246,48 +176,5 @@
     [storage addAttribute:NSForegroundColorAttributeName value:self.colors[JLTokenTypeText] range:range];
 }
 
-#pragma mark - Color Themes
-
-- (NSDictionary *)defaultAttributes
-{
-    if (!_defaultAttributes) _defaultAttributes = @{NSForegroundColorAttributeName: self.colors[JLTokenTypeText], NSFontAttributeName : [UIFont fontWithName:@"Menlo" size:12]};
-    return _defaultAttributes;
-}
-
--(void)setTheme:(JLTokenizerTheme)theme
-{
-    self.colors = [Chromatism colorsForTheme:theme];
-    self.textView.typingAttributes = @{ NSForegroundColorAttributeName : self.colors[JLTokenTypeText]};
-    _theme = theme;
-    
-    //Set font, text color and background color back to default
-    UIColor *backgroundColor = self.colors[JLTokenTypeBackground];
-    [self.textView setBackgroundColor:backgroundColor ? backgroundColor : [UIColor whiteColor] ];
-}
-
-- (NSDictionary *)colors
-{
-    if (!_colors) {
-        self.colors = [Chromatism colorsForTheme:self.theme];
-    }
-    return _colors;
-}
-
-- (void)setColors:(NSDictionary *)colors
-{
-    _colors = colors;
-}
-
-- (NSArray *)themes
-{
-    if (!_themes) _themes = @[@(JLTokenizerThemeDefault),@(JLTokenizerThemeDusk)];
-    return _themes;
-}
-
-- (JLTokenizerTheme)theme
-{
-    if (!_theme) _theme = JLTokenizerThemeDefault;
-    return _theme;
-}
 
 @end
