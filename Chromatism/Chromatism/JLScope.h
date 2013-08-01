@@ -22,6 +22,7 @@
  */
 - (void)perform;
 - (void)performInIndexSet:(NSIndexSet *)set;
+- (void)reset;
 
 /// The color
 @property (nonatomic, strong) UIColor *color;

@@ -44,41 +44,95 @@
 
 @interface JLTokenizer ()
 
+@property (nonatomic, strong) JLScope *documentScope;
+@property (nonatomic, strong) JLScope *lineScope;
+
 @end
 
 @implementation JLTokenizer
 
-#pragma mark - Scopes
+#pragma mark - Setup
 
+- (void)setup
+{
+    JLScope *documentScope = [JLScope new];
+    JLScope *lineScope = [JLScope new];
+    
+    // Block and line comments
+    [self addToken:JLTokenTypeComment withPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andScope:documentScope];
+    
+    [self addToken:JLTokenTypeComment withPattern:@"//.*+$" andScope:lineScope];
+    
+    // Preprocessor macros
+    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withPattern:@"^#.*+$" andScope:lineScope];
+    
+    // #import <Library/Library.h>
+    // In xcode it only works for #import and #include, not all preprocessor statements.
+    [self addToken:JLTokenTypeString withPattern:@"<.*?>" andScope:preprocessor];
+    
+    // Strings
+    [[self addToken:JLTokenTypeString withPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andScope:lineScope] addScope:preprocessor];
+    
+    // Numbers
+    [self addToken:JLTokenTypeNumber withPattern:@"(?<=\\s)\\d+" andScope:lineScope];
+    
+    // New literals, for example @[]
+    // TODO: Literals don't search through multiple lines. Nor does it keep track of nested things.
+    [[self addToken:JLTokenTypeNumber withPattern:@"@[\\(|\\{|\\[][^\\(\\{\\[]+[\\)|\\}|\\]]" andScope:lineScope] setOpaque:NO];
+    
+    // C function names
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\w+\\s*(?>\\(.*\\)" andScope:lineScope] setCaptureGroup:1];
+    
+    // Dot notation
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\.(\\w+)" andScope:lineScope] setCaptureGroup:1];
+    
+    // Method Calls
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\[\\w+\\s+(\\w+)\\]" andScope:lineScope] setCaptureGroup:1];
+    
+    // Method call parts
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(?<=\\w+):\\s*[^\\s;\\]]+" andScope:lineScope] setCaptureGroup:1];
+    
+    [self addToken:JLTokenTypeKeyword withPattern:@"\\b(true|false|yes|no|TRUE|FALSE|bool|BOOL|nil|id|void|self|NULL|if|else|strong|weak|nonatomic|atomic|assign|copy|typedef|enum|auto|break|case|const|char|continue|do|default|double|extern|float|for|goto|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|volatile|while|nonatomic|atomic|nonatomic|readonly|super)\\b" andScope:lineScope];
+    [self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:lineScope];
+    
+    // Other Class Names
+    [self addToken:JLTokenTypeOtherClassNames withPattern:@"\\b[A-Z]{3}[a-zA-Z]*\\b" andScope:lineScope];
+    
+    [documentScope addSubscope:lineScope];
+    
+    self.documentScope = documentScope;
+    self.lineScope = lineScope;
+}
+
+- (JLScope *)documentScope
+{
+    if (!_documentScope) [self setup];
+    return _documentScope;
+}
+
+- (JLScope *)lineScope
+{
+    if (!_lineScope) [self setup];
+    return _lineScope;
+}
+
+//// Get the string with everything that has changed
+//NSString *newString = [storage.string substringWithRange:range];
+//NSString *oldString = [self.dataSource recentlyReplacedText];
 //
-// NOT COMPLETED
-//
-//- (void)refreshScopesInTextStorage:(NSTextStorage *)textStorage;
-//{
-//    NSString *string = textStorage.string;
-//    __block NSUInteger scope = 0;
-//    
-//    
-//    NSString *pattern = @"\\{|\\}";
-//    NSError *error;
-//    NSString *attribute = @"ChromatismScopeAttributeName";
-//    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
-//
-//    NSAssert(!error, @"%@",error);
-//    
-//    [expression enumerateMatchesInString:string options:0 range:NSMakeRange(0, textStorage.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-//        NSString *substring = [string substringWithRange:result.range];
-//        if ([substring isEqualToString:@"{"]) {
-//            scope++;
-//        }
-//        else scope--;
-//        NSLog(@"Scope is %i",scope);
-//        float f = 0.3 + ((float)scope/10);
-//        NSLog(@"Color is :%f",f);
-//        UIColor *color = [UIColor colorWithWhite:f alpha:1];
-//        [textStorage addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(result.range.location, string.length - result.range.location)];
-//    }];
+//NSString *diffString;
+//if (newString && oldString) {
+//    diffString = [newString stringByAppendingString:oldString];
 //}
+//
+//JLScope *documentScope = [JLScope scopeWithTextStorage:storage];
+//JLScope *rangeScope = [JLScope scopeWithRange:range inTextStorage:storage];
+//
+//// Block and line comments
+//if ([self characters:@"/*" appearInString:diffString]) {
+//    [self addToken:JLTokenTypeComment withPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andScope:documentScope];
+//}
+
 
 #pragma mark - NSTextStorageDelegate
 
@@ -130,62 +184,13 @@
     // First, remove old attributes
     [self clearColorAttributesInRange:range textStorage:storage];
     
-    // Get the string with everything that has changed
-    NSString *newString = [storage.string substringWithRange:range];
-    NSString *oldString = [self.dataSource recentlyReplacedText];
+    [self.documentScope reset];
     
-    NSString *diffString;
-    if (newString && oldString) {
-        diffString = [newString stringByAppendingString:oldString];
-    }
+    [self.documentScope setTextStorage:storage];
+    [self.documentScope.set addIndexesInRange:NSMakeRange(0, storage.length)];
+    [self.lineScope.set addIndexesInRange:range];
     
-    JLScope *documentScope = [JLScope scopeWithTextStorage:storage];
-    JLScope *rangeScope = [JLScope scopeWithRange:range inTextStorage:storage];
- 
-    // Block and line comments
-    if ([self characters:@"/*" appearInString:diffString]) {
-        [self addToken:JLTokenTypeComment withPattern:@"/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/" andScope:documentScope];
-    }
-    
-    [self addToken:JLTokenTypeComment withPattern:@"//.*+$" andScope:rangeScope];
-    
-    // Preprocessor macros
-    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withPattern:@"^#.*+$" andScope:rangeScope];
-    
-    // #import <Library/Library.h>
-    // In xcode it only works for #import and #include, not all preprocessor statements.
-    [self addToken:JLTokenTypeString withPattern:@"<.*?>" andScope:preprocessor];
-    
-    // Strings
-    [[self addToken:JLTokenTypeString withPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andScope:rangeScope] addScope:preprocessor];
-    
-    // Numbers
-    [self addToken:JLTokenTypeNumber withPattern:@"(?<=\\s)\\d+" andScope:rangeScope];
-    
-    // New literals, for example @[]
-    // TODO: Literals don't search through multiple lines. Nor does it keep track of nested things.
-    [[self addToken:JLTokenTypeNumber withPattern:@"@[\\(|\\{|\\[][^\\(\\{\\[]+[\\)|\\}|\\]]" andScope:rangeScope] setOpaque:NO];
-    
-    // C function names
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\w+\\s*(?>\\(.*\\)" andScope:rangeScope] setCaptureGroup:1];
-    
-    // Dot notation
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\.(\\w+)" andScope:rangeScope] setCaptureGroup:1];
-
-    // Method Calls
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\[\\w+\\s+(\\w+)\\]" andScope:rangeScope] setCaptureGroup:1];
-    
-    // Method call parts
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(?<=\\w+):\\s*[^\\s;\\]]+" andScope:rangeScope] setCaptureGroup:1];
-    
-    [self addToken:JLTokenTypeKeyword withPattern:@"\\b(true|false|yes|no|TRUE|FALSE|bool|BOOL|nil|id|void|self|NULL|if|else|strong|weak|nonatomic|atomic|assign|copy|typedef|enum|auto|break|case|const|char|continue|do|default|double|extern|float|for|goto|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|volatile|while|nonatomic|atomic|nonatomic|readonly|super)\\b" andScope:rangeScope];
-    [self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:rangeScope];
-    
-    // Other Class Names
-    [self addToken:JLTokenTypeOtherClassNames withPattern:@"\\b[A-Z]{3}[a-zA-Z]*\\b" andScope:rangeScope];
-    
-    [documentScope addSubscope:rangeScope];
-    [documentScope perform];
+    [self.documentScope perform];
 }
 
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
@@ -200,6 +205,38 @@
     [storage removeAttribute:NSForegroundColorAttributeName range:range];
     [storage addAttribute:NSForegroundColorAttributeName value:self.colors[JLTokenTypeText] range:range];
 }
+
+#pragma mark - Scopes
+
+//
+// NOT COMPLETED
+//
+//- (void)refreshScopesInTextStorage:(NSTextStorage *)textStorage;
+//{
+//    NSString *string = textStorage.string;
+//    __block NSUInteger scope = 0;
+//
+//
+//    NSString *pattern = @"\\{|\\}";
+//    NSError *error;
+//    NSString *attribute = @"ChromatismScopeAttributeName";
+//    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+//
+//    NSAssert(!error, @"%@",error);
+//
+//    [expression enumerateMatchesInString:string options:0 range:NSMakeRange(0, textStorage.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+//        NSString *substring = [string substringWithRange:result.range];
+//        if ([substring isEqualToString:@"{"]) {
+//            scope++;
+//        }
+//        else scope--;
+//        NSLog(@"Scope is %i",scope);
+//        float f = 0.3 + ((float)scope/10);
+//        NSLog(@"Color is :%f",f);
+//        UIColor *color = [UIColor colorWithWhite:f alpha:1];
+//        [textStorage addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(result.range.location, string.length - result.range.location)];
+//    }];
+//}
 
 
 @end

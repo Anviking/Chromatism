@@ -83,6 +83,14 @@
     if ([self.delegate respondsToSelector:@selector(scopeDidFinishPerforming:)]) [self.delegate scopeDidFinishPerforming:self];
 }
 
+- (void)reset
+{
+    self.set = nil;
+    for (JLScope *scope in self.subscopes) {
+        [scope reset];
+    }
+}
+
 #pragma mark - Scope Hierarchy Management
 
 - (NSMutableArray *)subscopes
