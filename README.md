@@ -3,6 +3,8 @@ Chromatism
 
 This is the beginning of a syntax highlighting `UITextView` for iOS. Currently it only knows about Obj-C. Previously Chromatism used a combination of `CoreText` and `UITableView` for performance, but luckily that is not needed anymore.
 
+![](http://anviking.com/img/chromatism.png)
+
 How to add Chromatism to your application:
 
 1. Drag and drop `Chromatism.xcodeproj` to your project.
@@ -26,4 +28,5 @@ Scopes and patters can ensure that regex patterns search in the right place. To 
 3. The scope ensures that its siblings don't search where the scope have found things.
 
 For more detail, see the `-perform`-implementation on [`JLScope`](https://github.com/Anviking/Chromatism/blob/master/Chromatism/Chromatism/JLScope.m#65) and [`JLTokenPattern`](https://github.com/Anviking/Chromatism/blob/master/Chromatism/Chromatism/JLTokenPattern.m#56).
+
 
