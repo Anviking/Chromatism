@@ -26,21 +26,21 @@
     }
     return self;
 }
-- (void)loadView
+
+- (JLTextView *)textView
 {
-    UIView *view = [[UIView alloc] init];
-    JLTextView *textView = [[JLTextView alloc] init];
-    textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    
-    if (self.defaultText) {
-        textView.text = self.defaultText;
-        self.defaultText = nil;
+    if (!_textView) {
+        JLTextView *textView = [[JLTextView alloc] init];
+        textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        
+        if (self.defaultText) {
+            textView.text = self.defaultText;
+            self.defaultText = nil;
+        }
+        
+        [self setTextView:textView];
     }
-    
-    [view addSubview:textView];
-    
-    [self setView:view];
-    [self setTextView:textView];
+    return _textView;
 }
 
 - (JLTokenizer *)tokenizer
@@ -52,6 +52,9 @@
 {
     [super viewDidLoad];
     
+    self.textView.frame = self.view.frame;
+    [self.view addSubview:self.textView];
+    self.view.backgroundColor = self.textView.backgroundColor;
     self.navigationController.navigationBar.translucent = TRUE;
 }
 

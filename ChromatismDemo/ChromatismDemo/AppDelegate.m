@@ -23,6 +23,9 @@
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     viewController.title = @"Chromatism";
     
+    [navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+    viewController.textView.keyboardAppearance = UIKeyboardAppearanceDark;
+    
     self.window.rootViewController = navigationController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
