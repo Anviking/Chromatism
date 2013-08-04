@@ -7,6 +7,7 @@
 //
 
 #import "JLTokenPattern.h"
+#import "Helpers.h"
 
 @interface JLScope ()
 - (void)iterateSubscopes;
@@ -55,8 +56,12 @@
 
 - (void)performInIndexSet:(NSIndexSet *)set
 {
+
     if (![self shouldPerform]) return;
     NSDictionary *attributes = [self.delegate attributesForScope:self];
+    NSMutableIndexSet *oldSet = self.set;
+    self.set = [self.set intersectionWithSet:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.textStorage.length)]];
+    [self.set removeIndexes:set];
     NSAssert(attributes, @"");
     [set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
         [self.expression enumerateMatchesInString:self.string options:self.matchingOptions range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
@@ -66,7 +71,8 @@
     }];
     
     [self iterateSubscopes];
-    if ([self.delegate respondsToSelector:@selector(scopeDidFinishPerforming:)]) [self.delegate scopeDidFinishPerforming:self];
+    
+    if (![oldSet isEqualToIndexSet:self.set] && [self.delegate respondsToSelector:@selector(scope:didChangeIndexesFrom:to:)]) [self.delegate scope:self didChangeIndexesFrom:oldSet to:self.set];
 }
 
 #pragma mark - Debugging

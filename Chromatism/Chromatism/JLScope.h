@@ -96,6 +96,6 @@
 - (NSString *)mergedModifiedStringForScope:(JLScope *)scope;
 
 - (BOOL)scopeShouldPerform:(JLScope *)scope;
-- (void)scopeDidFinishPerforming:(JLScope *)scope;
+- (void)scope:(JLScope *)scope didChangeIndexesFrom:(NSIndexSet *)oldSet to:(NSIndexSet *)newSet;
 
 @end

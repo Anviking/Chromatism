@@ -66,8 +66,9 @@
     JLScope *lineScope = [JLScope new];
     
     // Block and line comments
-    JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withIdentifier:BLOCK_COMMENT pattern:@"/\\*.*?\\*/" andScope:documentScope];
+    JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withIdentifier:BLOCK_COMMENT pattern:@"" andScope:documentScope];
     blockComment.triggeringCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"/*"];
+    blockComment.expression = [NSRegularExpression regularExpressionWithPattern:@"/\\*.*?\\*/" options:NSRegularExpressionDotMatchesLineSeparators error:nil];
     
     [self addToken:JLTokenTypeComment withIdentifier:LINE_COMMENT pattern:@"//.*+$" andScope:lineScope];
     
@@ -145,9 +146,23 @@
 
 #pragma mark - JLScope delegate
 
-- (void)scopeDidFinishPerforming:(JLScope *)scope
+- (void)scope:(JLScope *)scope didChangeIndexesFrom:(NSIndexSet *)oldSet to:(NSIndexSet *)newSet
 {
     if ([self.delegate respondsToSelector:@selector(scope:didFinishProcessing:)]) [self.delegate scope:scope didFinishProcessing:self];
+    
+    if (!scope.identifier) return;
+    if (![scope.identifier isEqualToString:BLOCK_COMMENT]) return;
+    
+    NSMutableIndexSet *removedIndexes = oldSet.mutableCopy;
+    [removedIndexes removeIndexes:newSet];
+    
+    NSLog(@"Removed Indexes:%@",removedIndexes);
+    
+    if (removedIndexes) {
+        [removedIndexes enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
+            [self tokenizeTextStorage:scope.textStorage withRange:range];
+        }];
+    }
 }
 
 - (NSString *)mergedModifiedStringForScope:(JLScope *)scope
@@ -179,11 +194,9 @@
     // First, remove old attributes
     [self clearColorAttributesInRange:range textStorage:storage];
     
-    [self.documentScope reset];
-    
     [self.documentScope setTextStorage:storage];
-    [self.documentScope.set addIndexesInRange:NSMakeRange(0, storage.length)];
-    [self.lineScope.set addIndexesInRange:range];
+    [self.documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, storage.length)]];
+    [self.lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:range]];
     
     [self.documentScope perform];
 }

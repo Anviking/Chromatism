@@ -73,26 +73,17 @@
     NSAssert(!self.scope, @"Only call -perform to a rootlevel scope");
     if (![self shouldPerform]) return;
     [self iterateSubscopes];
-    
-    if ([self.delegate respondsToSelector:@selector(scopeDidFinishPerforming:)]) [self.delegate scopeDidFinishPerforming:self];
 }
 
 - (void)performInIndexSet:(NSIndexSet *)set
 {
     NSParameterAssert(set);
     if (![self shouldPerform]) return;
+    NSMutableIndexSet *oldSet = self.set;
     self.set = [self.set intersectionWithSet:set];
     [self iterateSubscopes];
     
-    if ([self.delegate respondsToSelector:@selector(scopeDidFinishPerforming:)]) [self.delegate scopeDidFinishPerforming:self];
-}
-
-- (void)reset
-{
-    self.set = nil;
-    for (JLScope *scope in self.subscopes) {
-        [scope reset];
-    }
+    if ([self.delegate respondsToSelector:@selector(scope:didChangeIndexesFrom:to:)]) [self.delegate scope:self didChangeIndexesFrom:oldSet to:self.set];
 }
 
 - (BOOL)shouldPerform
