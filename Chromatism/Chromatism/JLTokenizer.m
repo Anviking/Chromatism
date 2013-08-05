@@ -148,18 +148,18 @@
 {
     if ([self.delegate respondsToSelector:@selector(scope:didFinishProcessing:)]) [self.delegate scope:scope didFinishProcessing:self];
     
-    if (!scope.identifier) return;
-    if (![scope.identifier isEqualToString:BLOCK_COMMENT]) return;
-    
-    NSMutableIndexSet *removedIndexes = oldSet.mutableCopy;
-    [removedIndexes removeIndexes:newSet];
-    
-    ChromatismLog(@"Removed Indexes:%@",removedIndexes);
-    
-    if (removedIndexes) {
-        [removedIndexes enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
-            [self tokenizeTextStorage:scope.textStorage withRange:range];
-        }];
+    if ([self.documentScope.subscopes containsObject:scope] && scope != self.lineScope)
+    {
+        NSMutableIndexSet *removedIndexes = oldSet.mutableCopy;
+        [removedIndexes removeIndexes:newSet];
+        
+        ChromatismLog(@"Removed Indexes:%@",removedIndexes);
+        
+        if (removedIndexes) {
+            [removedIndexes enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
+                [self tokenizeTextStorage:scope.textStorage withRange:range];
+            }];
+        } 
     }
 }
 
