@@ -13,6 +13,12 @@ typedef NS_ENUM(NSInteger, JLTokenizerTheme) {
     JLTokenizerThemeDusk
 };
 
+#ifdef DEBUG
+#   define ChromatismLog(...) NSLog(__VA_ARGS__)
+#else
+#   define ChromatismLog(...)
+#endif
+
 FOUNDATION_EXPORT NSString *const JLTokenTypeText;
 FOUNDATION_EXPORT NSString *const JLTokenTypeBackground;
 FOUNDATION_EXPORT NSString *const JLTokenTypeComment;

@@ -22,7 +22,6 @@
  */
 - (void)perform;
 - (void)performInIndexSet:(NSIndexSet *)set;
-- (void)reset;
 
 /**
  *  Array of nested JLScopes and JLTokenPatterns. Reverse realationship to scope, setting one causes the other to update. No not mutate. 

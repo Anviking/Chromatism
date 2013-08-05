@@ -138,10 +138,8 @@
 {
     _editedRange = editedRange;
     _editedLineRange = [textStorage.string lineRangeForRange:editedRange];
-    // Measure performance
-    NSDate *date = [NSDate date];
+    
    [self tokenizeTextStorage:textStorage withRange:_editedLineRange];
-    NSLog(@"Chromatism done tokenizing with time of %fms",ABS([date timeIntervalSinceNow]*1000));
 }
 
 #pragma mark - JLScope delegate
@@ -156,7 +154,7 @@
     NSMutableIndexSet *removedIndexes = oldSet.mutableCopy;
     [removedIndexes removeIndexes:newSet];
     
-    NSLog(@"Removed Indexes:%@",removedIndexes);
+    ChromatismLog(@"Removed Indexes:%@",removedIndexes);
     
     if (removedIndexes) {
         [removedIndexes enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
@@ -241,38 +239,5 @@
     [storage removeAttribute:NSForegroundColorAttributeName range:range];
     [storage addAttribute:NSForegroundColorAttributeName value:self.colors[JLTokenTypeText] range:range];
 }
-
-#pragma mark - Scopes
-
-//
-// NOT COMPLETED
-//
-//- (void)refreshScopesInTextStorage:(NSTextStorage *)textStorage;
-//{
-//    NSString *string = textStorage.string;
-//    __block NSUInteger scope = 0;
-//
-//
-//    NSString *pattern = @"\\{|\\}";
-//    NSError *error;
-//    NSString *attribute = @"ChromatismScopeAttributeName";
-//    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
-//
-//    NSAssert(!error, @"%@",error);
-//
-//    [expression enumerateMatchesInString:string options:0 range:NSMakeRange(0, textStorage.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-//        NSString *substring = [string substringWithRange:result.range];
-//        if ([substring isEqualToString:@"{"]) {
-//            scope++;
-//        }
-//        else scope--;
-//        NSLog(@"Scope is %i",scope);
-//        float f = 0.3 + ((float)scope/10);
-//        NSLog(@"Color is :%f",f);
-//        UIColor *color = [UIColor colorWithWhite:f alpha:1];
-//        [textStorage addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(result.range.location, string.length - result.range.location)];
-//    }];
-//}
-
 
 @end
