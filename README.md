@@ -3,7 +3,7 @@ Chromatism
 
 This is the beginning of a syntax highlighting `UITextView` for iOS. Currently it only knows about Obj-C. Previously Chromatism used a combination of `CoreText` and `UITableView` for performance, but luckily that is not needed anymore.
 
-![](http://anviking.com/img/chromatism.png)
+![](http://anviking.com/img/chromatism_black.png)
 
 How to add Chromatism to your application:
 
