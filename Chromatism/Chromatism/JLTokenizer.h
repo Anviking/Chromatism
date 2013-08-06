@@ -17,14 +17,15 @@
 
 @interface JLTokenizer : NSObject <NSTextStorageDelegate, JLScopeDelegate>
 
-// Override to create your own syntax highlighting
-- (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range;
-- (void)tokenizeTextStorage:(NSTextStorage *)storage;
+- (void)tokenizeTextStorage:(NSTextStorage *)textStorage withRange:(NSRange)range;
+- (void)tokenizeWithRange:(NSRange)range;
+- (void)tokenize;
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
 
 @property (nonatomic, strong) NSDictionary *colors;
+@property (nonatomic, weak) NSTextStorage *textStorage;
 @property (nonatomic, weak) id<JLTokenizerDelegate> delegate;
 @property (nonatomic, weak) id<JLTokenizerDataSource> dataSource;
 @end

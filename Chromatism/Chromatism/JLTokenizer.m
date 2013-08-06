@@ -131,15 +131,16 @@
 
 - (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
-    
+    NSAssert(textStorage == self.textStorage, @"A JLTokenizer should only handle one textStorage");
 }
 
 - (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
+    NSAssert(textStorage == self.textStorage, @"A JLTokenizer should only handle one textStorage");
     _editedRange = editedRange;
     _editedLineRange = [textStorage.string lineRangeForRange:editedRange];
     
-   [self tokenizeTextStorage:textStorage withRange:_editedLineRange];
+   [self tokenizeWithRange:_editedLineRange];
 }
 
 #pragma mark - JLScope delegate
@@ -182,9 +183,14 @@
 
 #pragma mark - Tokenizing
 
-- (void)tokenizeTextStorage:(NSTextStorage *)storage
+- (void)tokenize
 {
-    [self tokenizeTextStorage:storage withRange:NSMakeRange(0, storage.length)];
+    [self tokenizeTextStorage:self.textStorage withRange:NSMakeRange(0, self.textStorage.length)];
+}
+
+- (void)tokenizeWithRange:(NSRange)range
+{
+    [self tokenizeTextStorage:self.textStorage withRange:range];
 }
 
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
