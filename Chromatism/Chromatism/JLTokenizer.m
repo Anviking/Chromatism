@@ -160,7 +160,7 @@
         
         if (removedIndexes) {
             [removedIndexes enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
-                [self tokenizeTextStorage:scope.textStorage withRange:range];
+                [self tokenizeWithRange:range];
             }];
         } 
     }
@@ -201,6 +201,7 @@
     
     [self.documentScope perform];
 }
+
 
 #pragma mark - Validation
 

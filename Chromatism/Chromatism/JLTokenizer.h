@@ -19,10 +19,9 @@
 
 - (void)tokenizeWithRange:(NSRange)range;
 - (void)tokenize;
-
 - (void)validateTokenization;
-
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
+
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
 
 @property (nonatomic, strong) NSDictionary *colors;
