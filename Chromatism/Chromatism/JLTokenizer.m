@@ -49,6 +49,7 @@
 
 @property (nonatomic, strong) JLScope *documentScope;
 @property (nonatomic, strong) JLScope *lineScope;
+@property (nonatomic, strong) NSTimer *validationTimer;
 
 @end
 
@@ -99,9 +100,9 @@
     [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(\\w+)\\]" andScope:lineScope] setCaptureGroup:1];
     
     // Method call parts
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(?<=\\w+):" andScope:lineScope] setCaptureGroup:1];
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(?<=\\w+):" andScope:lineScope] setCaptureGroup:0];
     
-    NSString *keywords = @"true false yes no TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super";
+    NSString *keywords = @"true false yes no YES TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super";
     
     [self addToken:JLTokenTypeKeyword withKeywords:keywords andScope:lineScope];
     [self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:lineScope];
@@ -140,7 +141,8 @@
     _editedRange = editedRange;
     _editedLineRange = [textStorage.string lineRangeForRange:editedRange];
     
-   [self tokenizeWithRange:_editedLineRange];
+    [self tokenizeWithRange:_editedLineRange];
+    [self setNeedsValidation:YES];
 }
 
 #pragma mark - JLScope delegate
@@ -203,6 +205,29 @@
     [self.lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:range]];
     
     [self.documentScope perform];
+}
+
+#pragma mark - Validation
+
+- (void)setNeedsValidation:(BOOL)needsValidation
+{
+    _needsValidation = needsValidation;
+    if (needsValidation) {
+        [self.validationTimer invalidate]; // This is not neccecary, right?
+        self.validationTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(validateTokenization) userInfo:nil repeats:NO];
+    }
+}
+
+- (void)validateTokenization
+{
+    [self.textStorage beginEditing];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        [self tokenize];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setNeedsValidation:NO];
+            [self.textStorage endEditing];
+        });
+    });
 }
 
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
