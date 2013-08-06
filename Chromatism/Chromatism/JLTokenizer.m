@@ -213,7 +213,7 @@
 {
     _needsValidation = needsValidation;
     if (needsValidation) {
-        [self.validationTimer invalidate]; // This is not neccecary, right?
+        [self.validationTimer invalidate]; // This is not necessary, right?
         self.validationTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(validateTokenization) userInfo:nil repeats:NO];
     }
 }
@@ -223,6 +223,8 @@
     [self.textStorage beginEditing];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         [self tokenize];
+        
+        // This seem to be safe, is it?
         dispatch_async(dispatch_get_main_queue(), ^{
             [self setNeedsValidation:NO];
             [self.textStorage endEditing];
