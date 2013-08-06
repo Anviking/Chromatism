@@ -17,7 +17,6 @@
 
 @interface JLTokenizer : NSObject <NSTextStorageDelegate, JLScopeDelegate>
 
-- (void)tokenizeTextStorage:(NSTextStorage *)textStorage withRange:(NSRange)range;
 - (void)tokenizeWithRange:(NSRange)range;
 - (void)tokenize;
 

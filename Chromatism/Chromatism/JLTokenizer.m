@@ -187,21 +187,16 @@
 
 - (void)tokenize
 {
-    [self tokenizeTextStorage:self.textStorage withRange:NSMakeRange(0, self.textStorage.length)];
+    [self tokenizeWithRange:NSMakeRange(0, self.textStorage.length)];
 }
 
 - (void)tokenizeWithRange:(NSRange)range
 {
-    [self tokenizeTextStorage:self.textStorage withRange:range];
-}
-
-- (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
-{
     // First, remove old attributes
-    [self clearColorAttributesInRange:range textStorage:storage];
+    [self clearColorAttributesInRange:range textStorage:self.textStorage];
     
-    [self.documentScope setTextStorage:storage];
-    [self.documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, storage.length)]];
+    [self.documentScope setTextStorage:self.textStorage];
+    [self.documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.textStorage.length)]];
     [self.lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:range]];
     
     [self.documentScope perform];
@@ -232,12 +227,19 @@
     });
 }
 
+/*
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
 {
     NSMutableAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:attributes].mutableCopy;
-    [self tokenizeTextStorage:(NSTextStorage *)attributedString withRange:NSMakeRange(0, string.length)];
+    
+    [self.documentScope setTextStorage:self.textStorage];
+    [self.documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.textStorage.length)]];
+    
+    [self.documentScope perform];
+    
     return attributedString;
 }
+*/
 
 #pragma mark - Helpers
 
