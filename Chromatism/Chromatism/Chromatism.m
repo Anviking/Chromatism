@@ -25,6 +25,9 @@ NSString *const JLTokenTypeProject = @"project";
 NSString *const JLTokenTypeOther = @"other";
 NSString *const JLTokenTypeOtherMethodNames = @"other_method_names";
 NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
+NSString *const JLTokenTypeProjectMethodNames = @"project_method_names";
+NSString *const JLTokenTypeProjectClassNames = @"project_class_names";
+
 
 @implementation Chromatism
 
@@ -46,10 +49,9 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
                        JLTokenTypeURL: [UIColor colorWithRed:21.0/255 green:67.0/255 blue:244.0/255 alpha:1],
                        JLTokenTypeOther: [UIColor colorWithRed:113.0/255 green:65.0/255 blue:163.0/255 alpha:1],
                        JLTokenTypeOtherMethodNames :  [UIColor colorWithHex:@"7040a6" alpha:1],
-                       JLTokenTypeOtherClassNames :  [UIColor colorWithHex:@"7040a6" alpha:1]
-                       
-                       
-                       
+                       JLTokenTypeOtherClassNames :  [UIColor colorWithHex:@"7040a6" alpha:1],
+                       JLTokenTypeProjectClassNames : [UIColor colorWithRed:63.0/255 green:110.0/255 blue:116.0/255 alpha:1],
+                       JLTokenTypeProjectMethodNames : [UIColor colorWithRed:38.0/255 green:71.0/255 blue:75.0/255 alpha:1]
                        };
             break;
         case JLTokenizerThemeDusk:
@@ -66,7 +68,9 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
                        JLTokenTypeURL: [UIColor colorWithRed:35.0/255 green:63.0/255 blue:208.0/255 alpha:1],
                        JLTokenTypeOther: [UIColor colorWithRed:0.0/255 green:175.0/255 blue:199.0/255 alpha:1],
                        JLTokenTypeOtherClassNames :  [UIColor colorWithHex:@"04afc8" alpha:1],
-                       JLTokenTypeOtherMethodNames :  [UIColor colorWithHex:@"04afc8" alpha:1]
+                       JLTokenTypeOtherMethodNames :  [UIColor colorWithHex:@"04afc8" alpha:1],
+                       JLTokenTypeProjectMethodNames : [UIColor colorWithRed:131.0/255 green:192.0/255 blue:87.0/255 alpha:1],
+                       JLTokenTypeProjectClassNames : [UIColor colorWithRed:131.0/255 green:192.0/255 blue:87.0/255 alpha:1]
                        };
             break;
     }
