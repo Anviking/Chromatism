@@ -40,13 +40,16 @@
 #import "JLTextViewController.h" 
 #import "JLScope.h"
 #import "JLTokenPattern.h"
-#import "Chromatism.h"
+#import "Chromatism+Internal.h"
 
 #define BLOCK_COMMENT @"blockComment"
 #define LINE_COMMENT @"lineComment"
+#define PROJECT_CLASS_NAMES JLTokenTypeProjectClassNames
+#define PROJECT_METHOD_NAMES JLTokenTypeProjectMethodNames
 
 @interface JLTokenizer ()
 
+@property (nonatomic, strong) NSMutableDictionary *scopes;
 @property (nonatomic, strong) JLScope *documentScope;
 @property (nonatomic, strong) JLScope *lineScope;
 @property (nonatomic, strong) NSTimer *validationTimer;
@@ -66,6 +69,8 @@
     JLScope *documentScope = [JLScope new];
     JLScope *lineScope = [JLScope new];
     
+    self.scopes = [NSMutableDictionary dictionary];
+    
     // Block and line comments
     JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withIdentifier:BLOCK_COMMENT pattern:@"" andScope:documentScope];
     blockComment.triggeringCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"/*"];
@@ -74,7 +79,7 @@
     [self addToken:JLTokenTypeComment withIdentifier:LINE_COMMENT pattern:@"//.*+$" andScope:lineScope];
     
     // Preprocessor macros
-    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withIdentifier:nil pattern:@"^#.*+$" andScope:lineScope];
+    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withIdentifier:JLTokenTypePreprocessor pattern:@"^#.*+$" andScope:lineScope];
     
     // #import <Library/Library.h>
     // In xcode it only works for #import and #include, not all preprocessor statements.
@@ -105,6 +110,8 @@
     NSString *keywords = @"true false yes no YES TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super";
     
     [self addToken:JLTokenTypeKeyword withKeywords:keywords andScope:lineScope];
+    [self addToken:JLTokenTypeProjectClassNames withIdentifier:PROJECT_CLASS_NAMES pattern:nil andScope:lineScope];
+    [self addToken:JLTokenTypeProjectClassNames withIdentifier:PROJECT_METHOD_NAMES pattern:nil andScope:lineScope];
     [self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:lineScope];
     
     // Other Class Names
@@ -138,11 +145,11 @@
 - (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
     NSAssert(textStorage == self.textStorage, @"A JLTokenizer should only handle one textStorage");
+    
     _editedRange = editedRange;
     _editedLineRange = [textStorage.string lineRangeForRange:editedRange];
     
     [self tokenizeWithRange:_editedLineRange];
-    [self setNeedsValidation:YES];
 }
 
 #pragma mark - JLScope delegate
@@ -202,23 +209,33 @@
     [self.documentScope perform];
 }
 
+#pragma mark - Symbolication
+
+- (void)symbolicate
+{
+    [self.scopes[PROJECT_CLASS_NAMES] setPattern:[NSString stringWithFormat:@"\\b(%@)\\b", [[self symbolsWithPattern:@"^@implementation (\\w+)" captureGroup:1] componentsJoinedByString:@"|"]]];
+    [self.scopes[PROJECT_METHOD_NAMES] setPattern:[NSString stringWithFormat:@"\\b(%@)\\b", [[self symbolsWithPattern:@"^@property \\(.*?\\)\\s*\\w+[\\s*]+(\\w+);" captureGroup:1] componentsJoinedByString:@"|"]]];
+}
 
 #pragma mark - Validation
 
 - (void)setNeedsValidation:(BOOL)needsValidation
 {
     _needsValidation = needsValidation;
+    [self.validationTimer invalidate];
+    
     if (needsValidation) {
-        [self.validationTimer invalidate]; // This is not necessary, right?
         self.validationTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(validateTokenization) userInfo:nil repeats:NO];
     }
+    
 }
 
 - (void)validateTokenization
 {
     [self.textStorage beginEditing];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        [self tokenize];
+        [self symbolicate];
+        //[self tokenize];
         
         // This seem to be safe, is it?
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -251,14 +268,11 @@
 
 - (JLTokenPattern *)addToken:(NSString *)type withIdentifier:(NSString *)identifier pattern:(NSString *)pattern andScope:(JLScope *)scope
 {
-    NSParameterAssert(type);
-    NSParameterAssert(pattern);
-    NSParameterAssert(scope);
-    
     JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern];
     token.identifier = identifier;
     token.type = type;
     token.delegate = self;
+    self.scopes[identifier] = token;
     [scope addSubscope:token];
     
     return token;
@@ -268,6 +282,18 @@
 {
     NSString *pattern = [NSString stringWithFormat:@"\\b(%@)\\b", [[keywords componentsSeparatedByString:@" "] componentsJoinedByString:@"|"]];
     return [self addToken:type withPattern:pattern andScope:scope];
+}
+
+- (NSMutableArray *)symbolsWithPattern:(NSString *)pattern captureGroup:(int)group
+{
+    NSMutableArray *array = [NSMutableArray array];
+    NSError *error = nil;
+    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:&error];
+    [expression enumerateMatchesInString:self.textStorage.string options:0 range:NSMakeRange(0, self.textStorage.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        [array addObject:[self.textStorage.string substringWithRange:[result rangeAtIndex:group]]];
+    }];
+    NSAssert(!error, @"%@",error);
+    return array;
 }
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;

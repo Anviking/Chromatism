@@ -20,6 +20,7 @@
 - (void)tokenizeWithRange:(NSRange)range;
 - (void)tokenize;
 - (void)validateTokenization;
+- (void)symbolicate;
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;

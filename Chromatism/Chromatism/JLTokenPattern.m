@@ -48,8 +48,10 @@
 
 - (void)setPattern:(NSString *)pattern
 {
-    _pattern = pattern;
-    _expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
+    if (pattern) {
+        _pattern = pattern;
+        _expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
+    }
 }
 
 #pragma mark - Perform
@@ -58,6 +60,7 @@
 {
 
     if (![self shouldPerform]) return;
+    if (!self.expression) return;
     NSDictionary *attributes = [self.delegate attributesForScope:self];
     NSMutableIndexSet *oldSet = self.set;
     self.set = [self.set intersectionWithSet:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.textStorage.length)]];
@@ -65,7 +68,10 @@
     NSAssert(attributes, @"");
     [set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
         [self.expression enumerateMatchesInString:self.string options:self.matchingOptions range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-            [self.textStorage addAttributes:attributes range:[result rangeAtIndex:self.captureGroup]];
+            [attributes enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                [self.textStorage removeAttribute:key range:[result rangeAtIndex:self.captureGroup]];
+                [self.textStorage addAttribute:key value:obj range:[result rangeAtIndex:self.captureGroup]];
+            }];
             [self.set addIndexesInRange:[result rangeAtIndex:self.captureGroup]];
         }];
     }];

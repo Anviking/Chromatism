@@ -127,6 +127,11 @@
     return YES;
 }
 
+- (void)textViewDidChange:(UITextView *)textView
+{
+    [self.syntaxTokenizer setNeedsValidation:YES];
+}
+
 #pragma mark - JLTokenizer data source
 
 - (NSString *)recentlyReplacedText
