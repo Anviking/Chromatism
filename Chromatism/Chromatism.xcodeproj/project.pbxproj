@@ -37,6 +37,10 @@
 		8FA091A91791E99900179325 /* NSMutableAttributedString+Mush.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA091A71791E99900179325 /* NSMutableAttributedString+Mush.m */; };
 		8FA0CB0F1795F41B00FF8EB1 /* JLTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8FA0CB101795F41B00FF8EB1 /* JLTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */; };
+		8FD79A5917C3741400F2763E /* JLLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FD79A5717C3741400F2763E /* JLLayoutManager.h */; };
+		8FD79A5A17C3741400F2763E /* JLLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD79A5817C3741400F2763E /* JLLayoutManager.m */; };
+		8FE2796517C3842900DD933A /* UIColor+Chromatism.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FE2796317C3842900DD933A /* UIColor+Chromatism.h */; };
+		8FE2796617C3842900DD933A /* UIColor+Chromatism.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE2796417C3842900DD933A /* UIColor+Chromatism.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +87,10 @@
 		8FA091A71791E99900179325 /* NSMutableAttributedString+Mush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Mush.m"; sourceTree = "<group>"; };
 		8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTextView.h; sourceTree = "<group>"; };
 		8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTextView.m; sourceTree = "<group>"; };
+		8FD79A5717C3741400F2763E /* JLLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLLayoutManager.h; sourceTree = "<group>"; };
+		8FD79A5817C3741400F2763E /* JLLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLLayoutManager.m; sourceTree = "<group>"; };
+		8FE2796317C3842900DD933A /* UIColor+Chromatism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Chromatism.h"; sourceTree = "<group>"; };
+		8FE2796417C3842900DD933A /* UIColor+Chromatism.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Chromatism.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,12 +160,16 @@
 				8F3AB9541781C1250023348A /* JLTextViewController.m */,
 				8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */,
 				8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */,
+				8FD79A5717C3741400F2763E /* JLLayoutManager.h */,
+				8FD79A5817C3741400F2763E /* JLLayoutManager.m */,
 				8FA091A61791E99900179325 /* NSMutableAttributedString+Mush.h */,
 				8FA091A71791E99900179325 /* NSMutableAttributedString+Mush.m */,
 				8F3AB94D1781C1250023348A /* Helpers.h */,
 				8F3AB94E1781C1250023348A /* Helpers.m */,
 				8F3AB94F1781C1250023348A /* JLScope.h */,
 				8F3AB9501781C1250023348A /* JLScope.m */,
+				8FE2796317C3842900DD933A /* UIColor+Chromatism.h */,
+				8FE2796417C3842900DD933A /* UIColor+Chromatism.m */,
 				8F3AB9571781C1250023348A /* JLTokenPattern.h */,
 				8F3AB9581781C1250023348A /* JLTokenPattern.m */,
 				8F3AB91E1781C0BA0023348A /* Supporting Files */,
@@ -207,6 +219,8 @@
 				8FA0CB0F1795F41B00FF8EB1 /* JLTextView.h in Headers */,
 				8F54EF0E1781C776008C1609 /* Chromatism.h in Headers */,
 				8F54EF101781C788008C1609 /* Helpers.h in Headers */,
+				8FE2796517C3842900DD933A /* UIColor+Chromatism.h in Headers */,
+				8FD79A5917C3741400F2763E /* JLLayoutManager.h in Headers */,
 				8F54EF111781C788008C1609 /* JLScope.h in Headers */,
 				8F54EF131781C788008C1609 /* JLTextViewController.h in Headers */,
 				8F54EF141781C788008C1609 /* JLTokenizer.h in Headers */,
@@ -302,11 +316,13 @@
 				8F54EF241781CD87008C1609 /* JLTokenPattern.m in Sources */,
 				8F54EF201781CD87008C1609 /* JLScope.m in Sources */,
 				8FA091A51791E62600179325 /* JLMarkdownTokenizer.m in Sources */,
+				8FE2796617C3842900DD933A /* UIColor+Chromatism.m in Sources */,
 				8FA0CB101795F41B00FF8EB1 /* JLTextView.m in Sources */,
 				8F54EF1F1781CD87008C1609 /* Helpers.m in Sources */,
 				8F54EF221781CD87008C1609 /* JLTextViewController.m in Sources */,
 				8F54EF231781CD87008C1609 /* JLTokenizer.m in Sources */,
 				8F54EF1E1781CD87008C1609 /* Chromatism.m in Sources */,
+				8FD79A5A17C3741400F2763E /* JLLayoutManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

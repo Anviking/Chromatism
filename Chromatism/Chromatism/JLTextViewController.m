@@ -10,6 +10,7 @@
 #import "JLTokenizer.h"
 #import "JLTokenizer.h"
 #import "JLTextView.h"
+#import "JLLayoutManager.h"
 
 @interface JLTextViewController ()
 /// Only set from -initWithText: and directly set to nil in -loadView
@@ -30,7 +31,17 @@
 - (JLTextView *)textView
 {
     if (!_textView) {
-        JLTextView *textView = [[JLTextView alloc] init];
+        CGRect newTextViewRect = CGRectInset(self.view.bounds, 8., 0.);
+        
+        JLLayoutManager *layoutManager = [[JLLayoutManager alloc] init];
+        NSTextContainer *container = [[NSTextContainer alloc] initWithSize:CGSizeMake(newTextViewRect.size.width, CGFLOAT_MAX)];
+        container.widthTracksTextView = YES;
+        [layoutManager addTextContainer:container];
+        
+        NSTextStorage *textStorage = [[NSTextStorage alloc] init];
+        [textStorage addLayoutManager:layoutManager];
+        
+        JLTextView *textView = [[JLTextView alloc] initWithFrame:newTextViewRect textContainer:container];
         textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         
         if (self.defaultText) {
