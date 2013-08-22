@@ -9,31 +9,38 @@
 #import "JLLayoutManager.h"
 #import "UIColor+Chromatism.h"
 
+NSString *const JLMarkdownCodeAttribute = @"Code";
+
 @implementation JLLayoutManager
 
-- (void)fillBackgroundRectArray:(const CGRect *)rectArray count:(NSUInteger)rectCount forCharacterRange:(NSRange)charRange color:(UIColor *)color
+- (void)drawBackgroundForGlyphRange:(NSRange)glyphsToShow atPoint:(CGPoint)origin
 {
-    if (color == [UIColor backgroundMarkupColor]) {
-        CGRect rect;
-        
-        //// Color Declarations
-        UIColor* borderColor = [UIColor colorWithRed: 0.867 green: 0.867 blue: 0.867 alpha: 1];
-        UIColor* backgroundColor = [UIColor colorWithRed: 0.973 green: 0.973 blue: 0.973 alpha: 1];
-        
-        for (int i = 0; i < rectCount; i++) {
-            rect = rectArray[i];
-            
-            //// Rounded Rectangle Drawing
-            UIBezierPath* roundedRectanglePath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius: 3];
-            [backgroundColor setFill];
-            [roundedRectanglePath fill];
-            [borderColor setStroke];
-            roundedRectanglePath.lineWidth = 1;
-            [roundedRectanglePath stroke];
+    NSRange range = [self characterRangeForGlyphRange:glyphsToShow actualGlyphRange:NULL];
+    [self.textStorage enumerateAttribute:JLMarkdownCodeAttribute inRange:range options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {
+        if (value) {
+            NSRange wholeGlyphRange = [self glyphRangeForCharacterRange:range actualCharacterRange:NULL];
+            [self enumerateEnclosingRectsForGlyphRange:wholeGlyphRange withinSelectedGlyphRange:wholeGlyphRange inTextContainer:self.textContainers.firstObject usingBlock:^(CGRect rect, BOOL *stop) {
+                [self drawCodeContainerInRect:CGRectOffset(rect, origin.x, origin.y + 4)];
+            }];
         }
-    } else {
-        [super fillBackgroundRectArray:rectArray count:rectCount forCharacterRange:charRange color:color];
-    }
+    }];
+    
+    [super drawBackgroundForGlyphRange:glyphsToShow atPoint:origin];
+}
+
+- (void)drawCodeContainerInRect:(CGRect)rect
+{
+    //// Color Declarations
+    UIColor* borderColor = [UIColor colorWithRed: 0.867 green: 0.867 blue: 0.867 alpha: 1];
+    UIColor* backgroundColor = [UIColor colorWithRed: 0.972549 green: 0.972549 blue: 0.972549 alpha: 1];
+    
+    //// Rounded Rectangle Drawing
+    UIBezierPath* roundedRectanglePath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius: 3];
+    [backgroundColor setFill];
+    [roundedRectanglePath fill];
+    [borderColor setStroke];
+    roundedRectanglePath.lineWidth = 1;
+    [roundedRectanglePath stroke];
 }
 
 @end

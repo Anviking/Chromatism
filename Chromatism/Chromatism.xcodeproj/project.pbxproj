@@ -37,9 +37,9 @@
 		8FA091A91791E99900179325 /* NSMutableAttributedString+Mush.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA091A71791E99900179325 /* NSMutableAttributedString+Mush.m */; };
 		8FA0CB0F1795F41B00FF8EB1 /* JLTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8FA0CB101795F41B00FF8EB1 /* JLTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */; };
-		8FD79A5917C3741400F2763E /* JLLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FD79A5717C3741400F2763E /* JLLayoutManager.h */; };
+		8FD79A5917C3741400F2763E /* JLLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FD79A5717C3741400F2763E /* JLLayoutManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8FD79A5A17C3741400F2763E /* JLLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD79A5817C3741400F2763E /* JLLayoutManager.m */; };
-		8FE2796517C3842900DD933A /* UIColor+Chromatism.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FE2796317C3842900DD933A /* UIColor+Chromatism.h */; };
+		8FE2796517C3842900DD933A /* UIColor+Chromatism.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FE2796317C3842900DD933A /* UIColor+Chromatism.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8FE2796617C3842900DD933A /* UIColor+Chromatism.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE2796417C3842900DD933A /* UIColor+Chromatism.m */; };
 /* End PBXBuildFile section */
 
