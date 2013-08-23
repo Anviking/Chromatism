@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 UIKIT_EXTERN NSString *const JLMarkdownCodeAttribute;
+UIKIT_EXTERN NSString *const JLLineStrokeAttribute;
 
 @interface JLLayoutManager : NSLayoutManager
 
