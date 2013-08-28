@@ -141,6 +141,8 @@
     _editedRange = editedRange;
     _editedLineRange = [textStorage.string lineRangeForRange:editedRange];
     
+    if (textStorage.editedMask == NSTextStorageEditedAttributes) return;
+    
     [self tokenizeWithRange:_editedLineRange];
     [self setNeedsValidation:YES];
 }
