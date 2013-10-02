@@ -85,8 +85,6 @@
 		8FA091A71791E99900179325 /* NSMutableAttributedString+Mush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Mush.m"; sourceTree = "<group>"; };
 		8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTextView.h; sourceTree = "<group>"; };
 		8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTextView.m; sourceTree = "<group>"; };
-		8FD79A5717C3741400F2763E /* JLLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLLayoutManager.h; sourceTree = "<group>"; };
-		8FD79A5817C3741400F2763E /* JLLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLLayoutManager.m; sourceTree = "<group>"; };
 		8FE2796317C3842900DD933A /* UIColor+Chromatism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Chromatism.h"; sourceTree = "<group>"; };
 		8FE2796417C3842900DD933A /* UIColor+Chromatism.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Chromatism.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -158,8 +156,6 @@
 				8F3AB9541781C1250023348A /* JLTextViewController.m */,
 				8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */,
 				8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */,
-				8FD79A5717C3741400F2763E /* JLLayoutManager.h */,
-				8FD79A5817C3741400F2763E /* JLLayoutManager.m */,
 				8FA091A61791E99900179325 /* NSMutableAttributedString+Mush.h */,
 				8FA091A71791E99900179325 /* NSMutableAttributedString+Mush.m */,
 				8F3AB94D1781C1250023348A /* Helpers.h */,
