@@ -86,6 +86,9 @@
     //Set font, text color and background color back to default
     UIColor *backgroundColor = self.syntaxTokenizer.colors[JLTokenTypeBackground];
     [self setBackgroundColor:backgroundColor ? backgroundColor : [UIColor whiteColor] ];
+    
+    // Refresh Tokenization
+    [self.syntaxTokenizer tokenizeTextStorage:self.textStorage withRange:NSMakeRange(0, self.textStorage.length)];
 }
 
 - (JLTokenizerTheme)theme
