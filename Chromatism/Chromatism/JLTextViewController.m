@@ -59,12 +59,54 @@
     
     self.view.backgroundColor = self.textView.backgroundColor;
     self.navigationController.navigationBar.translucent = TRUE;
+    
+    [self registerForKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Content Insets and Keyboard
+
+// Call this method somewhere in your view controller setup code.
+- (void)registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification *)notification
+{
+    NSDictionary* info = [notification userInfo];
+    UIScrollView *scrollView = self.textView;
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    scrollView.contentInset = contentInsets;
+    scrollView.scrollIndicatorInsets = contentInsets;
+    
+    //CGPoint caretPosition = [self.textView caretRectForPosition:self.textView.selectedTextRange.start].origin;
+    //CGRect caretRect = CGRectMake(caretPosition.x, caretPosition.y, 1, 1);
+    //[self.textView scrollRectToVisible:caretRect animated:YES];
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification *)notification
+{
+    UIScrollView *scrollView = self.textView;
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    scrollView.contentInset = contentInsets;
+    scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 @end
