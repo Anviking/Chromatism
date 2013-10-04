@@ -158,6 +158,9 @@
         NSMutableIndexSet *removedIndexes = oldSet.mutableCopy;
         [removedIndexes removeIndexes:newSet];
         
+        // Make sure the indexes still excist in the attributedString
+        removedIndexes = [removedIndexes intersectionWithSet:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.textStorage.length)]];
+        
         ChromatismLog(@"Removed Indexes:%@",removedIndexes);
         
         if (removedIndexes) {
