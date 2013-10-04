@@ -218,7 +218,7 @@
 {
     _needsValidation = needsValidation;
     if (needsValidation) {
-        [self.validationTimer invalidate]; // This is not neccecary, right?
+        [self.validationTimer invalidate]; // This is not necessary, right?
         self.validationTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(validateTokenization) userInfo:nil repeats:NO];
     }
 }
