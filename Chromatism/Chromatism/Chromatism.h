@@ -11,7 +11,6 @@
 #import "JLTokenizer.h"
 #import "JLTextViewController.h"
 #import "JLTokenPattern.h"
-#import "JLMarkdownTokenizer.h"
 #import "JLTextView.h"
 #import "UIColor+Chromatism.h"
 #import "Chromatism+Internal.h"
