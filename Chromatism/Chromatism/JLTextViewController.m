@@ -107,20 +107,33 @@
     UIScrollView *scrollView = self.textView;
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    UIEdgeInsets contentInsets = scrollView.contentInset;
+    contentInsets.bottom = kbSize.height;
     scrollView.contentInset = contentInsets;
     scrollView.scrollIndicatorInsets = contentInsets;
     
-    //CGPoint caretPosition = [self.textView caretRectForPosition:self.textView.selectedTextRange.start].origin;
-    //CGRect caretRect = CGRectMake(caretPosition.x, caretPosition.y, 1, 1);
-    //[self.textView scrollRectToVisible:caretRect animated:YES];
+    CGPoint point = [self.textView caretRectForPosition:self.textView.selectedTextRange.start].origin;
+    point.y = MIN(point.y, self.textView.frame.size.height - kbSize.height);
+    
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= kbSize.height;
+    if (!CGRectContainsPoint(aRect, point) ) {
+        
+        CGRect rect = CGRectMake(point.x, point.y, 1, 1);
+        rect.size.height = kbSize.height;
+        rect.origin.y += kbSize.height;
+        [self.textView scrollRectToVisible:rect animated:YES];
+    }
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
 - (void)keyboardWillBeHidden:(NSNotification *)notification
 {
     UIScrollView *scrollView = self.textView;
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    UIEdgeInsets contentInsets = scrollView.contentInset;
+    contentInsets.bottom = 0;
+    scrollView.contentInset = contentInsets;
+    scrollView.scrollIndicatorInsets = contentInsets;
     scrollView.contentInset = contentInsets;
     scrollView.scrollIndicatorInsets = contentInsets;
 }

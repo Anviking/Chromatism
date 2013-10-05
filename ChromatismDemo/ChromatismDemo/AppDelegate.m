@@ -36,6 +36,7 @@
     NSString *string = [[NSString alloc] initWithData:[NSData dataWithContentsOfURL:URL] encoding:NSUTF8StringEncoding];
     
     JLTextViewController *viewController = [[JLTextViewController alloc] initWithText:string];
+    viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Resign" style:UIBarButtonItemStylePlain target:viewController.textView action:@selector(resignFirstResponder)];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     viewController.title = @"Chromatism";
     
