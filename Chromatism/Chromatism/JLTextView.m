@@ -61,7 +61,6 @@
     self.textStorage.delegate = self.syntaxTokenizer;
     self.theme = JLTokenizerThemeDusk;
     self.syntaxTokenizer.dataSource = self;
-    self.syntaxTokenizer.textStorage = self.textStorage;
     
     // Set default properties
     self.scrollEnabled = YES;

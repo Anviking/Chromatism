@@ -18,17 +18,17 @@
 @interface JLTokenizer : NSObject <NSTextStorageDelegate, JLScopeDelegate>
 
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage withRange:(NSRange)range;
-- (void)tokenizeWithRange:(NSRange)range;
-- (void)tokenize;
+- (void)tokenizeTextStorage:(NSTextStorage *)textStorage;
 
-- (void)validateTokenization;
+// - (void)validateTokenization;
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
 
 @property (nonatomic, strong) NSDictionary *colors;
-@property (nonatomic, weak) NSTextStorage *textStorage;
-@property (nonatomic, assign) BOOL needsValidation;
+
+// @property (nonatomic, assign) BOOL needsValidation;
+
 @property (nonatomic, weak) id<JLTokenizerDelegate> delegate;
 @property (nonatomic, weak) id<JLTokenizerDataSource> dataSource;
 @end

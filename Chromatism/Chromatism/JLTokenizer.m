@@ -132,19 +132,18 @@
 
 - (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
-    NSAssert(textStorage == self.textStorage, @"A JLTokenizer should only handle one textStorage");
+    
 }
 
 - (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
-    NSAssert(textStorage == self.textStorage, @"A JLTokenizer should only handle one textStorage");
     _editedRange = editedRange;
     _editedLineRange = [textStorage.string lineRangeForRange:editedRange];
     
     if (textStorage.editedMask == NSTextStorageEditedAttributes) return;
     
-    [self tokenizeWithRange:_editedLineRange];
-    [self setNeedsValidation:YES];
+    [self tokenizeTextStorage:textStorage withRange:_editedLineRange];
+//    [self setNeedsValidation:YES];
 }
 
 #pragma mark - JLScope delegate
@@ -159,7 +158,7 @@
         [removedIndexes removeIndexes:newSet];
         
         // Make sure the indexes still excist in the attributedString
-        removedIndexes = [removedIndexes intersectionWithSet:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.textStorage.length)]];
+        removedIndexes = [removedIndexes intersectionWithSet:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, scope.textStorage.length)]];
         
         ChromatismLog(@"Removed Indexes:%@",removedIndexes);
         
@@ -190,14 +189,9 @@
 
 #pragma mark - Tokenizing
 
-- (void)tokenize
+- (void)tokenizeTextStorage:(NSTextStorage *)textStorage
 {
-    [self tokenizeTextStorage:self.textStorage withRange:NSMakeRange(0, self.textStorage.length)];
-}
-
-- (void)tokenizeWithRange:(NSRange)range
-{
-    [self tokenizeTextStorage:self.textStorage withRange:range];
+    [self tokenizeTextStorage:textStorage withRange:NSMakeRange(0, textStorage.length)];
 }
 
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
@@ -214,6 +208,7 @@
 
 #pragma mark - Validation
 
+/*
 - (void)setNeedsValidation:(BOOL)needsValidation
 {
     _needsValidation = needsValidation;
@@ -224,7 +219,7 @@
 }
 
 - (void)validateTokenization
-{/*
+{
     [self.textStorage beginEditing];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         [self tokenize];
@@ -233,8 +228,8 @@
             [self.textStorage endEditing];
         });
     });
-  */
 }
+*/
 
 - (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
 {
