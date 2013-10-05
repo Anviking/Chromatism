@@ -3,6 +3,8 @@ Chromatism
 
 This is the beginning of a syntax highlighting `UITextView` for iOS. Currently it only knows about Obj-C. Previously Chromatism used a combination of `CoreText` and `UITableView` for performance, but luckily that is not needed anymore.
 
+**Chromatism is currently unstable, changing quickly and without test-coverage.**
+
 ![](http://anviking.com/img/chromatism_black.png)
 
 How to add Chromatism to your application:
@@ -18,7 +20,6 @@ How to add Chromatism to your application:
 - `JLScope` has a `NSMutableIndexSet`-property that corresponds to ranges in the textStorage. Scopes can be arranged in a hierarchy. A scope's children is stored in the `subscopes` property, and a scopes parent is simply called its `scope`. A scope can be executed via the `-perform`-method. The method causes subscopes to perform cascadingly. 
 - `JLTokenPattern` is a subclass of `JLScope`. It has a regex-pattern that in `-perform` searches through the ranges of its parent scope.
 
-####However, the project is changing quickly.
 
 ## Scopes and Patterns
 Scopes and patters can ensure that regex patterns search in the right place. To understand how they work, it is helpful to know what happens in the `-perform` method.
