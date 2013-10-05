@@ -7,7 +7,10 @@ This is the beginning of a syntax highlighting `UITextView` for iOS. Currently i
 
 ![](http://anviking.com/img/chromatism_black.png)
 
-How to add Chromatism to your application:
+## License
+MIT, see [LICENSE.txt](https://github.com/Anviking/Chromatism/blob/master/LICENSE.txt). If you develop Chromatism further, sharing your improvements are encouraged.
+
+## How to add Chromatism to your application:
 
 1. Drag and drop `Chromatism.xcodeproj` to your project.
 2. Add `Chromatism` as a target dependency and link to `libChromatism.a`
@@ -29,5 +32,4 @@ Scopes and patters can ensure that regex patterns search in the right place. To 
 3. The scope ensures that its siblings don't search where the scope have found things.
 
 For more detail, see the `-perform`-implementation on [`JLScope`](https://github.com/Anviking/Chromatism/blob/master/Chromatism/Chromatism/JLScope.m#65) and [`JLTokenPattern`](https://github.com/Anviking/Chromatism/blob/master/Chromatism/Chromatism/JLTokenPattern.m#56).
-
 
