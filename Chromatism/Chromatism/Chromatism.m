@@ -42,6 +42,12 @@ NSString *const JLTokenTypeOther = @"other";
 NSString *const JLTokenTypeOtherMethodNames = @"other_method_names";
 NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
 
+NSString *const JLTokenTypeDiffAddition = @"diff_addition";
+NSString *const JLTokenTypeDiffDeletion = @"diff_deletion";
+
+NSString *const JLDiffColorAttributeName = @"diff_color_attribute_name";
+
+
 @implementation Chromatism
 
 + (NSDictionary *)colorsForTheme:(JLTokenizerTheme)theme
@@ -62,9 +68,10 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
                        JLTokenTypeURL: [UIColor colorWithRed:21.0/255 green:67.0/255 blue:244.0/255 alpha:1],
                        JLTokenTypeOther: [UIColor colorWithRed:113.0/255 green:65.0/255 blue:163.0/255 alpha:1],
                        JLTokenTypeOtherMethodNames :  [UIColor colorWithHex:@"7040a6" alpha:1],
-                       JLTokenTypeOtherClassNames :  [UIColor colorWithHex:@"7040a6" alpha:1]
+                       JLTokenTypeOtherClassNames :  [UIColor colorWithHex:@"7040a6" alpha:1],
                        
-                       
+                       JLTokenTypeDiffAddition : [UIColor greenColor],
+                       JLTokenTypeDiffDeletion : [UIColor redColor]
                        
                        };
             break;
@@ -82,7 +89,11 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
                        JLTokenTypeURL: [UIColor colorWithRed:35.0/255 green:63.0/255 blue:208.0/255 alpha:1],
                        JLTokenTypeOther: [UIColor colorWithRed:0.0/255 green:175.0/255 blue:199.0/255 alpha:1],
                        JLTokenTypeOtherClassNames :  [UIColor colorWithHex:@"04afc8" alpha:1],
-                       JLTokenTypeOtherMethodNames :  [UIColor colorWithHex:@"04afc8" alpha:1]
+                       JLTokenTypeOtherMethodNames :  [UIColor colorWithHex:@"04afc8" alpha:1],
+                       
+                       JLTokenTypeDiffAddition : [UIColor greenColor],
+                       JLTokenTypeDiffDeletion : [UIColor redColor]
+                       
                        };
             break;
     }

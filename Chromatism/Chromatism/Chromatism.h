@@ -29,4 +29,5 @@
 #import "JLTokenPattern.h"
 #import "JLTextView.h"
 #import "UIColor+Chromatism.h"
+#import "JLDiffTokenizer.h"
 #import "Chromatism+Internal.h"

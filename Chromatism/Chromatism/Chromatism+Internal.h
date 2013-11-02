@@ -49,6 +49,11 @@ FOUNDATION_EXPORT NSString *const JLTokenTypeURL;
 FOUNDATION_EXPORT NSString *const JLTokenTypeOther;
 FOUNDATION_EXPORT NSString *const JLTokenTypeOtherClassNames;
 FOUNDATION_EXPORT NSString *const JLTokenTypeOtherMethodNames;
+FOUNDATION_EXPORT NSString *const JLTokenTypeDiffAddition;
+FOUNDATION_EXPORT NSString *const JLTokenTypeDiffDeletion;
+
+/// Used as attribute in NSAttributedStrings. You may subclass NSLayoutManager to use this attribute.
+FOUNDATION_EXPORT NSString *const JLDiffColorAttributeName;
 
 /**
  *  In addition to being the name of the library, the Chromatism class handles colors and TokenTypes
