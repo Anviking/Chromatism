@@ -159,6 +159,72 @@
     return YES;
 }
 
+// http://stackoverflow.com/questions/19235762/how-can-i-support-the-up-and-down-arrow-keys-with-a-bluetooth-keyboard-under-ios
+
+#pragma mark - Bluethooth Keyboard Extension
+
+- (NSArray *)keyCommands {
+    UIKeyCommand *upArrow = [UIKeyCommand keyCommandWithInput: UIKeyInputUpArrow modifierFlags: 0 action: @selector(upArrow:)];
+    UIKeyCommand *downArrow = [UIKeyCommand keyCommandWithInput: UIKeyInputDownArrow modifierFlags: 0 action: @selector(downArrow:)];
+    return [[NSArray alloc] initWithObjects: upArrow, downArrow, nil];
+}
+
+- (void)upArrow:(UIKeyCommand *)keyCommand {
+    UITextRange *range = self.selectedTextRange;
+    if (range != nil) {
+        float lineHeight = self.font.lineHeight;
+        
+        CGRect caret = [self firstRectForRange: range];
+        if (isinf(caret.origin.y)) {
+            // Work-around for a bug in iOS 7 that returns bogus values when the caret is at the start of a line.
+            range = [self textRangeFromPosition: range.start toPosition: [self positionFromPosition: range.start offset: 1]];
+            caret = [self firstRectForRange: range];
+            caret.origin.y = caret.origin.y + lineHeight;
+        }
+        caret.origin.y = caret.origin.y - lineHeight < 0 ? 0 : caret.origin.y - lineHeight;
+        caret.size.width = 1;
+        UITextPosition *position = [self closestPositionToPoint: caret.origin];
+        self.selectedTextRange = [self textRangeFromPosition: position toPosition: position];
+        
+        caret = [self firstRectForRange: self.selectedTextRange];
+        if (isinf(caret.origin.y)) {
+            // Work-around for a bug in iOS 7 that occurs when the range is set to a position past the end of the last character
+            // on a line.
+            NSRange range = {0, 0};
+            range.location = [self offsetFromPosition: self.beginningOfDocument toPosition: position];
+            self.selectedRange = range;
+        }
+    }
+}
+
+- (void)downArrow:(UIKeyCommand *)keyCommand {
+    UITextRange *range = self.selectedTextRange;
+    if (range != nil) {
+        float lineHeight = self.font.lineHeight;
+        
+        CGRect caret = [self firstRectForRange: range];
+        if (isinf(caret.origin.y)) {
+            // Work-around for a bug in iOS 7 that returns bogus values when the caret is at the start of a line.
+            range = [self textRangeFromPosition: range.start toPosition: [self positionFromPosition: range.start offset: 1]];
+            caret = [self firstRectForRange: range];
+            caret.origin.y = caret.origin.y + lineHeight;
+        }
+        caret.origin.y = caret.origin.y + lineHeight < 0 ? 0 : caret.origin.y + lineHeight;
+        caret.size.width = 1;
+        UITextPosition *position = [self closestPositionToPoint: caret.origin];
+        self.selectedTextRange = [self textRangeFromPosition: position toPosition: position];
+        
+        caret = [self firstRectForRange: self.selectedTextRange];
+        if (isinf(caret.origin.y)) {
+            // Work-around for a bug in iOS 7 that occurs when the range is set to a position past the end of the last character
+            // on a line.
+            NSRange range = {0, 0};
+            range.location = [self offsetFromPosition: self.beginningOfDocument toPosition: position];
+            self.selectedRange = range;
+        }
+    }
+}
+
 #pragma mark - Helpers
 
 - (UITextRange *)rangeWithRange:(NSRange)range
