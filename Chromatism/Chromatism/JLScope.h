@@ -26,7 +26,7 @@
 
 @protocol JLScopeDelegate;
 
-@interface JLScope : NSObject
+@interface JLScope : NSOperation
 
 // Designated initializors
 + (instancetype)scopeWithRange:(NSRange)range inTextStorage:(NSTextStorage *)textStorage;
@@ -36,8 +36,9 @@
 /**
  *  Causes the every scope to perform cascadingly
  */
-- (void)perform;
-- (void)performInIndexSet:(NSIndexSet *)set;
+
+- (void)addSubscope:(JLScope*)scope;
+- (void)addScope:(JLScope *)scope;
 
 /**
  *  Array of nested JLScopes and JLTokenPatterns. Reverse realationship to scope, setting one causes the other to update. No not mutate. 
@@ -48,17 +49,7 @@
  *  Weak reference to the parent scope. Default nil means that there is no parent. Reverse realationship to subscopes, setting one causes the other to update.
  */
 
-@property (nonatomic, weak) JLScope *scope;
-
-- (void)addSubscope:(JLScope *)subscope;
-- (void)removeSubscope:(JLScope *)subscope;
-
-/**
- *  Creates a copy of the instance, and adds 
- */
-
-- (void)addScope:(JLScope *)scope;
-
+@property (nonatomic, weak) NSArray *scopes;
 
 /**
  *  A weak reference to a textStorage in which the scope is operating. Will be passed down to subscopes.

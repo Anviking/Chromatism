@@ -50,6 +50,7 @@
 @property (nonatomic, strong) JLScope *documentScope;
 @property (nonatomic, strong) JLScope *lineScope;
 @property (nonatomic, strong) NSTimer *validationTimer;
+@property (nonatomic, strong) NSMutableArray *scopes;
 
 @end
 
@@ -66,6 +67,11 @@
 {
     JLScope *documentScope = [JLScope new];
     JLScope *lineScope = [JLScope new];
+    
+    self.scopes = @[].mutableCopy;
+    
+    [self.scopes addObject:documentScope];
+    [self.scopes addObject:lineScope];
     
     // Block and line comments
     JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withIdentifier:BLOCK_COMMENT pattern:@"" andScope:documentScope];
@@ -203,7 +209,8 @@
     [self.documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, storage.length)]];
     [self.lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:range]];
     
-    [self.documentScope perform];
+    [[NSOperationQueue mainQueue] setMaxConcurrentOperationCount:50];
+    [[NSOperationQueue mainQueue] addOperations:self.scopes waitUntilFinished:NO];
 }
 
 #pragma mark - Validation
@@ -255,7 +262,9 @@
     token.identifier = identifier;
     token.type = type;
     token.delegate = self;
-    [scope addSubscope:token];
+    [token addDependency:scope];
+    
+    [self.scopes addObject:token];
     
     return token;
 }

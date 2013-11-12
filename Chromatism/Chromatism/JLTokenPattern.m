@@ -70,9 +70,15 @@
 
 #pragma mark - Perform
 
-- (void)performInIndexSet:(NSIndexSet *)set
+- (void)main
 {
-
+    NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
+    for (JLScope *scope in self.dependencies) {
+        if ([scope isKindOfClass:[JLScope class]]) {
+            [set addIndexes:scope.set];
+        }
+    }
+    
     if (![self shouldPerform]) return;
     NSDictionary *attributes = [self.delegate attributesForScope:self];
     NSMutableIndexSet *oldSet = self.set;
@@ -85,9 +91,7 @@
             [self.set addIndexesInRange:[result rangeAtIndex:self.captureGroup]];
         }];
     }];
-    
-    [self iterateSubscopes];
-    
+        
     if (![oldSet isEqualToIndexSet:self.set] && [self.delegate respondsToSelector:@selector(scope:didChangeIndexesFrom:to:)]) [self.delegate scope:self didChangeIndexesFrom:oldSet to:self.set];
 }
 
@@ -97,24 +101,6 @@
 {
     NSString *subscopes = [[[[self.subscopes valueForKey:@"description"] componentsJoinedByString:@"\n"] componentsSeparatedByString:@"\n"] componentsJoinedByString:@"\n\t\t"];
     return [NSString stringWithFormat:@"%@, %@, Regex Pattern: %@, opaque: %i, indexesSet:%@ \nsubscopes, %@", NSStringFromClass(self.class), self.identifier, self.pattern, self.opaque, self.set, subscopes];
-}
-
-#pragma mark - NSCopying Protocol
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    JLTokenPattern *pattern = [[self.class allocWithZone:zone] init];
-    for (JLScope *subscope in self.subscopes) {
-        [pattern addSubscope:subscope.copy];
-    }
-    pattern.textStorage = self.textStorage;
-    pattern.expression = self.expression;
-    pattern.set = self.set.mutableCopy;
-    pattern.delegate = self.delegate;
-    pattern.type = self.type.copy;
-    pattern.identifier = self.identifier.copy;
-
-    return pattern;
 }
 
 @end

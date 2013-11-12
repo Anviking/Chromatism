@@ -26,17 +26,10 @@
 #import "Helpers.h"
 
 @interface JLScope ()
-
-- (void)iterateSubscopes;
-
 @property (nonatomic, readwrite, strong) NSString *string;
 @end
 
 @implementation JLScope
-{
-    NSMutableArray *_subscopes;
-}
-@synthesize subscopes = _subscopes;
 
 #pragma mark - Initialization
 
@@ -64,42 +57,24 @@
 
 #pragma mark - Perform
 
-- (void)iterateSubscopes
+- (void)main
 {
-    NSMutableIndexSet *set = (self.empty) ? self.scope.set.mutableCopy :self.set.mutableCopy;
-    for (JLScope *scope in self.subscopes) {
-        
-        NSAssert(scope != self, @"%@ can under no circumstances have itself as a subscope.", self);
-        scope.textStorage = self.textStorage;
-        scope.string = self.string;
-        
-        [scope performInIndexSet:set];
-        
-        if (scope.opaque) {
-            [set removeIndexes:scope.set];
-            if (self.empty) {
-                [self.set addIndexes:scope.set];
-            }
+    NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
+    for (JLScope *scope in self.dependencies) {
+        if ([scope isKindOfClass:[JLScope class]]) {
+            [set addIndexes:scope.set];
         }
     }
-}
-
-- (void)perform
-{
-    NSAssert(!self.scope, @"Only call -perform to a rootlevel scope");
-    if (![self shouldPerform]) return;
-    [self iterateSubscopes];
-}
-
-- (void)performInIndexSet:(NSIndexSet *)set
-{
-    NSParameterAssert(set);
-    if (![self shouldPerform]) return;
-    NSMutableIndexSet *oldSet = self.set;
-    self.set = [self.set intersectionWithSet:set];
-    [self iterateSubscopes];
     
-    if ([self.delegate respondsToSelector:@selector(scope:didChangeIndexesFrom:to:)]) [self.delegate scope:self didChangeIndexesFrom:oldSet to:self.set];
+    if (set.count > 0) {
+        if (![self shouldPerform]) return;
+        NSMutableIndexSet *oldSet = self.set;
+        self.set = [self.set intersectionWithSet:set];
+        
+        if ([self.delegate respondsToSelector:@selector(scope:didChangeIndexesFrom:to:)]) [self.delegate scope:self didChangeIndexesFrom:oldSet to:self.set];
+    } else {
+        self.set = [NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.string.length)];
+    }
 }
 
 - (BOOL)shouldPerform
@@ -117,39 +92,14 @@
     return YES;
 }
 
-#pragma mark - Scope Hierarchy Management
-
-- (NSMutableArray *)subscopes
+- (void)addSubscope:(JLScope *)scope
 {
-    if (!_subscopes) _subscopes = [NSMutableArray array];
-    return _subscopes;
+    [scope addDependency:self];
 }
 
-- (void)setSubscopes:(NSArray *)subscopes
+- (void)addScope:(JLScope *)scope
 {
-    for (JLScope *scope in subscopes) {
-        scope.scope = self;
-    }
-    _subscopes = subscopes.mutableCopy;
-}
-
-- (void)setScope:(JLScope *)scope
-{
-    [(NSMutableArray *)_scope.subscopes removeObject:self];
-    _scope = scope;
-    
-    [(NSMutableArray *)_scope.subscopes addObject:self];
-}
-
-- (void)addSubscope:(JLScope *)subscope
-{
-    [(NSMutableArray *)self.subscopes addObject:subscope];
-    subscope->_scope = self;
-}
-
-- (void)removeSubscope:(JLScope *)subscope
-{
-    [(NSMutableArray *)self.subscopes removeObject:subscope];
+    [self addDependency:scope];
 }
 
 #pragma mark - Properties
@@ -171,26 +121,6 @@
 {
     NSString *subscopes = [[[[self.subscopes valueForKey:@"description"] componentsJoinedByString:@"\n"] componentsSeparatedByString:@"\n"] componentsJoinedByString:@"\n\t\t"];
     return [NSString stringWithFormat:@"%@, %@, nopaque: %i, nindexesSet:%@, \n subscopes, %@", NSStringFromClass(self.class), _identifier, _opaque, _set, subscopes];
-}
-
-#pragma mark - NSCopying Protocol
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    JLScope *scope = [[self.class allocWithZone:zone] init];
-    for (JLScope *subscope in self.subscopes) {
-        [scope addSubscope:subscope.copy];
-    }
-    scope.textStorage = self.textStorage;
-    scope.delegate = self.delegate;
-    scope.type = self.type.copy;
-    scope.identifier = self.identifier.copy;
-    return scope;
-}
-
-- (void)addScope:(JLScope *)scope
-{
-    [scope addSubscope:self.copy];
 }
 
 @end
