@@ -294,18 +294,23 @@
         
         NSString *prefixString = [@"\n" stringByAppendingString:[self prefixStringFromRange:range inTextView:textView]];
         
-        NSString *lastCharacter = [textView.text substringWithRange:NSMakeRange(range.location - 1, 1)];
-        if ([lastCharacter isEqualToString:@"{"]) {
-            
-            prefixString = [prefixString stringByAppendingString:@"    "];
-        } else if ([lastCharacter isEqualToString:@"}"]) {
-            if ([[prefixString substringFromIndex:prefixString.length - 4] isEqualToString:@"    "]) {
-                prefixString = [prefixString substringToIndex:prefixString.length - 4];
-            }
-            else if ([[prefixString substringFromIndex:prefixString.length - 1] isEqualToString:@"\t"]) {
-                prefixString = [prefixString substringToIndex:prefixString.length - 1];
-            }
+        unichar previousCharacter = [textView.text characterAtIndex:range.location - 1];
+        switch ([self intendationActionAfterReplacingTextInRange:range replacementText:text previousCharacter:previousCharacter textView:textView]) {
+            case JLTokenizerIntendtationActionIncrease:
+                prefixString = [prefixString stringByAppendingString:@"    "];
+                break;
+            case JLTokenizerIntendtationActionDecrease:
+                if ([[prefixString substringFromIndex:prefixString.length - 4] isEqualToString:@"    "]) {
+                    prefixString = [prefixString substringToIndex:prefixString.length - 4];
+                }
+                else if ([[prefixString substringFromIndex:prefixString.length - 1] isEqualToString:@"\t"]) {
+                    prefixString = [prefixString substringToIndex:prefixString.length - 1];
+                }
+                break;
+            case JLTokenizerIntendtationActionNone:
+                break;
         }
+        
         [textView replaceRange:[self rangeWithRange:range inTextView:textView] withText:prefixString];
         return NO;
     }
@@ -316,6 +321,17 @@
     else _oldString = @"";
     
     return YES;
+}
+
+- (JLTokenizerIntendtationAction)intendationActionAfterReplacingTextInRange:(NSRange)range replacementText:(NSString *)text previousCharacter:(unichar)character textView:(UITextView *)textView;
+{
+    if (character == '{') {
+        return JLTokenizerIntendtationActionIncrease;
+    } else if (character == '}') {
+        return JLTokenizerIntendtationActionDecrease;
+    } else {
+        return JLTokenizerIntendtationActionNone;
+    }
 }
 
 #pragma mark - Helpers
