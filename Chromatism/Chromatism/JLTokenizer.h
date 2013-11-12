@@ -13,9 +13,9 @@
 
 @class TextViewChange, JLTextView;
 
-@protocol JLTokenizerDelegate, JLTokenizerDataSource;
+@protocol JLTokenizerDelegate;
 
-@interface JLTokenizer : NSObject <NSTextStorageDelegate, JLScopeDelegate>
+@interface JLTokenizer : NSObject <NSTextStorageDelegate, JLScopeDelegate, NSLayoutManagerDelegate, UITextViewDelegate>
 
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage withRange:(NSRange)range;
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage;
@@ -30,14 +30,6 @@
 // @property (nonatomic, assign) BOOL needsValidation;
 
 @property (nonatomic, weak) id<JLTokenizerDelegate> delegate;
-@property (nonatomic, weak) id<JLTokenizerDataSource> dataSource;
-@end
-
-@protocol JLTokenizerDataSource <NSObject>
-
-/// Return the text that was replaced in the most recent text edit or an empty string if there is none.
-- (NSString *)recentlyReplacedText;
-
 @end
 
 @protocol JLTokenizerDelegate <NSObject>

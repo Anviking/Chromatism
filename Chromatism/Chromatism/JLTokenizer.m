@@ -57,6 +57,7 @@
 {
     NSRange _editedRange;
     NSRange _editedLineRange;
+    NSString *_oldString;
 }
 
 #pragma mark - Setup
@@ -172,10 +173,9 @@
 
 - (NSString *)mergedModifiedStringForScope:(JLScope *)scope
 {
-    NSString *oldString = [self.dataSource recentlyReplacedText];
     NSString *newString = [scope.string substringWithRange:_editedLineRange];
-    if (oldString && newString) {
-        return [oldString stringByAppendingString:newString];
+    if (_oldString && newString) {
+        return [_oldString stringByAppendingString:newString];
     }
     return nil;
 }
@@ -270,6 +270,89 @@
 {
     [storage removeAttribute:NSForegroundColorAttributeName range:range];
     [storage addAttribute:NSForegroundColorAttributeName value:self.colors[JLTokenTypeText] range:range];
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    _oldString = nil;
+    
+    if (range.length == 0 && text.length == 1) {
+        // A normal character typed
+    }
+    else if (range.length == 1 && text.length == 0) {
+        // Backspace
+    }
+    else {
+        // Multicharacter edit
+    }
+    
+    if ([text isEqualToString:@"\n"]) {
+        // Return
+        // Start the new line with as many tabs or white spaces as the previous one.
+        
+        NSString *prefixString = [@"\n" stringByAppendingString:[self prefixStringFromRange:range inTextView:textView]];
+        
+        NSString *lastCharacter = [textView.text substringWithRange:NSMakeRange(range.location - 1, 1)];
+        if ([lastCharacter isEqualToString:@"{"]) {
+            
+            prefixString = [prefixString stringByAppendingString:@"    "];
+        } else if ([lastCharacter isEqualToString:@"}"]) {
+            if ([[prefixString substringFromIndex:prefixString.length - 4] isEqualToString:@"    "]) {
+                prefixString = [prefixString substringToIndex:prefixString.length - 4];
+            }
+            else if ([[prefixString substringFromIndex:prefixString.length - 1] isEqualToString:@"\t"]) {
+                prefixString = [prefixString substringToIndex:prefixString.length - 1];
+            }
+        }
+        [textView replaceRange:[self rangeWithRange:range inTextView:textView] withText:prefixString];
+        return NO;
+    }
+    
+    if (range.length > 0) {
+        _oldString = [textView.text substringWithRange:range];
+    }
+    else _oldString = @"";
+    
+    return YES;
+}
+
+#pragma mark - Helpers
+
+- (UITextRange *)rangeWithRange:(NSRange)range inTextView:(UITextView *)textView
+{
+    UITextPosition *beginning = textView.beginningOfDocument;
+    UITextPosition *start = [textView positionFromPosition:beginning offset:range.location];
+    UITextPosition *stop = [textView positionFromPosition:start offset:range.length];
+    
+    return [textView textRangeFromPosition:start toPosition:stop];
+}
+
+- (NSString *)prefixStringFromRange:(NSRange)range inTextView:(UITextView *)textView
+{
+    NSRange lineRange = [textView.text lineRangeForRange:range];
+    NSRange prefixRange = [textView.text rangeOfString:@"[\\t| ]*" options:NSRegularExpressionSearch range:lineRange];
+    return [textView.text substringWithRange:prefixRange];
+}
+
+#pragma mark - NSLayoutManager delegeate
+
+/*
+ *  TODO: Find out a way to set intendation for entire paragraphs.
+ */
+
+- (CGFloat)layoutManager:(NSLayoutManager *)layoutManager paragraphSpacingBeforeGlyphAtIndex:(NSUInteger)glyphIndex withProposedLineFragmentRect:(CGRect)rect
+{
+    return 0;
+}
+
+- (BOOL)layoutManager:(NSLayoutManager *)layoutManager shouldBreakLineByWordBeforeCharacterAtIndex:(NSUInteger)charIndex
+{
+    NSString *character = [layoutManager.textStorage.string substringWithRange:NSMakeRange(charIndex, 1)];
+    // NSLog(@"Asked about linebreak: %@",character);
+    if ([character isEqualToString:@"*"]) return NO;
+    return YES;
 }
 
 @end

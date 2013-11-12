@@ -28,7 +28,7 @@
 
 @class JLTokenizer;
 
-@interface JLTextView : UITextView <UITextViewDelegate, NSLayoutManagerDelegate, JLTokenizerDataSource>
+@interface JLTextView : UITextView
 
 @property (nonatomic, strong) JLTokenizer *syntaxTokenizer;
 @property (nonatomic, assign) JLTokenizerTheme theme;
