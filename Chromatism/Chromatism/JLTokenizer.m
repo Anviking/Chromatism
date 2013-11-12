@@ -349,9 +349,8 @@
 
 - (BOOL)layoutManager:(NSLayoutManager *)layoutManager shouldBreakLineByWordBeforeCharacterAtIndex:(NSUInteger)charIndex
 {
-    NSString *character = [layoutManager.textStorage.string substringWithRange:NSMakeRange(charIndex, 1)];
-    // NSLog(@"Asked about linebreak: %@",character);
-    if ([character isEqualToString:@"*"]) return NO;
+    unichar character = [layoutManager.textStorage.string characterAtIndex:charIndex];
+    if (character == '*') return NO;
     return YES;
 }
 
