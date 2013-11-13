@@ -40,16 +40,6 @@
 - (void)addSubscope:(JLScope*)scope;
 - (void)addScope:(JLScope *)scope;
 
-/**
- *  Array of nested JLScopes and JLTokenPatterns. Reverse realationship to scope, setting one causes the other to update. No not mutate. 
- */
-@property (nonatomic, strong) NSArray *subscopes;
-
-/**
- *  Weak reference to the parent scope. Default nil means that there is no parent. Reverse realationship to subscopes, setting one causes the other to update.
- */
-
-@property (nonatomic, weak) NSArray *scopes;
 
 /**
  *  A weak reference to a textStorage in which the scope is operating. Will be passed down to subscopes.

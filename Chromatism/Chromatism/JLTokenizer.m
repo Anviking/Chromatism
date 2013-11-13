@@ -159,7 +159,7 @@
 {
     if ([self.delegate respondsToSelector:@selector(scope:didFinishProcessing:)]) [self.delegate scope:scope didFinishProcessing:self];
     
-    if ([self.documentScope.subscopes containsObject:scope] && scope != self.lineScope)
+    if (![scope.dependencies containsObject:self.documentScope] && scope != self.lineScope)
     {
         NSMutableIndexSet *removedIndexes = oldSet.mutableCopy;
         [removedIndexes removeIndexes:newSet];
@@ -202,6 +202,7 @@
 
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
 {
+    [self setup];
     // First, remove old attributes
     [self clearColorAttributesInRange:range textStorage:storage];
     
@@ -209,8 +210,15 @@
     [self.documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, storage.length)]];
     [self.lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:range]];
     
-    [[NSOperationQueue mainQueue] setMaxConcurrentOperationCount:50];
-    [[NSOperationQueue mainQueue] addOperations:self.scopes waitUntilFinished:NO];
+    for (JLScope *scope in self.scopes) {
+        scope.textStorage = storage;
+    }
+    
+//    [[NSOperationQueue mainQueue] setMaxConcurrentOperationCount:50];
+    [storage beginEditing];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [queue addOperations:self.scopes waitUntilFinished:YES];
+    [storage endEditing];
 }
 
 #pragma mark - Validation

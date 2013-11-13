@@ -26,11 +26,9 @@
 #import "Helpers.h"
 
 @interface JLScope ()
-- (void)iterateSubscopes;
 - (BOOL)shouldPerform;
 
 @property (nonatomic, readwrite, strong) NSString *string;
-
 @end
 
 @implementation JLTokenPattern
@@ -87,7 +85,9 @@
     NSAssert(attributes, @"");
     [set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
         [self.expression enumerateMatchesInString:self.string options:self.matchingOptions range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-            [self.textStorage addAttributes:attributes range:[result rangeAtIndex:self.captureGroup]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.textStorage addAttributes:attributes range:[result rangeAtIndex:self.captureGroup]];
+            });
             [self.set addIndexesInRange:[result rangeAtIndex:self.captureGroup]];
         }];
     }];
@@ -99,7 +99,7 @@
 
 - (NSString *)description
 {
-    NSString *subscopes = [[[[self.subscopes valueForKey:@"description"] componentsJoinedByString:@"\n"] componentsSeparatedByString:@"\n"] componentsJoinedByString:@"\n\t\t"];
+    NSString *subscopes = [[[[self.dependencies valueForKey:@"description"] componentsJoinedByString:@"\n"] componentsSeparatedByString:@"\n"] componentsJoinedByString:@"\n\t\t"];
     return [NSString stringWithFormat:@"%@, %@, Regex Pattern: %@, opaque: %i, indexesSet:%@ \nsubscopes, %@", NSStringFromClass(self.class), self.identifier, self.pattern, self.opaque, self.set, subscopes];
 }
 
