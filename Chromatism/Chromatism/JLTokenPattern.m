@@ -35,10 +35,26 @@
 
 #pragma mark - Initialization
 
+static NSCache *cache;
+
 + (instancetype)tokenPatternWithPattern:(NSString *)pattern
 {
+    if (!cache) {
+        cache = [NSCache new];
+    }
+    
     JLTokenPattern *tokenPattern = [JLTokenPattern new];
-    tokenPattern.pattern = pattern;
+    NSRegularExpression *expression = [cache objectForKey:pattern];
+    if (expression) {
+        tokenPattern->_expression = expression;
+        tokenPattern->_pattern = pattern;
+    } else {
+        tokenPattern.pattern = pattern;
+        if (tokenPattern.expression) {
+            [cache setObject:tokenPattern.expression forKey:pattern];
+        }
+    }
+    
     return tokenPattern;
 }
 
