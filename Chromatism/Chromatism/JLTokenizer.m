@@ -42,15 +42,14 @@
 #import "JLTokenPattern.h"
 #import "Chromatism.h"
 
-#define BLOCK_COMMENT @"blockComment"
-#define LINE_COMMENT @"lineComment"
-
 @interface JLTokenizer ()
 
 @property (nonatomic, strong) JLScope *documentScope;
 @property (nonatomic, strong) JLScope *lineScope;
 @property (nonatomic, strong) NSTimer *validationTimer;
-@property (nonatomic, strong) NSMutableArray *scopes;
+@property (nonatomic, strong) NSMutableDictionary *scopes;
+@property (nonatomic, strong) NSMutableDictionary *scopeHierarchy;
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
 
 @end
 
@@ -63,76 +62,31 @@
 
 #pragma mark - Setup
 
-- (void)setup
+- (id)init
 {
-    JLScope *documentScope = [JLScope new];
-    JLScope *lineScope = [JLScope new];
-    
-    self.scopes = @[].mutableCopy;
-    
-    [self.scopes addObject:documentScope];
-    [self.scopes addObject:lineScope];
-    
-    // Block and line comments
-    JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withIdentifier:BLOCK_COMMENT pattern:@"" andScope:documentScope];
-    blockComment.triggeringCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"/*"];
-    blockComment.expression = [NSRegularExpression regularExpressionWithPattern:@"/\\*.*?\\*/" options:NSRegularExpressionDotMatchesLineSeparators error:nil];
-    
-    [self addToken:JLTokenTypeComment withIdentifier:LINE_COMMENT pattern:@"//.*+$" andScope:lineScope];
-    
-    // Preprocessor macros
-    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withIdentifier:nil pattern:@"^#.*+$" andScope:lineScope];
-    
-    // #import <Library/Library.h>
-    // In xcode it only works for #import and #include, not all preprocessor statements.
-    [self addToken:JLTokenTypeString withPattern:@"<.*?>" andScope:preprocessor];
-    
-    // Strings
-    [[self addToken:JLTokenTypeString withPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andScope:lineScope] addScope:preprocessor];
-    
-    // Numbers
-    [self addToken:JLTokenTypeNumber withPattern:@"(?<=\\s)\\d+" andScope:lineScope];
-    
-    // New literals, for example @[]
-    // TODO: Highlight the closing bracket too, but with some special "nested-token-pattern"
-    [[self addToken:JLTokenTypeNumber withPattern:@"@[\\[|\\{|\\(]" andScope:lineScope] setOpaque:NO];
-    
-    // C function names
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\w+\\s*(?>\\(.*\\)" andScope:lineScope] setCaptureGroup:1];
-    
-    // Dot notation
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\.(\\w+)" andScope:lineScope] setCaptureGroup:1];
-    
-    // Method Calls
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(\\w+)\\]" andScope:lineScope] setCaptureGroup:1];
-    
-    // Method call parts
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(?<=\\w+):" andScope:lineScope] setCaptureGroup:0];
-    
-    NSString *keywords = @"true false yes no YES TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super";
-    
-    [self addToken:JLTokenTypeKeyword withKeywords:keywords andScope:lineScope];
-    [self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:lineScope];
-    
-    // Other Class Names
-    [self addToken:JLTokenTypeOtherClassNames withPattern:@"\\b[A-Z]{3}[a-zA-Z]*\\b" andScope:lineScope];
-    
-    [documentScope addSubscope:lineScope];
-    
-    self.documentScope = documentScope;
-    self.lineScope = lineScope;
+    self = [super init];
+    if (self) {
+        self.operationQueue = [[NSOperationQueue alloc] init];
+    }
+    return self;
 }
 
-- (JLScope *)documentScope
+- (JLTokenPattern *)addTokenOfType:(NSString *)type pattern:(NSString *)pattern scopes:(NSArray *)scopes;
 {
-    if (!_documentScope) [self setup];
-    return _documentScope;
-}
-
-- (JLScope *)lineScope
-{
-    if (!_lineScope) [self setup];
-    return _lineScope;
+    JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern];
+    token.type = type;
+    token.delegate = self;
+    [self.operationQueue addOperation:token];
+    
+    if (scopes) {
+        for (JLScope *scope in scopes) {
+            [token addScope:scope];
+        }
+    } else {
+        [token addScope:self.lineScope];
+    }
+    
+    return token;
 }
 
 #pragma mark - NSTextStorageDelegate
@@ -189,7 +143,7 @@
 - (NSDictionary *)attributesForScope:(JLScope *)scope
 {
     UIColor *color = self.colors[scope.type];
-    NSAssert(color, @"Didn't get a color for type:%@ in colorDictionary: %@",scope.type, self.colors);
+    NSAssert(color, @"Didn't get a color for type: %@ in colorDictionary: %@",scope.type, self.colors);
     return @{ NSForegroundColorAttributeName : color };
 }
 
@@ -202,23 +156,78 @@
 
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
 {
-    [self setup];
-    // First, remove old attributes
+    [storage beginEditing];
+    
+    [self.operationQueue setSuspended:YES];
+    [self createScopes];
+    
     [self clearColorAttributesInRange:range textStorage:storage];
     
     [self.documentScope setTextStorage:storage];
     [self.documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, storage.length)]];
     [self.lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:range]];
     
-    for (JLScope *scope in self.scopes) {
-        scope.textStorage = storage;
-    }
-    
-//    [[NSOperationQueue mainQueue] setMaxConcurrentOperationCount:50];
-    [storage beginEditing];
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    [queue addOperations:self.scopes waitUntilFinished:YES];
+    [self.operationQueue setSuspended:NO];
+    [self.operationQueue waitUntilAllOperationsAreFinished];
     [storage endEditing];
+}
+
+- (void)createScopes
+{
+    JLScope *documentScope = [JLScope new];
+    JLScope *lineScope = [JLScope new];
+    
+    [self.operationQueue addOperation:lineScope];
+    [self.operationQueue addOperation:documentScope];
+    
+    // Block and line comments
+    JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withPattern:@"" andScope:documentScope];
+    blockComment.triggeringCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"/*"];
+    blockComment.expression = [NSRegularExpression regularExpressionWithPattern:@"/\\*.*?\\*/" options:NSRegularExpressionDotMatchesLineSeparators error:nil];
+    
+    [self addToken:JLTokenTypeComment withPattern:@"//.*+$" andScope:lineScope];
+    
+    // Preprocessor macros
+    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withPattern:@"^#.*+$" andScope:lineScope];
+    
+    // #import <Library/Library.h>
+    // In xcode it only works for #import and #include, not all preprocessor statements.
+    [self addToken:JLTokenTypeString withPattern:@"<.*?>" andScope:preprocessor];
+    
+    // Strings
+    [[self addToken:JLTokenTypeString withPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andScope:lineScope] addScope:preprocessor];
+    
+    // Numbers
+    [self addToken:JLTokenTypeNumber withPattern:@"(?<=\\s)\\d+" andScope:lineScope];
+    
+    // New literals, for example @[]
+    // TODO: Highlight the closing bracket too, but with some special "nested-token-pattern"
+    [[self addToken:JLTokenTypeNumber withPattern:@"@[\\[|\\{|\\(]" andScope:lineScope] setOpaque:NO];
+    
+    // C function names
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\w+\\s*(?>\\(.*\\)" andScope:lineScope] setCaptureGroup:1];
+    
+    // Dot notation
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\.(\\w+)" andScope:lineScope] setCaptureGroup:1];
+    
+    // Method Calls
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(\\w+)\\]" andScope:lineScope] setCaptureGroup:1];
+    
+    // Method call parts
+    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(?<=\\w+):" andScope:lineScope] setCaptureGroup:0];
+    
+    NSString *keywords = @"true false yes no YES TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super";
+    
+    [self addToken:JLTokenTypeKeyword withKeywords:keywords andScope:lineScope];
+    [self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:lineScope];
+    
+    // Other Class Names
+    [self addToken:JLTokenTypeOtherClassNames withPattern:@"\\b[A-Z]{3}[a-zA-Z]*\\b" andScope:lineScope];
+    
+    [documentScope addSubscope:lineScope];
+    
+    self.documentScope = documentScope;
+    self.lineScope = lineScope;
 }
 
 #pragma mark - Validation
@@ -257,22 +266,15 @@
 
 - (JLTokenPattern *)addToken:(NSString *)type withPattern:(NSString *)pattern andScope:(JLScope *)scope
 {
-    return [self addToken:type withIdentifier:type pattern:pattern andScope:scope];
-}
-
-- (JLTokenPattern *)addToken:(NSString *)type withIdentifier:(NSString *)identifier pattern:(NSString *)pattern andScope:(JLScope *)scope
-{
     NSParameterAssert(type);
     NSParameterAssert(pattern);
     NSParameterAssert(scope);
     
     JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern];
-    token.identifier = identifier;
     token.type = type;
     token.delegate = self;
     [token addDependency:scope];
-    
-    [self.scopes addObject:token];
+    [self.operationQueue addOperation:token];
     
     return token;
 }

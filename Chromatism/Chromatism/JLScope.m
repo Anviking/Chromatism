@@ -63,6 +63,8 @@
     for (JLScope *scope in self.dependencies) {
         if ([scope isKindOfClass:[JLScope class]]) {
             [set addIndexes:scope.set];
+            self.textStorage = scope.textStorage;
+            self.string = scope.string;
         }
     }
     

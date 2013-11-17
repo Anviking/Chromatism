@@ -78,6 +78,7 @@ static NSCache *cache;
 
 - (void)setPattern:(NSString *)pattern
 {
+    if (!pattern) return;
     _pattern = pattern;
     _expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
 }
@@ -90,6 +91,8 @@ static NSCache *cache;
     for (JLScope *scope in self.dependencies) {
         if ([scope isKindOfClass:[JLScope class]]) {
             [set addIndexes:scope.set];
+            self.string = scope.string;
+            self.textStorage = scope.textStorage;
         }
     }
     
