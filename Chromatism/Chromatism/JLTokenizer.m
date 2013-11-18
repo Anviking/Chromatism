@@ -109,27 +109,6 @@
 
 #pragma mark - JLScope delegate
 
-- (void)scope:(JLScope *)scope didChangeIndexesFrom:(NSIndexSet *)oldSet to:(NSIndexSet *)newSet
-{
-    if ([self.delegate respondsToSelector:@selector(scope:didFinishProcessing:)]) [self.delegate scope:scope didFinishProcessing:self];
-    
-    if (![scope.dependencies containsObject:self.documentScope] && scope != self.lineScope)
-    {
-        NSMutableIndexSet *removedIndexes = oldSet.mutableCopy;
-        [removedIndexes removeIndexes:newSet];
-        
-        // Make sure the indexes still excist in the attributedString
-        removedIndexes = [removedIndexes intersectionWithSet:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, scope.textStorage.length)]];
-        
-        ChromatismLog(@"Removed Indexes:%@",removedIndexes);
-        
-        if (removedIndexes) {
-            [removedIndexes enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
-                [self tokenizeTextStorage:scope.textStorage withRange:range];
-            }];
-        } 
-    }
-}
 
 - (NSString *)mergedModifiedStringForScope:(JLScope *)scope
 {
@@ -176,6 +155,9 @@
 {
     JLScope *documentScope = [JLScope new];
     JLScope *lineScope = [JLScope new];
+    
+    self.documentScope = documentScope;
+    self.lineScope = lineScope;
     
     self.scopes = [NSMutableArray arrayWithObjects:documentScope, lineScope, nil];
     
@@ -229,8 +211,7 @@
     
     [documentScope addSubscope:lineScope];
     
-    self.documentScope = documentScope;
-    self.lineScope = lineScope;
+
 }
 
 #pragma mark - Validation

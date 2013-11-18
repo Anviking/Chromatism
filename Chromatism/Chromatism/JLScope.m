@@ -84,10 +84,8 @@
     
     if (set.count > 0) {
         if (![self shouldPerform]) return;
-        NSMutableIndexSet *oldSet = self.set;
         self.set = [self.set intersectionWithSet:set];
         
-        if ([self.delegate respondsToSelector:@selector(scope:didChangeIndexesFrom:to:)]) [self.delegate scope:self didChangeIndexesFrom:oldSet to:self.set];
     } else {
         self.set = [NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.string.length)];
     }

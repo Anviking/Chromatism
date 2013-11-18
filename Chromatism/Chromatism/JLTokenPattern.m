@@ -96,7 +96,6 @@ static NSCache *cache;
     
     if (![self shouldPerform]) return;
     NSDictionary *attributes = [self.delegate attributesForScope:self];
-    NSMutableIndexSet *oldSet = self.set;
     self.set = [self.set intersectionWithSet:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.textStorage.length)]];
     [self.set removeIndexes:set];
     NSAssert(attributes, @"");
@@ -108,8 +107,6 @@ static NSCache *cache;
             [self.set addIndexesInRange:[result rangeAtIndex:self.captureGroup]];
         }];
     }];
-        
-    if (![oldSet isEqualToIndexSet:self.set] && [self.delegate respondsToSelector:@selector(scope:didChangeIndexesFrom:to:)]) [self.delegate scope:self didChangeIndexesFrom:oldSet to:self.set];
     
     for (JLScope *scope in self.scopes) {
         [scope.set removeIndexes:self.set];
