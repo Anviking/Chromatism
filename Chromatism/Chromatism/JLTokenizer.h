@@ -11,6 +11,12 @@
 #import "Chromatism+Internal.h"
 #import "JLScope.h"
 
+typedef NS_ENUM(NSInteger, JLTokenizerIntendtationAction) {
+    JLTokenizerIntendtationActionIncrease = 1,
+    JLTokenizerIntendtationActionDecrease = -1,
+    JLTokenizerIntendtationActionNone = 0
+} NS_ENUM_AVAILABLE_IOS(7_0);
+
 @class TextViewChange, JLTextView;
 
 @protocol JLTokenizerDelegate;
@@ -24,6 +30,8 @@
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 + (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
+
+- (JLTokenizerIntendtationAction)intendationActionAfterReplacingTextInRange:(NSRange)range replacementText:(NSString *)text previousCharacter:(unichar)character textView:(UITextView *)textView;
 
 @property (nonatomic, strong) NSDictionary *colors;
 

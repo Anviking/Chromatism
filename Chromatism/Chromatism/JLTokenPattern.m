@@ -26,21 +26,35 @@
 #import "Helpers.h"
 
 @interface JLScope ()
-- (void)iterateSubscopes;
 - (BOOL)shouldPerform;
 
 @property (nonatomic, readwrite, strong) NSString *string;
-
 @end
 
 @implementation JLTokenPattern
 
 #pragma mark - Initialization
 
+static NSCache *cache;
+
 + (instancetype)tokenPatternWithPattern:(NSString *)pattern
 {
+    if (!cache) {
+        cache = [NSCache new];
+    }
+    
     JLTokenPattern *tokenPattern = [JLTokenPattern new];
-    tokenPattern.pattern = pattern;
+    NSRegularExpression *expression = [cache objectForKey:pattern];
+    if (expression) {
+        tokenPattern->_expression = expression;
+        tokenPattern->_pattern = pattern;
+    } else {
+        tokenPattern.pattern = pattern;
+        if (tokenPattern.expression) {
+            [cache setObject:tokenPattern.expression forKey:pattern];
+        }
+    }
+    
     return tokenPattern;
 }
 
@@ -64,15 +78,24 @@
 
 - (void)setPattern:(NSString *)pattern
 {
+    if (!pattern) return;
     _pattern = pattern;
     _expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
 }
 
 #pragma mark - Perform
 
-- (void)performInIndexSet:(NSIndexSet *)set
+- (void)main
 {
-
+    NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
+    for (JLScope *scope in self.dependencies) {
+        if ([scope isKindOfClass:[JLScope class]]) {
+            [set addIndexes:scope.set];
+            self.string = scope.string;
+            self.textStorage = scope.textStorage;
+        }
+    }
+    
     if (![self shouldPerform]) return;
     NSDictionary *attributes = [self.delegate attributesForScope:self];
     NSMutableIndexSet *oldSet = self.set;
@@ -81,40 +104,28 @@
     NSAssert(attributes, @"");
     [set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
         [self.expression enumerateMatchesInString:self.string options:self.matchingOptions range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-            [self.textStorage addAttributes:attributes range:[result rangeAtIndex:self.captureGroup]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.textStorage addAttributes:attributes range:[result rangeAtIndex:self.captureGroup]];
+            });
             [self.set addIndexesInRange:[result rangeAtIndex:self.captureGroup]];
         }];
     }];
-    
-    [self iterateSubscopes];
-    
+        
     if (![oldSet isEqualToIndexSet:self.set] && [self.delegate respondsToSelector:@selector(scope:didChangeIndexesFrom:to:)]) [self.delegate scope:self didChangeIndexesFrom:oldSet to:self.set];
+    
+    for (JLScope *scope in self.dependencies) {
+        if ([scope isKindOfClass:[JLScope class]]) {
+            [scope.set removeIndexes:self.set];
+        }
+    }
 }
 
 #pragma mark - Debugging
 
 - (NSString *)description
 {
-    NSString *subscopes = [[[[self.subscopes valueForKey:@"description"] componentsJoinedByString:@"\n"] componentsSeparatedByString:@"\n"] componentsJoinedByString:@"\n\t\t"];
+    NSString *subscopes = [[[[self.dependencies valueForKey:@"description"] componentsJoinedByString:@"\n"] componentsSeparatedByString:@"\n"] componentsJoinedByString:@"\n\t\t"];
     return [NSString stringWithFormat:@"%@, %@, Regex Pattern: %@, opaque: %i, indexesSet:%@ \nsubscopes, %@", NSStringFromClass(self.class), self.identifier, self.pattern, self.opaque, self.set, subscopes];
-}
-
-#pragma mark - NSCopying Protocol
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    JLTokenPattern *pattern = [[self.class allocWithZone:zone] init];
-    for (JLScope *subscope in self.subscopes) {
-        [pattern addSubscope:subscope.copy];
-    }
-    pattern.textStorage = self.textStorage;
-    pattern.expression = self.expression;
-    pattern.set = self.set.mutableCopy;
-    pattern.delegate = self.delegate;
-    pattern.type = self.type.copy;
-    pattern.identifier = self.identifier.copy;
-
-    return pattern;
 }
 
 @end
