@@ -88,12 +88,10 @@ static NSCache *cache;
 - (void)main
 {
     NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
-    for (JLScope *scope in self.dependencies) {
-        if ([scope isKindOfClass:[JLScope class]]) {
+    for (JLScope *scope in self.scopes) {
             [set addIndexes:scope.set];
             self.string = scope.string;
             self.textStorage = scope.textStorage;
-        }
     }
     
     if (![self shouldPerform]) return;
@@ -113,10 +111,8 @@ static NSCache *cache;
         
     if (![oldSet isEqualToIndexSet:self.set] && [self.delegate respondsToSelector:@selector(scope:didChangeIndexesFrom:to:)]) [self.delegate scope:self didChangeIndexesFrom:oldSet to:self.set];
     
-    for (JLScope *scope in self.dependencies) {
-        if ([scope isKindOfClass:[JLScope class]]) {
-            [scope.set removeIndexes:self.set];
-        }
+    for (JLScope *scope in self.scopes) {
+        [scope.set removeIndexes:self.set];
     }
 }
 

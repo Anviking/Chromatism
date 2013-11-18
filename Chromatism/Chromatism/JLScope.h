@@ -37,9 +37,11 @@
  *  Causes the every scope to perform cascadingly
  */
 
-- (void)addSubscope:(JLScope*)scope;
+- (void)addSubscope:(JLScope *)scope;
 - (void)addScope:(JLScope *)scope;
 
+/// Array of parent scopes
+@property (nonatomic, strong) NSMutableArray *scopes;
 
 /**
  *  A weak reference to a textStorage in which the scope is operating. Will be passed down to subscopes.

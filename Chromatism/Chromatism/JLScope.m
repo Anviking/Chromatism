@@ -55,17 +55,23 @@
     return [self scopeWithRange:NSMakeRange(0, textStorage.length) inTextStorage:textStorage];
 }
 
+- (NSMutableArray *)scopes
+{
+    if (!_scopes) {
+        self.scopes = @[].mutableCopy;
+    }
+    return _scopes;
+}
+
 #pragma mark - Perform
 
 - (void)main
 {
     NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
-    for (JLScope *scope in self.dependencies) {
-        if ([scope isKindOfClass:[JLScope class]]) {
-            [set addIndexes:scope.set];
-            self.textStorage = scope.textStorage;
-            self.string = scope.string;
-        }
+    for (JLScope *scope in self.scopes) {
+        [set addIndexes:scope.set];
+        self.textStorage = scope.textStorage;
+        self.string = scope.string;
     }
     
     if (set.count > 0) {
@@ -78,10 +84,8 @@
         self.set = [NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.string.length)];
     }
     
-    for (JLScope *scope in self.dependencies) {
-        if ([scope isKindOfClass:[JLScope class]]) {
-            [scope.set removeIndexes:self.set];
-        }
+    for (JLScope *scope in self.scopes) {
+        [scope.set removeIndexes:self.set];
     }
 }
 
@@ -103,11 +107,13 @@
 - (void)addSubscope:(JLScope *)scope
 {
     [scope addDependency:self];
+    [scope.scopes addObject:self];
 }
 
 - (void)addScope:(JLScope *)scope
 {
     [self addDependency:scope];
+    [self.scopes addObject:scope];
 }
 
 #pragma mark - Properties

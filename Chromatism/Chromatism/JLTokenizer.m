@@ -276,7 +276,8 @@
     JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern];
     token.type = type;
     token.delegate = self;
-    [token addDependency:scope];
+    [token addScope:scope];
+    
     [self.operationQueue addOperation:token];
     [self.scopes addObject:token];
     
