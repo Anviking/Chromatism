@@ -26,16 +26,11 @@ typedef NS_ENUM(NSInteger, JLTokenizerIntendtationAction) {
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage withRange:(NSRange)range;
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage;
 
-// - (void)validateTokenization;
-
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 
 - (JLTokenizerIntendtationAction)intendationActionAfterReplacingTextInRange:(NSRange)range replacementText:(NSString *)text previousCharacter:(unichar)character textView:(UITextView *)textView;
 
 @property (nonatomic, strong) NSDictionary *colors;
-
-// @property (nonatomic, assign) BOOL needsValidation;
-
 @property (nonatomic, weak) id<JLTokenizerDelegate> delegate;
 @end
 

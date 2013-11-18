@@ -47,7 +47,6 @@
 @property (nonatomic, strong) JLScope *documentScope;
 @property (nonatomic, strong) JLScope *lineScope;
 @property (nonatomic, strong) NSTimer *validationTimer;
-@property (nonatomic, strong) NSMutableArray *scopes;
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
 
 @end
@@ -69,24 +68,6 @@
         self.operationQueue.maxConcurrentOperationCount = 1;
     }
     return self;
-}
-
-- (JLTokenPattern *)addTokenOfType:(NSString *)type pattern:(NSString *)pattern scopes:(NSArray *)scopes;
-{
-    JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern];
-    token.type = type;
-    token.delegate = self;
-    [self.operationQueue addOperation:token];
-    
-    if (scopes) {
-        for (JLScope *scope in scopes) {
-            [token addScope:scope];
-        }
-    } else {
-        [token addScope:self.lineScope];
-    }
-    
-    return token;
 }
 
 #pragma mark - NSTextStorageDelegate
@@ -158,8 +139,6 @@
     self.documentScope = documentScope;
     self.lineScope = lineScope;
     
-    self.scopes = [NSMutableArray arrayWithObjects:documentScope, lineScope, nil];
-    
     [self.operationQueue addOperation:lineScope];
     [self.operationQueue addOperation:documentScope];
     
@@ -209,8 +188,6 @@
     [self addToken:JLTokenTypeOtherClassNames withPattern:@"\\b[A-Z]{3}[a-zA-Z]*\\b" andScope:lineScope];
     
     [documentScope addSubscope:lineScope];
-    
-
 }
 
 #pragma mark - Symbolication
@@ -348,10 +325,6 @@
 }
 
 #pragma mark - NSLayoutManager delegeate
-
-/*
- *  TODO: Find out a way to set intendation for entire paragraphs.
- */
 
 - (CGFloat)layoutManager:(NSLayoutManager *)layoutManager paragraphSpacingBeforeGlyphAtIndex:(NSUInteger)glyphIndex withProposedLineFragmentRect:(CGRect)rect
 {
