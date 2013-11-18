@@ -40,8 +40,11 @@
 - (void)addSubscope:(JLScope *)scope;
 - (void)addScope:(JLScope *)scope;
 
-/// Array of parent scopes
-@property (nonatomic, strong) NSMutableArray *scopes;
+/// NSHashTable with weak references to parent scopes
+@property (nonatomic, strong) NSHashTable *scopes;
+
+/// NSMutableArray of strong references to subscopes
+@property (nonatomic, strong) NSMutableArray *subscopes;
 
 /**
  *  A weak reference to a textStorage in which the scope is operating. Will be passed down to subscopes.

@@ -55,12 +55,20 @@
     return [self scopeWithRange:NSMakeRange(0, textStorage.length) inTextStorage:textStorage];
 }
 
-- (NSMutableArray *)scopes
+- (NSHashTable *)scopes
 {
     if (!_scopes) {
-        self.scopes = @[].mutableCopy;
+        self.scopes = [NSHashTable weakObjectsHashTable];
     }
     return _scopes;
+}
+
+- (NSMutableArray *)subscopes
+{
+    if (!_subscopes) {
+        self.subscopes = [NSMutableArray array];
+    }
+    return _subscopes;
 }
 
 #pragma mark - Perform
@@ -106,14 +114,18 @@
 
 - (void)addSubscope:(JLScope *)scope
 {
+    for (JLScope *obj in self.subscopes) {
+        [scope addDependency:obj];
+    }
+    
     [scope addDependency:self];
     [scope.scopes addObject:self];
+    [self.subscopes addObject:scope];
 }
 
 - (void)addScope:(JLScope *)scope
 {
-    [self addDependency:scope];
-    [self.scopes addObject:scope];
+    [scope addSubscope:self];
 }
 
 #pragma mark - Properties

@@ -279,13 +279,6 @@
     [token addScope:scope];
     
     [self.operationQueue addOperation:token];
-    [self.scopes addObject:token];
-    
-    [self.scopes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([scope.dependencies containsObject:obj]) {
-            [token addDependency:obj];
-        }
-    }];
     
     return token;
 }
