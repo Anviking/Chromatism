@@ -105,34 +105,37 @@
     [storage beginEditing];
     
     [self.operationQueue setSuspended:YES];
-    [self createScopes];
+    
+    JLScope *documentScope = [JLScope new];
+    JLScope *lineScope = [JLScope new];
+    
+    [self prepareDocumentScope:documentScope];
+    [self prepareLineScope:lineScope];
+    [documentScope addSubscope:lineScope];
+    
+    [self.operationQueue addOperation:lineScope];
+    [self.operationQueue addOperation:documentScope];
     
     [self clearColorAttributesInRange:range textStorage:storage];
     
-    [self.documentScope setTextStorage:storage];
-    [self.documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, storage.length)]];
-    [self.lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:range]];
+    [documentScope setTextStorage:storage];
+    [documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, storage.length)]];
+    [lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:range]];
     
     [self.operationQueue setSuspended:NO];
     [self.operationQueue waitUntilAllOperationsAreFinished];
     [storage endEditing];
 }
 
-- (void)createScopes
+- (void)prepareDocumentScope:(JLScope *)documentScope
 {
-    JLScope *documentScope = [JLScope new];
-    JLScope *lineScope = [JLScope new];
-    
-    [self.operationQueue addOperation:lineScope];
-    [self.operationQueue addOperation:documentScope];
-    
-    // Block and line comments
     JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withPattern:@"" andScope:documentScope];
     blockComment.triggeringCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"/*"];
     blockComment.expression = [NSRegularExpression regularExpressionWithPattern:@"/\\*.*?\\*/" options:NSRegularExpressionDotMatchesLineSeparators error:nil];
-    
-    [lineScope addDependency:blockComment];
-    
+}
+
+- (void)prepareLineScope:(JLScope *)lineScope
+{
     [self addToken:JLTokenTypeComment withPattern:@"//.*+$" andScope:lineScope];
     
     JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withPattern:@"^#.*+$" andScope:lineScope];
@@ -170,9 +173,8 @@
     
     // Other Class Names
     [self addToken:JLTokenTypeOtherClassNames withPattern:@"\\b[A-Z]{3}[a-zA-Z]*\\b" andScope:lineScope];
-    
-    [documentScope addSubscope:lineScope];
 }
+
 
 #pragma mark - Symbolication
 

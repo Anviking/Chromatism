@@ -23,6 +23,10 @@ typedef NS_ENUM(NSInteger, JLTokenizerIntendtationAction) {
 
 @interface JLTokenizer : NSObject <NSTextStorageDelegate, JLScopeDelegate, NSLayoutManagerDelegate, UITextViewDelegate>
 
+/// Override these two methods and add your own scopes and tokenPatterns
+- (void)prepareDocumentScope:(JLScope *)documentScope;
+- (void)prepareLineScope:(JLScope *)lineScope;
+
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage withRange:(NSRange)range;
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage;
 
