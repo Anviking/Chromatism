@@ -77,6 +77,12 @@
     } else {
         self.set = [NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.string.length)];
     }
+    
+    for (JLScope *scope in self.dependencies) {
+        if ([scope isKindOfClass:[JLScope class]]) {
+            [scope.set removeIndexes:self.set];
+        }
+    }
 }
 
 - (BOOL)shouldPerform

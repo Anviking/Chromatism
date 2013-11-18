@@ -112,6 +112,12 @@ static NSCache *cache;
     }];
         
     if (![oldSet isEqualToIndexSet:self.set] && [self.delegate respondsToSelector:@selector(scope:didChangeIndexesFrom:to:)]) [self.delegate scope:self didChangeIndexesFrom:oldSet to:self.set];
+    
+    for (JLScope *scope in self.dependencies) {
+        if ([scope isKindOfClass:[JLScope class]]) {
+            [scope.set removeIndexes:self.set];
+        }
+    }
 }
 
 #pragma mark - Debugging

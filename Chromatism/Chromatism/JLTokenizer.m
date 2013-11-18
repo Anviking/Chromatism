@@ -47,8 +47,7 @@
 @property (nonatomic, strong) JLScope *documentScope;
 @property (nonatomic, strong) JLScope *lineScope;
 @property (nonatomic, strong) NSTimer *validationTimer;
-@property (nonatomic, strong) NSMutableDictionary *scopes;
-@property (nonatomic, strong) NSMutableDictionary *scopeHierarchy;
+@property (nonatomic, strong) NSMutableArray *scopes;
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
 
 @end
@@ -67,6 +66,7 @@
     self = [super init];
     if (self) {
         self.operationQueue = [[NSOperationQueue alloc] init];
+        self.operationQueue.maxConcurrentOperationCount = 1;
     }
     return self;
 }
@@ -177,6 +177,8 @@
     JLScope *documentScope = [JLScope new];
     JLScope *lineScope = [JLScope new];
     
+    self.scopes = [NSMutableArray arrayWithObjects:documentScope, lineScope, nil];
+    
     [self.operationQueue addOperation:lineScope];
     [self.operationQueue addOperation:documentScope];
     
@@ -185,9 +187,10 @@
     blockComment.triggeringCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"/*"];
     blockComment.expression = [NSRegularExpression regularExpressionWithPattern:@"/\\*.*?\\*/" options:NSRegularExpressionDotMatchesLineSeparators error:nil];
     
+    [lineScope addDependency:blockComment];
+    
     [self addToken:JLTokenTypeComment withPattern:@"//.*+$" andScope:lineScope];
     
-    // Preprocessor macros
     JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withPattern:@"^#.*+$" andScope:lineScope];
     
     // #import <Library/Library.h>
@@ -275,6 +278,13 @@
     token.delegate = self;
     [token addDependency:scope];
     [self.operationQueue addOperation:token];
+    [self.scopes addObject:token];
+    
+    [self.scopes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([scope.dependencies containsObject:obj]) {
+            [token addDependency:obj];
+        }
+    }];
     
     return token;
 }
