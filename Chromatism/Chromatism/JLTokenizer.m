@@ -47,11 +47,6 @@
 @end
 
 @implementation JLTokenizer
-{
-    NSRange _editedRange;
-    NSRange _editedLineRange;
-    NSString *_oldString;
-}
 
 #pragma mark - Setup
 
@@ -74,13 +69,54 @@
 
 - (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
-    _editedRange = editedRange;
-    _editedLineRange = [textStorage.string lineRangeForRange:editedRange];
-    
     if (textStorage.editedMask == NSTextStorageEditedAttributes) return;
-    
-    [self tokenizeTextStorage:textStorage withRange:_editedLineRange];
+    [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
 }
+
+#pragma mark - NSLayoutManager delegeate
+
+- (CGFloat)layoutManager:(NSLayoutManager *)layoutManager paragraphSpacingBeforeGlyphAtIndex:(NSUInteger)glyphIndex withProposedLineFragmentRect:(CGRect)rect
+{
+    return 0;
+}
+
+- (BOOL)layoutManager:(NSLayoutManager *)layoutManager shouldBreakLineByWordBeforeCharacterAtIndex:(NSUInteger)charIndex
+{
+    unichar character = [layoutManager.textStorage.string characterAtIndex:charIndex];
+    if (character == '*') return NO;
+    return YES;
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if (![text isEqualToString:@"\n"]) return YES; // Something else than return
+    
+    // Return has been pressed, start the new line with as many tabs or white spaces as the previous one.
+    NSString *prefixString = [@"\n" stringByAppendingString:[self prefixStringFromRange:range inTextView:textView]];
+    
+    unichar previousCharacter = [textView.text characterAtIndex:range.location - 1];
+    switch ([self intendationActionAfterReplacingTextInRange:range replacementText:text previousCharacter:previousCharacter textView:textView]) {
+        case JLTokenizerIntendtationActionIncrease:
+            prefixString = [prefixString stringByAppendingString:@"    "];
+            break;
+        case JLTokenizerIntendtationActionDecrease:
+            if ([[prefixString substringFromIndex:prefixString.length - 4] isEqualToString:@"    "]) {
+                prefixString = [prefixString substringToIndex:prefixString.length - 4];
+            }
+            else if ([[prefixString substringFromIndex:prefixString.length - 1] isEqualToString:@"\t"]) {
+                prefixString = [prefixString substringToIndex:prefixString.length - 1];
+            }
+            break;
+        case JLTokenizerIntendtationActionNone:
+            break;
+    }
+    
+    [textView replaceRange:[self rangeWithRange:range inTextView:textView] withText:prefixString];
+    return NO;
+}
+
 
 #pragma mark - Tokenizing
 
@@ -115,6 +151,8 @@
     [self.operationQueue waitUntilAllOperationsAreFinished];
     [storage endEditing];
 }
+
+#pragma mark - Setup Token Patterns
 
 - (void)prepareDocumentScope:(JLScope *)documentScope
 {
@@ -175,63 +213,6 @@
     return array;
 }
 
-- (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
-{
-    [storage removeAttribute:NSForegroundColorAttributeName range:range];
-    [storage addAttribute:NSForegroundColorAttributeName value:self.colors[JLTokenTypeText] range:range];
-}
-
-#pragma mark - UITextViewDelegate
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    _oldString = nil;
-    
-    if (range.length == 0 && text.length == 1) {
-        // A normal character typed
-    }
-    else if (range.length == 1 && text.length == 0) {
-        // Backspace
-    }
-    else {
-        // Multicharacter edit
-    }
-    
-    if ([text isEqualToString:@"\n"]) {
-        // Return
-        // Start the new line with as many tabs or white spaces as the previous one.
-        
-        NSString *prefixString = [@"\n" stringByAppendingString:[self prefixStringFromRange:range inTextView:textView]];
-        
-        unichar previousCharacter = [textView.text characterAtIndex:range.location - 1];
-        switch ([self intendationActionAfterReplacingTextInRange:range replacementText:text previousCharacter:previousCharacter textView:textView]) {
-            case JLTokenizerIntendtationActionIncrease:
-                prefixString = [prefixString stringByAppendingString:@"    "];
-                break;
-            case JLTokenizerIntendtationActionDecrease:
-                if ([[prefixString substringFromIndex:prefixString.length - 4] isEqualToString:@"    "]) {
-                    prefixString = [prefixString substringToIndex:prefixString.length - 4];
-                }
-                else if ([[prefixString substringFromIndex:prefixString.length - 1] isEqualToString:@"\t"]) {
-                    prefixString = [prefixString substringToIndex:prefixString.length - 1];
-                }
-                break;
-            case JLTokenizerIntendtationActionNone:
-                break;
-        }
-        
-        [textView replaceRange:[self rangeWithRange:range inTextView:textView] withText:prefixString];
-        return NO;
-    }
-    
-    if (range.length > 0) {
-        _oldString = [textView.text substringWithRange:range];
-    }
-    else _oldString = @"";
-    
-    return YES;
-}
-
 - (JLTokenizerIntendtationAction)intendationActionAfterReplacingTextInRange:(NSRange)range replacementText:(NSString *)text previousCharacter:(unichar)character textView:(UITextView *)textView;
 {
     if (character == '{') {
@@ -254,25 +235,17 @@
     return [textView textRangeFromPosition:start toPosition:stop];
 }
 
+- (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
+{
+    [storage removeAttribute:NSForegroundColorAttributeName range:range];
+    [storage addAttribute:NSForegroundColorAttributeName value:self.colors[JLTokenTypeText] range:range];
+}
+
 - (NSString *)prefixStringFromRange:(NSRange)range inTextView:(UITextView *)textView
 {
     NSRange lineRange = [textView.text lineRangeForRange:range];
     NSRange prefixRange = [textView.text rangeOfString:@"[\\t| ]*" options:NSRegularExpressionSearch range:lineRange];
     return [textView.text substringWithRange:prefixRange];
-}
-
-#pragma mark - NSLayoutManager delegeate
-
-- (CGFloat)layoutManager:(NSLayoutManager *)layoutManager paragraphSpacingBeforeGlyphAtIndex:(NSUInteger)glyphIndex withProposedLineFragmentRect:(CGRect)rect
-{
-    return 0;
-}
-
-- (BOOL)layoutManager:(NSLayoutManager *)layoutManager shouldBreakLineByWordBeforeCharacterAtIndex:(NSUInteger)charIndex
-{
-    unichar character = [layoutManager.textStorage.string characterAtIndex:charIndex];
-    if (character == '*') return NO;
-    return YES;
 }
 
 @end
