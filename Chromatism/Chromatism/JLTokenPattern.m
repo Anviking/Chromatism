@@ -87,7 +87,7 @@ static NSCache *cache;
 
 - (void)performInIndexSet:(NSMutableIndexSet *)set
 {
-    NSDictionary *attributes = [self.delegate attributesForScope:self];
+    NSDictionary *attributes = @{ NSForegroundColorAttributeName : self.color };
     NSAssert(attributes, @"");
     [set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
         [self.expression enumerateMatchesInString:self.string options:self.matchingOptions range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {

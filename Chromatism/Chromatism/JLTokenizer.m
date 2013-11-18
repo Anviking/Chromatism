@@ -43,9 +43,7 @@
 #import "Chromatism+Internal.h"
 
 @interface JLTokenizer ()
-
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
-
 @end
 
 @implementation JLTokenizer
@@ -84,15 +82,6 @@
     [self tokenizeTextStorage:textStorage withRange:_editedLineRange];
 }
 
-#pragma mark - JLScope delegate
-
-- (NSDictionary *)attributesForScope:(JLScope *)scope
-{
-    UIColor *color = self.colors[scope.type];
-    NSAssert(color, @"Didn't get a color for type: %@ in colorDictionary: %@",scope.type, self.colors);
-    return @{ NSForegroundColorAttributeName : color };
-}
-
 #pragma mark - Tokenizing
 
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage
@@ -103,7 +92,6 @@
 - (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
 {
     [storage beginEditing];
-    
     [self.operationQueue setSuspended:YES];
     
     JLScope *documentScope = [JLScope new];
@@ -111,6 +99,7 @@
     
     [self prepareDocumentScope:documentScope];
     [self prepareLineScope:lineScope];
+    
     [documentScope addSubscope:lineScope];
     
     [self.operationQueue addOperation:lineScope];
@@ -130,7 +119,6 @@
 - (void)prepareDocumentScope:(JLScope *)documentScope
 {
     JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withPattern:@"" andScope:documentScope];
-    blockComment.triggeringCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"/*"];
     blockComment.expression = [NSRegularExpression regularExpressionWithPattern:@"/\\*.*?\\*/" options:NSRegularExpressionDotMatchesLineSeparators error:nil];
 }
 
@@ -197,7 +185,7 @@
     
     JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern];
     token.type = type;
-    token.delegate = self;
+    token.color = self.colors[type];
 
     [token addScope:scope];
     

@@ -24,8 +24,6 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol JLScopeDelegate;
-
 @interface JLScope : NSOperation
 
 // Designated initializors
@@ -76,22 +74,5 @@
  *  What kind of scope is this?
  */
 @property (nonatomic, copy) NSString *type;
-
-/**
- *  A simple delegate
- */
-@property (nonatomic, weak) id<JLScopeDelegate> delegate;
-
-/**
- *  If provided, the scope will only perform when matches of the set is found in the string returned from the -mergedModifiedStringForScope: delegate method.
- */
-@property (nonatomic, strong) NSCharacterSet *triggeringCharacterSet;
-
-@end
-
-@protocol JLScopeDelegate <NSObject>
-@optional
-
-- (NSDictionary *)attributesForScope:(JLScope *)scope;
 
 @end

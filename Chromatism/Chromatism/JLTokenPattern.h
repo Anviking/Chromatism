@@ -39,4 +39,6 @@
  */
 @property (nonatomic, assign) NSUInteger captureGroup;
 
+@property (nonatomic, strong) UIColor *color;
+
 @end
