@@ -39,6 +39,8 @@
 		8FE2796617C3842900DD933A /* UIColor+Chromatism.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE2796417C3842900DD933A /* UIColor+Chromatism.m */; };
 		8FFEB27D183AD6740032C9FB /* JLObjectiveCTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FFEB27B183AD6740032C9FB /* JLObjectiveCTokenizer.h */; };
 		8FFEB27E183AD6740032C9FB /* JLObjectiveCTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFEB27C183AD6740032C9FB /* JLObjectiveCTokenizer.m */; };
+		8FFEB283183AD8B70032C9FB /* JLTokenizer+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FFEB281183AD8B70032C9FB /* JLTokenizer+Additions.h */; };
+		8FFEB284183AD8B70032C9FB /* JLTokenizer+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFEB282183AD8B70032C9FB /* JLTokenizer+Additions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +89,8 @@
 		8FE2796417C3842900DD933A /* UIColor+Chromatism.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Chromatism.m"; sourceTree = "<group>"; };
 		8FFEB27B183AD6740032C9FB /* JLObjectiveCTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLObjectiveCTokenizer.h; sourceTree = "<group>"; };
 		8FFEB27C183AD6740032C9FB /* JLObjectiveCTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLObjectiveCTokenizer.m; sourceTree = "<group>"; };
+		8FFEB281183AD8B70032C9FB /* JLTokenizer+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JLTokenizer+Additions.h"; sourceTree = "<group>"; };
+		8FFEB282183AD8B70032C9FB /* JLTokenizer+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JLTokenizer+Additions.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +199,8 @@
 			children = (
 				8F3AB9551781C1250023348A /* JLTokenizer.h */,
 				8F3AB9561781C1250023348A /* JLTokenizer.m */,
+				8FFEB281183AD8B70032C9FB /* JLTokenizer+Additions.h */,
+				8FFEB282183AD8B70032C9FB /* JLTokenizer+Additions.m */,
 				8FFEB27B183AD6740032C9FB /* JLObjectiveCTokenizer.h */,
 				8FFEB27C183AD6740032C9FB /* JLObjectiveCTokenizer.m */,
 				8F9F6BC61822F09D00DE15A8 /* JLDiffTokenizer.h */,
@@ -232,6 +238,7 @@
 				8FE2796517C3842900DD933A /* UIColor+Chromatism.h in Headers */,
 				8F54EF111781C788008C1609 /* JLScope.h in Headers */,
 				8FFEB27D183AD6740032C9FB /* JLObjectiveCTokenizer.h in Headers */,
+				8FFEB283183AD8B70032C9FB /* JLTokenizer+Additions.h in Headers */,
 				8F54EF131781C788008C1609 /* JLTextViewController.h in Headers */,
 				8F54EF141781C788008C1609 /* JLTokenizer.h in Headers */,
 				8F54EF151781C788008C1609 /* JLTokenPattern.h in Headers */,
@@ -324,6 +331,7 @@
 				8F54EF241781CD87008C1609 /* JLTokenPattern.m in Sources */,
 				8FFEB27E183AD6740032C9FB /* JLObjectiveCTokenizer.m in Sources */,
 				8F9F6BC91822F09D00DE15A8 /* JLDiffTokenizer.m in Sources */,
+				8FFEB284183AD8B70032C9FB /* JLTokenizer+Additions.m in Sources */,
 				8F54EF201781CD87008C1609 /* JLScope.m in Sources */,
 				8FE2796617C3842900DD933A /* UIColor+Chromatism.m in Sources */,
 				8FA0CB101795F41B00FF8EB1 /* JLTextView.m in Sources */,
