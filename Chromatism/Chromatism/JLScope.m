@@ -82,32 +82,16 @@
         self.string = scope.string;
     }
     
-    if (set.count > 0) {
-        if (![self shouldPerform]) return;
-        self.set = [self.set intersectionWithSet:set];
-        
-    } else {
-        self.set = [NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.string.length)];
-    }
+    [self performInIndexSet:set];
     
     for (JLScope *scope in self.scopes) {
         [scope.set removeIndexes:self.set];
     }
 }
 
-- (BOOL)shouldPerform
+- (void)performInIndexSet:(NSMutableIndexSet *)set
 {
-    if ([self.delegate respondsToSelector:@selector(scopeShouldPerform:)]) return [self.delegate scopeShouldPerform:self];
-
-    if (self.triggeringCharacterSet) {
-        NSString *string = [self.delegate mergedModifiedStringForScope:self];
-        if (!string) return YES;
-        if ([string rangeOfCharacterFromSet:self.triggeringCharacterSet].location == NSNotFound) {
-            return NO;
-        }
-        return YES;
-    }
-    return YES;
+    self.set = (set.count > 0) ? [self.set intersectionWithSet:set] : [NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.string.length)];
 }
 
 - (void)addSubscope:(JLScope *)scope

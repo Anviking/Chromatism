@@ -27,7 +27,7 @@
 
 @interface JLScope ()
 - (BOOL)shouldPerform;
-
+@property (nonatomic, strong) NSMutableIndexSet *backupSet;
 @property (nonatomic, readwrite, strong) NSString *string;
 @end
 
@@ -85,20 +85,9 @@ static NSCache *cache;
 
 #pragma mark - Perform
 
-- (void)main
+- (void)performInIndexSet:(NSMutableIndexSet *)set
 {
-    NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
-    for (JLScope *scope in self.scopes) {
-            [set addIndexes:scope.set];
-            self.string = scope.string;
-            self.textStorage = scope.textStorage;
-    }
-    
-    if (![self shouldPerform]) return;
-    if (!self.expression) return;
     NSDictionary *attributes = [self.delegate attributesForScope:self];
-    self.set = [self.set intersectionWithSet:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.textStorage.length)]];
-    [self.set removeIndexes:set];
     NSAssert(attributes, @"");
     [set enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
         [self.expression enumerateMatchesInString:self.string options:self.matchingOptions range:range usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
@@ -108,10 +97,6 @@ static NSCache *cache;
             [self.set addIndexesInRange:[result rangeAtIndex:self.captureGroup]];
         }];
     }];
-    
-    for (JLScope *scope in self.scopes) {
-        [scope.set removeIndexes:self.set];
-    }
 }
 
 #pragma mark - Debugging

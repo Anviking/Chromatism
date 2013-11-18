@@ -44,9 +44,6 @@
 
 @interface JLTokenizer ()
 
-@property (nonatomic, strong) JLScope *documentScope;
-@property (nonatomic, strong) JLScope *lineScope;
-@property (nonatomic, strong) NSTimer *validationTimer;
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
 
 @end
@@ -85,19 +82,9 @@
     if (textStorage.editedMask == NSTextStorageEditedAttributes) return;
     
     [self tokenizeTextStorage:textStorage withRange:_editedLineRange];
-//    [self setNeedsValidation:YES];
 }
 
 #pragma mark - JLScope delegate
-
-- (NSString *)mergedModifiedStringForScope:(JLScope *)scope
-{
-    NSString *newString = [scope.string substringWithRange:_editedLineRange];
-    if (_oldString && newString) {
-        return [_oldString stringByAppendingString:newString];
-    }
-    return nil;
-}
 
 - (NSDictionary *)attributesForScope:(JLScope *)scope
 {
@@ -135,9 +122,6 @@
 {
     JLScope *documentScope = [JLScope new];
     JLScope *lineScope = [JLScope new];
-    
-    self.documentScope = documentScope;
-    self.lineScope = lineScope;
     
     [self.operationQueue addOperation:lineScope];
     [self.operationQueue addOperation:documentScope];

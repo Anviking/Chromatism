@@ -33,9 +33,10 @@
 + (instancetype)scopeWithTextStorage:(NSTextStorage *)textStorage;
 
 @property (nonatomic, strong) NSMutableIndexSet *set;
-/**
- *  Causes the every scope to perform cascadingly
- */
+
+
+/// Used by subclasses
+- (void)performInIndexSet:(NSMutableIndexSet *)set;
 
 - (void)addSubscope:(JLScope *)scope;
 - (void)addScope:(JLScope *)scope;
@@ -92,10 +93,5 @@
 @optional
 
 - (NSDictionary *)attributesForScope:(JLScope *)scope;
-
-/// @see JLTokenizer and -triggeringCharacterSet
-- (NSString *)mergedModifiedStringForScope:(JLScope *)scope;
-
-- (BOOL)scopeShouldPerform:(JLScope *)scope;
 
 @end
