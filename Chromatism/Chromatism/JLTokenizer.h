@@ -17,15 +17,19 @@ typedef NS_ENUM(NSInteger, JLTokenizerIntendtationAction) {
     JLTokenizerIntendtationActionNone = 0
 } NS_ENUM_AVAILABLE_IOS(7_0);
 
-@class TextViewChange, JLTextView;
+@class TextViewChange, JLTextView, JLTokenPattern;
 
 @protocol JLTokenizerDelegate;
 
 @interface JLTokenizer : NSObject <NSTextStorageDelegate, NSLayoutManagerDelegate, UITextViewDelegate>
 
-/// Override these two methods and add your own scopes and tokenPatterns
+// Override these two methods and add your own scopes and tokenPatterns
 - (void)prepareDocumentScope:(JLScope *)documentScope;
 - (void)prepareLineScope:(JLScope *)lineScope;
+
+// Creates JLTokenPatterns and adds them to the operationQueue
+- (JLTokenPattern *)addToken:(NSString *)type withPattern:(NSString *)pattern andScope:(JLScope *)scope;
+- (JLTokenPattern *)addToken:(NSString *)type withKeywords:(NSString *)keywords andScope:(JLScope *)scope;
 
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage withRange:(NSRange)range;
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage;
