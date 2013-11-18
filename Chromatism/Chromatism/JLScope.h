@@ -3,14 +3,30 @@
 //  iGitpad
 //
 //  Created by Johannes Lund on 2013-06-30.
-//  Copyright (c) 2013 Anviking. All rights reserved.
+//  Copyright (c) 2013 Johannes Lund
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of
+//  this software and associated documentation files (the "Software"), to deal in
+//  the Software without restriction, including without limitation the rights to
+//  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+//  the Software, and to permit persons to whom the Software is furnished to do so,
+//  subject to the following conditions:
+
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+//  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+//  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+//  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+//  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.//
 
 #import <UIKit/UIKit.h>
 
 @protocol JLScopeDelegate;
 
-@interface JLScope : NSObject
+@interface JLScope : NSOperation
 
 // Designated initializors
 + (instancetype)scopeWithRange:(NSRange)range inTextStorage:(NSTextStorage *)textStorage;
@@ -20,29 +36,15 @@
 /**
  *  Causes the every scope to perform cascadingly
  */
-- (void)perform;
-- (void)performInIndexSet:(NSIndexSet *)set;
 
-/**
- *  Array of nested JLScopes and JLTokenPatterns. Reverse realationship to scope, setting one causes the other to update. No not mutate. 
- */
-@property (nonatomic, strong) NSArray *subscopes;
-
-/**
- *  Weak reference to the parent scope. Default nil means that there is no parent. Reverse realationship to subscopes, setting one causes the other to update.
- */
-
-@property (nonatomic, weak) JLScope *scope;
-
-- (void)addSubscope:(JLScope *)subscope;
-- (void)removeSubscope:(JLScope *)subscope;
-
-/**
- *  Creates a copy of the instance, and adds 
- */
-
+- (void)addSubscope:(JLScope *)scope;
 - (void)addScope:(JLScope *)scope;
 
+/// NSHashTable with weak references to parent scopes
+@property (nonatomic, strong) NSHashTable *scopes;
+
+/// NSMutableArray of strong references to subscopes
+@property (nonatomic, strong) NSMutableArray *subscopes;
 
 /**
  *  A weak reference to a textStorage in which the scope is operating. Will be passed down to subscopes.
@@ -95,6 +97,5 @@
 - (NSString *)mergedModifiedStringForScope:(JLScope *)scope;
 
 - (BOOL)scopeShouldPerform:(JLScope *)scope;
-- (void)scope:(JLScope *)scope didChangeIndexesFrom:(NSIndexSet *)oldSet to:(NSIndexSet *)newSet;
 
 @end

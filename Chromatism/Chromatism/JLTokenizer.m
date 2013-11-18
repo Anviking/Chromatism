@@ -42,17 +42,13 @@
 #import "JLTokenPattern.h"
 #import "Chromatism+Internal.h"
 
-#define BLOCK_COMMENT @"blockComment"
-#define LINE_COMMENT @"lineComment"
-#define PROJECT_CLASS_NAMES JLTokenTypeProjectClassNames
-#define PROJECT_METHOD_NAMES JLTokenTypeProjectMethodNames
-
 @interface JLTokenizer ()
 
-@property (nonatomic, strong) NSMutableDictionary *scopes;
 @property (nonatomic, strong) JLScope *documentScope;
 @property (nonatomic, strong) JLScope *lineScope;
 @property (nonatomic, strong) NSTimer *validationTimer;
+@property (nonatomic, strong) NSMutableArray *scopes;
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
 
 @end
 
@@ -60,26 +56,123 @@
 {
     NSRange _editedRange;
     NSRange _editedLineRange;
+    NSString *_oldString;
 }
 
 #pragma mark - Setup
 
-- (void)setup
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.operationQueue = [[NSOperationQueue alloc] init];
+        self.operationQueue.maxConcurrentOperationCount = 1;
+    }
+    return self;
+}
+
+- (JLTokenPattern *)addTokenOfType:(NSString *)type pattern:(NSString *)pattern scopes:(NSArray *)scopes;
+{
+    JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern];
+    token.type = type;
+    token.delegate = self;
+    [self.operationQueue addOperation:token];
+    
+    if (scopes) {
+        for (JLScope *scope in scopes) {
+            [token addScope:scope];
+        }
+    } else {
+        [token addScope:self.lineScope];
+    }
+    
+    return token;
+}
+
+#pragma mark - NSTextStorageDelegate
+
+- (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
+{
+    
+}
+
+- (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
+{
+    _editedRange = editedRange;
+    _editedLineRange = [textStorage.string lineRangeForRange:editedRange];
+    
+    if (textStorage.editedMask == NSTextStorageEditedAttributes) return;
+    
+    [self tokenizeTextStorage:textStorage withRange:_editedLineRange];
+//    [self setNeedsValidation:YES];
+}
+
+#pragma mark - JLScope delegate
+
+- (NSString *)mergedModifiedStringForScope:(JLScope *)scope
+{
+    NSString *newString = [scope.string substringWithRange:_editedLineRange];
+    if (_oldString && newString) {
+        return [_oldString stringByAppendingString:newString];
+    }
+    return nil;
+}
+
+- (NSDictionary *)attributesForScope:(JLScope *)scope
+{
+    UIColor *color = self.colors[scope.type];
+    NSAssert(color, @"Didn't get a color for type: %@ in colorDictionary: %@",scope.type, self.colors);
+    return @{ NSForegroundColorAttributeName : color };
+}
+
+#pragma mark - Tokenizing
+
+- (void)tokenizeTextStorage:(NSTextStorage *)textStorage
+{
+    [self tokenizeTextStorage:textStorage withRange:NSMakeRange(0, textStorage.length)];
+}
+
+- (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
+{
+    [storage beginEditing];
+    
+    [self.operationQueue setSuspended:YES];
+    [self createScopes];
+    
+    [self clearColorAttributesInRange:range textStorage:storage];
+    
+    [self.documentScope setTextStorage:storage];
+    [self.documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, storage.length)]];
+    [self.lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:range]];
+    
+    [self.operationQueue setSuspended:NO];
+    [self.operationQueue waitUntilAllOperationsAreFinished];
+    [storage endEditing];
+}
+
+- (void)createScopes
 {
     JLScope *documentScope = [JLScope new];
     JLScope *lineScope = [JLScope new];
     
-    self.scopes = [NSMutableDictionary dictionary];
+    self.documentScope = documentScope;
+    self.lineScope = lineScope;
+    
+    self.scopes = [NSMutableArray arrayWithObjects:documentScope, lineScope, nil];
+    
+    [self.operationQueue addOperation:lineScope];
+    [self.operationQueue addOperation:documentScope];
     
     // Block and line comments
-    JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withIdentifier:BLOCK_COMMENT pattern:@"" andScope:documentScope];
+    JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withPattern:@"" andScope:documentScope];
     blockComment.triggeringCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"/*"];
     blockComment.expression = [NSRegularExpression regularExpressionWithPattern:@"/\\*.*?\\*/" options:NSRegularExpressionDotMatchesLineSeparators error:nil];
     
-    [self addToken:JLTokenTypeComment withIdentifier:LINE_COMMENT pattern:@"//.*+$" andScope:lineScope];
+    [lineScope addDependency:blockComment];
     
-    // Preprocessor macros
-    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withIdentifier:JLTokenTypePreprocessor pattern:@"^#.*+$" andScope:lineScope];
+    [self addToken:JLTokenTypeComment withPattern:@"//.*+$" andScope:lineScope];
+    
+    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withPattern:@"^#.*+$" andScope:lineScope];
     
     // #import <Library/Library.h>
     // In xcode it only works for #import and #include, not all preprocessor statements.
@@ -110,8 +203,6 @@
     NSString *keywords = @"true false yes no YES TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super";
     
     [self addToken:JLTokenTypeKeyword withKeywords:keywords andScope:lineScope];
-    [self addToken:JLTokenTypeProjectClassNames withIdentifier:PROJECT_CLASS_NAMES pattern:nil andScope:lineScope];
-    [self addToken:JLTokenTypeProjectClassNames withIdentifier:PROJECT_METHOD_NAMES pattern:nil andScope:lineScope];
     [self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:lineScope];
     
     // Other Class Names
@@ -119,143 +210,16 @@
     
     [documentScope addSubscope:lineScope];
     
-    self.documentScope = documentScope;
-    self.lineScope = lineScope;
-}
 
-- (JLScope *)documentScope
-{
-    if (!_documentScope) [self setup];
-    return _documentScope;
-}
-
-- (JLScope *)lineScope
-{
-    if (!_lineScope) [self setup];
-    return _lineScope;
-}
-
-#pragma mark - NSTextStorageDelegate
-
-- (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
-{
-    NSAssert(textStorage == self.textStorage, @"A JLTokenizer should only handle one textStorage");
-}
-
-- (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
-{
-    NSAssert(textStorage == self.textStorage, @"A JLTokenizer should only handle one textStorage");
-    
-    _editedRange = editedRange;
-    _editedLineRange = [textStorage.string lineRangeForRange:editedRange];
-    
-    [self tokenizeWithRange:_editedLineRange];
-}
-
-#pragma mark - JLScope delegate
-
-- (void)scope:(JLScope *)scope didChangeIndexesFrom:(NSIndexSet *)oldSet to:(NSIndexSet *)newSet
-{
-    if ([self.delegate respondsToSelector:@selector(scope:didFinishProcessing:)]) [self.delegate scope:scope didFinishProcessing:self];
-    
-    if ([self.documentScope.subscopes containsObject:scope] && scope != self.lineScope)
-    {
-        NSMutableIndexSet *removedIndexes = oldSet.mutableCopy;
-        [removedIndexes removeIndexes:newSet];
-        
-        ChromatismLog(@"Removed Indexes:%@",removedIndexes);
-        
-        if (removedIndexes) {
-            [removedIndexes enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
-                [self tokenizeWithRange:range];
-            }];
-        } 
-    }
-}
-
-- (NSString *)mergedModifiedStringForScope:(JLScope *)scope
-{
-    NSString *oldString = [self.dataSource recentlyReplacedText];
-    NSString *newString = [scope.string substringWithRange:_editedLineRange];
-    if (oldString && newString) {
-        return [oldString stringByAppendingString:newString];
-    }
-    return nil;
-}
-
-- (NSDictionary *)attributesForScope:(JLScope *)scope
-{
-    UIColor *color = self.colors[scope.type];
-    NSAssert(color, @"Didn't get a color for type:%@ in colorDictionary: %@",scope.type, self.colors);
-    return @{ NSForegroundColorAttributeName : color };
-}
-
-#pragma mark - Tokenizing
-
-- (void)tokenize
-{
-    [self tokenizeWithRange:NSMakeRange(0, self.textStorage.length)];
-}
-
-- (void)tokenizeWithRange:(NSRange)range
-{
-    // First, remove old attributes
-    [self clearColorAttributesInRange:range textStorage:self.textStorage];
-    
-    [self.documentScope setTextStorage:self.textStorage];
-    [self.documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.textStorage.length)]];
-    [self.lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:range]];
-    
-    [self.documentScope perform];
 }
 
 #pragma mark - Symbolication
 
+/*
 - (void)symbolicate
 {
     [self.scopes[PROJECT_CLASS_NAMES] setPattern:[NSString stringWithFormat:@"\\b(%@)\\b", [[self symbolsWithPattern:@"^@implementation (\\w+)" captureGroup:1] componentsJoinedByString:@"|"]]];
     [self.scopes[PROJECT_METHOD_NAMES] setPattern:[NSString stringWithFormat:@"\\b(%@)\\b", [[self symbolsWithPattern:@"^@property \\(.*?\\)\\s*\\w+[\\s*]+(\\w+);" captureGroup:1] componentsJoinedByString:@"|"]]];
-}
-
-#pragma mark - Validation
-
-- (void)setNeedsValidation:(BOOL)needsValidation
-{
-    _needsValidation = needsValidation;
-    [self.validationTimer invalidate];
-    
-    if (needsValidation) {
-        self.validationTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(validateTokenization) userInfo:nil repeats:NO];
-    }
-    
-}
-
-- (void)validateTokenization
-{
-    [self.textStorage beginEditing];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        [self symbolicate];
-        //[self tokenize];
-        
-        // This seem to be safe, is it?
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self setNeedsValidation:NO];
-            [self.textStorage endEditing];
-        });
-    });
-}
-
-/*
-- (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
-{
-    NSMutableAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:attributes].mutableCopy;
-    
-    [self.documentScope setTextStorage:self.textStorage];
-    [self.documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.textStorage.length)]];
-    
-    [self.documentScope perform];
-    
-    return attributedString;
 }
 */
 
@@ -263,17 +227,18 @@
 
 - (JLTokenPattern *)addToken:(NSString *)type withPattern:(NSString *)pattern andScope:(JLScope *)scope
 {
-    return [self addToken:type withIdentifier:type pattern:pattern andScope:scope];
-}
 
-- (JLTokenPattern *)addToken:(NSString *)type withIdentifier:(NSString *)identifier pattern:(NSString *)pattern andScope:(JLScope *)scope
-{
+    NSParameterAssert(type);
+    NSParameterAssert(pattern);
+    NSParameterAssert(scope);
+    
     JLTokenPattern *token = [JLTokenPattern tokenPatternWithPattern:pattern];
-    token.identifier = identifier;
     token.type = type;
     token.delegate = self;
-    self.scopes[identifier] = token;
-    [scope addSubscope:token];
+
+    [token addScope:scope];
+    
+    [self.operationQueue addOperation:token];
     
     return token;
 }
@@ -284,13 +249,13 @@
     return [self addToken:type withPattern:pattern andScope:scope];
 }
 
-- (NSMutableArray *)symbolsWithPattern:(NSString *)pattern captureGroup:(int)group
+- (NSMutableArray *)symbolsWithPattern:(NSString *)pattern captureGroup:(int)group textStorage:(NSTextStorage *)textStorage
 {
     NSMutableArray *array = [NSMutableArray array];
     NSError *error = nil;
     NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:&error];
-    [expression enumerateMatchesInString:self.textStorage.string options:0 range:NSMakeRange(0, self.textStorage.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-        [array addObject:[self.textStorage.string substringWithRange:[result rangeAtIndex:group]]];
+    [expression enumerateMatchesInString:textStorage.string options:0 range:NSMakeRange(0, textStorage.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        [array addObject:[textStorage.string substringWithRange:[result rangeAtIndex:group]]];
     }];
     NSAssert(!error, @"%@",error);
     return array;
@@ -300,6 +265,104 @@
 {
     [storage removeAttribute:NSForegroundColorAttributeName range:range];
     [storage addAttribute:NSForegroundColorAttributeName value:self.colors[JLTokenTypeText] range:range];
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    _oldString = nil;
+    
+    if (range.length == 0 && text.length == 1) {
+        // A normal character typed
+    }
+    else if (range.length == 1 && text.length == 0) {
+        // Backspace
+    }
+    else {
+        // Multicharacter edit
+    }
+    
+    if ([text isEqualToString:@"\n"]) {
+        // Return
+        // Start the new line with as many tabs or white spaces as the previous one.
+        
+        NSString *prefixString = [@"\n" stringByAppendingString:[self prefixStringFromRange:range inTextView:textView]];
+        
+        unichar previousCharacter = [textView.text characterAtIndex:range.location - 1];
+        switch ([self intendationActionAfterReplacingTextInRange:range replacementText:text previousCharacter:previousCharacter textView:textView]) {
+            case JLTokenizerIntendtationActionIncrease:
+                prefixString = [prefixString stringByAppendingString:@"    "];
+                break;
+            case JLTokenizerIntendtationActionDecrease:
+                if ([[prefixString substringFromIndex:prefixString.length - 4] isEqualToString:@"    "]) {
+                    prefixString = [prefixString substringToIndex:prefixString.length - 4];
+                }
+                else if ([[prefixString substringFromIndex:prefixString.length - 1] isEqualToString:@"\t"]) {
+                    prefixString = [prefixString substringToIndex:prefixString.length - 1];
+                }
+                break;
+            case JLTokenizerIntendtationActionNone:
+                break;
+        }
+        
+        [textView replaceRange:[self rangeWithRange:range inTextView:textView] withText:prefixString];
+        return NO;
+    }
+    
+    if (range.length > 0) {
+        _oldString = [textView.text substringWithRange:range];
+    }
+    else _oldString = @"";
+    
+    return YES;
+}
+
+- (JLTokenizerIntendtationAction)intendationActionAfterReplacingTextInRange:(NSRange)range replacementText:(NSString *)text previousCharacter:(unichar)character textView:(UITextView *)textView;
+{
+    if (character == '{') {
+        return JLTokenizerIntendtationActionIncrease;
+    } else if (character == '}') {
+        return JLTokenizerIntendtationActionDecrease;
+    } else {
+        return JLTokenizerIntendtationActionNone;
+    }
+}
+
+#pragma mark - Helpers
+
+- (UITextRange *)rangeWithRange:(NSRange)range inTextView:(UITextView *)textView
+{
+    UITextPosition *beginning = textView.beginningOfDocument;
+    UITextPosition *start = [textView positionFromPosition:beginning offset:range.location];
+    UITextPosition *stop = [textView positionFromPosition:start offset:range.length];
+    
+    return [textView textRangeFromPosition:start toPosition:stop];
+}
+
+- (NSString *)prefixStringFromRange:(NSRange)range inTextView:(UITextView *)textView
+{
+    NSRange lineRange = [textView.text lineRangeForRange:range];
+    NSRange prefixRange = [textView.text rangeOfString:@"[\\t| ]*" options:NSRegularExpressionSearch range:lineRange];
+    return [textView.text substringWithRange:prefixRange];
+}
+
+#pragma mark - NSLayoutManager delegeate
+
+/*
+ *  TODO: Find out a way to set intendation for entire paragraphs.
+ */
+
+- (CGFloat)layoutManager:(NSLayoutManager *)layoutManager paragraphSpacingBeforeGlyphAtIndex:(NSUInteger)glyphIndex withProposedLineFragmentRect:(CGRect)rect
+{
+    return 0;
+}
+
+- (BOOL)layoutManager:(NSLayoutManager *)layoutManager shouldBreakLineByWordBeforeCharacterAtIndex:(NSUInteger)charIndex
+{
+    unichar character = [layoutManager.textStorage.string characterAtIndex:charIndex];
+    if (character == '*') return NO;
+    return YES;
 }
 
 @end

@@ -1,8 +1,8 @@
 //
-//  ChromatismDemoTests.m
-//  ChromatismDemoTests
+//  UIColor+Chromatism.m
+//  Chromatism
 //
-//  Created by Anviking on 2013-07-31.
+//  Created by Johannes Lund on 2013-08-20.
 //  Copyright (c) 2013 Johannes Lund
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -22,24 +22,17 @@
 //  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.//
 
-#import <XCTest/XCTest.h>
+#import "UIColor+Chromatism.h"
 
-@interface ChromatismDemoTests : XCTestCase
+@implementation UIColor (Chromatism)
 
-@end
-
-@implementation ChromatismDemoTests
-
-- (void)setUp
++ (UIColor *)backgroundMarkupColor
 {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
+    static UIColor *color;
+    if (!color) {
+        color = [UIColor colorWithWhite:0.1122334455 alpha:1];
+    }
+    return color;
 }
 
 @end

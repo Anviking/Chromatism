@@ -3,8 +3,24 @@
 //  Chromatism
 //
 //  Created by Johannes Lund on 2013-07-01.
-//  Copyright (c) 2013 Anviking. All rights reserved.
+//  Copyright (c) 2013 Johannes Lund
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of
+//  this software and associated documentation files (the "Software"), to deal in
+//  the Software without restriction, including without limitation the rights to
+//  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+//  the Software, and to permit persons to whom the Software is furnished to do so,
+//  subject to the following conditions:
+
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+//  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+//  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+//  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+//  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.//
 
 #import "Chromatism+Internal.h"
 #import "Helpers.h"
@@ -29,6 +45,12 @@ NSString *const JLTokenTypeProjectMethodNames = @"project_method_names";
 NSString *const JLTokenTypeProjectClassNames = @"project_class_names";
 
 
+NSString *const JLTokenTypeDiffAddition = @"diff_addition";
+NSString *const JLTokenTypeDiffDeletion = @"diff_deletion";
+
+NSString *const JLDiffColorAttributeName = @"diff_color_attribute_name";
+
+
 @implementation Chromatism
 
 + (NSDictionary *)colorsForTheme:(JLTokenizerTheme)theme
@@ -51,7 +73,11 @@ NSString *const JLTokenTypeProjectClassNames = @"project_class_names";
                        JLTokenTypeOtherMethodNames :  [UIColor colorWithHex:@"7040a6" alpha:1],
                        JLTokenTypeOtherClassNames :  [UIColor colorWithHex:@"7040a6" alpha:1],
                        JLTokenTypeProjectClassNames : [UIColor colorWithRed:63.0/255 green:110.0/255 blue:116.0/255 alpha:1],
-                       JLTokenTypeProjectMethodNames : [UIColor colorWithRed:38.0/255 green:71.0/255 blue:75.0/255 alpha:1]
+                       JLTokenTypeProjectMethodNames : [UIColor colorWithRed:38.0/255 green:71.0/255 blue:75.0/255 alpha:1],
+                       
+                       JLTokenTypeDiffAddition : [UIColor greenColor],
+                       JLTokenTypeDiffDeletion : [UIColor redColor]
+                       
                        };
             break;
         case JLTokenizerThemeDusk:
@@ -70,7 +96,11 @@ NSString *const JLTokenTypeProjectClassNames = @"project_class_names";
                        JLTokenTypeOtherClassNames :  [UIColor colorWithHex:@"04afc8" alpha:1],
                        JLTokenTypeOtherMethodNames :  [UIColor colorWithHex:@"04afc8" alpha:1],
                        JLTokenTypeProjectMethodNames : [UIColor colorWithRed:131.0/255 green:192.0/255 blue:87.0/255 alpha:1],
-                       JLTokenTypeProjectClassNames : [UIColor colorWithRed:131.0/255 green:192.0/255 blue:87.0/255 alpha:1]
+                       JLTokenTypeProjectClassNames : [UIColor colorWithRed:131.0/255 green:192.0/255 blue:87.0/255 alpha:1],
+                       
+                       JLTokenTypeDiffAddition : [UIColor greenColor],
+                       JLTokenTypeDiffDeletion : [UIColor redColor]
+                       
                        };
             break;
     }

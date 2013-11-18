@@ -3,8 +3,24 @@
 //  iGitpad
 //
 //  Created by Johannes Lund on 2013-06-13.
-//  Copyright (c) 2013 Anviking. All rights reserved.
+//  Copyright (c) 2013 Johannes Lund
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of
+//  this software and associated documentation files (the "Software"), to deal in
+//  the Software without restriction, including without limitation the rights to
+//  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+//  the Software, and to permit persons to whom the Software is furnished to do so,
+//  subject to the following conditions:
+
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+//  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+//  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+//  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+//  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.//
 
 #import "JLTextViewController.h"
 #import "JLTokenizer.h"
@@ -27,10 +43,15 @@
     return self;
 }
 
+- (void)loadView
+{
+    self.view = self.textView;
+}
+
 - (JLTextView *)textView
 {
     if (!_textView) {
-        JLTextView *textView = [[JLTextView alloc] init];
+        JLTextView *textView = [[JLTextView alloc] initWithFrame:CGRectZero];
         textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         
         if (self.defaultText) {
@@ -52,18 +73,10 @@
 {
     [super viewDidLoad];
     
-    self.textView.frame = self.view.frame;
-    [self.view addSubview:self.textView];
     self.view.backgroundColor = self.textView.backgroundColor;
     self.navigationController.navigationBar.translucent = TRUE;
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [self registerForKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
@@ -72,68 +85,57 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+#pragma mark - Content Insets and Keyboard
+
+// Call this method somewhere in your view controller setup code.
+- (void)registerForKeyboardNotifications
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
 }
 
-#pragma mark - Responding to keyboard events
-
-- (void)keyboardWillShow:(NSNotification *)notification {
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification *)notification
+{
+    NSDictionary* info = [notification userInfo];
+    UIScrollView *scrollView = self.textView;
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    /*
-     Reduce the size of the text view so that it's not obscured by the keyboard.
-     Animate the resize so that it's in sync with the appearance of the keyboard.
-     */
+    UIEdgeInsets contentInsets = scrollView.contentInset;
+    contentInsets.bottom = kbSize.height;
+    scrollView.contentInset = contentInsets;
+    scrollView.scrollIndicatorInsets = contentInsets;
     
-    NSDictionary *userInfo = [notification userInfo];
+    CGPoint point = [self.textView caretRectForPosition:self.textView.selectedTextRange.start].origin;
+    point.y = MIN(point.y, self.textView.frame.size.height - kbSize.height);
     
-    // Get the origin of the keyboard when it's displayed.
-    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-    
-    // Get the top of the keyboard as the y coordinate of its origin in self's view's
-    // coordinate system. The bottom of the text view's frame should align with the top
-    // of the keyboard's final position.
-    //
-    CGRect keyboardRect = [aValue CGRectValue];
-    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
-    
-    CGFloat keyboardTop = keyboardRect.origin.y;
-    CGRect newTextViewFrame = self.view.bounds;
-    newTextViewFrame.size.height = keyboardTop - self.view.bounds.origin.y;
-    
-    // Get the duration of the animation.
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-    // Animate the resize of the text view's frame in sync with the keyboard's appearance.
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:animationDuration];
-    
-    self.textView.frame = newTextViewFrame;
-    
-    [UIView commitAnimations];
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= kbSize.height;
+    if (!CGRectContainsPoint(aRect, point) ) {
+        
+        CGRect rect = CGRectMake(point.x, point.y, 1, 1);
+        rect.size.height = kbSize.height;
+        rect.origin.y += kbSize.height;
+        [self.textView scrollRectToVisible:rect animated:YES];
+    }
 }
 
-- (void)keyboardWillHide:(NSNotification *)notification {
-    
-    NSDictionary *userInfo = [notification userInfo];
-    
-    /*
-     Restore the size of the text view (fill self's view).
-     Animate the resize so that it's in sync with the disappearance of the keyboard.
-     */
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:animationDuration];
-    
-    self.textView.frame = self.view.bounds;
-    
-    [UIView commitAnimations];
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification *)notification
+{
+    UIScrollView *scrollView = self.textView;
+    UIEdgeInsets contentInsets = scrollView.contentInset;
+    contentInsets.bottom = 0;
+    scrollView.contentInset = contentInsets;
+    scrollView.scrollIndicatorInsets = contentInsets;
+    scrollView.contentInset = contentInsets;
+    scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 @end

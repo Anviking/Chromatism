@@ -11,32 +11,32 @@
 #import "Chromatism+Internal.h"
 #import "JLScope.h"
 
+typedef NS_ENUM(NSInteger, JLTokenizerIntendtationAction) {
+    JLTokenizerIntendtationActionIncrease = 1,
+    JLTokenizerIntendtationActionDecrease = -1,
+    JLTokenizerIntendtationActionNone = 0
+} NS_ENUM_AVAILABLE_IOS(7_0);
+
 @class TextViewChange, JLTextView;
 
-@protocol JLTokenizerDelegate, JLTokenizerDataSource;
+@protocol JLTokenizerDelegate;
 
-@interface JLTokenizer : NSObject <NSTextStorageDelegate, JLScopeDelegate>
+@interface JLTokenizer : NSObject <NSTextStorageDelegate, JLScopeDelegate, NSLayoutManagerDelegate, UITextViewDelegate>
 
-- (void)tokenizeWithRange:(NSRange)range;
-- (void)tokenize;
-- (void)validateTokenization;
-- (void)symbolicate;
+- (void)tokenizeTextStorage:(NSTextStorage *)textStorage withRange:(NSRange)range;
+- (void)tokenizeTextStorage:(NSTextStorage *)textStorage;
+
+// - (void)validateTokenization;
+
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 
-- (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
+- (JLTokenizerIntendtationAction)intendationActionAfterReplacingTextInRange:(NSRange)range replacementText:(NSString *)text previousCharacter:(unichar)character textView:(UITextView *)textView;
 
 @property (nonatomic, strong) NSDictionary *colors;
-@property (nonatomic, weak) NSTextStorage *textStorage;
-@property (nonatomic, assign) BOOL needsValidation;
+
+// @property (nonatomic, assign) BOOL needsValidation;
+
 @property (nonatomic, weak) id<JLTokenizerDelegate> delegate;
-@property (nonatomic, weak) id<JLTokenizerDataSource> dataSource;
-@end
-
-@protocol JLTokenizerDataSource <NSObject>
-
-/// Return the text that was replaced in the most recent text edit or an empty string if there is none.
-- (NSString *)recentlyReplacedText;
-
 @end
 
 @protocol JLTokenizerDelegate <NSObject>

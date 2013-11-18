@@ -16,7 +16,7 @@
 
 + (UIColor*)colorWithHex:(NSString*)hex alpha:(CGFloat)alpha {
     
-    assert(6 == [hex length]);
+    if (hex.length != 6) return nil;
     
     NSString *redHex = [NSString stringWithFormat:@"0x%@", [hex substringWithRange:NSMakeRange(0, 2)]];
     NSString *greenHex = [NSString stringWithFormat:@"0x%@", [hex substringWithRange:NSMakeRange(2, 2)]];
