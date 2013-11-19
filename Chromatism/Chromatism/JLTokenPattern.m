@@ -37,23 +37,10 @@
 
 static NSCache *cache;
 
-+ (instancetype)tokenPatternWithPattern:(NSString *)pattern
++ (instancetype)tokenPatternWithRegularExpression:(NSRegularExpression *)expression;
 {
-    if (!cache) {
-        cache = [NSCache new];
-    }
-    
     JLTokenPattern *tokenPattern = [JLTokenPattern new];
-    NSRegularExpression *expression = [cache objectForKey:pattern];
-    if (expression) {
-        tokenPattern->_expression = expression;
-        tokenPattern->_pattern = pattern;
-    } else {
-        tokenPattern.pattern = pattern;
-        if (tokenPattern.expression) {
-            [cache setObject:tokenPattern.expression forKey:pattern];
-        }
-    }
+    tokenPattern.expression = expression;
     
     return tokenPattern;
 }
@@ -66,21 +53,6 @@ static NSCache *cache;
         self.captureGroup = 0;
     }
     return self;
-}
-
-#pragma mark - Regular Expression
-
-- (void)setExpression:(NSRegularExpression *)expression
-{
-    _expression = expression;
-    _pattern = expression.pattern;
-}
-
-- (void)setPattern:(NSString *)pattern
-{
-    if (!pattern) return;
-    _pattern = pattern;
-    _expression = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionAnchorsMatchLines error:nil];
 }
 
 #pragma mark - Perform
@@ -104,7 +76,7 @@ static NSCache *cache;
 - (NSString *)description
 {
     NSString *subscopes = [[[[self.dependencies valueForKey:@"description"] componentsJoinedByString:@"\n"] componentsSeparatedByString:@"\n"] componentsJoinedByString:@"\n\t\t"];
-    return [NSString stringWithFormat:@"%@, %@, Regex Pattern: %@, opaque: %i, indexesSet:%@ \nsubscopes, %@", NSStringFromClass(self.class), self.identifier, self.pattern, self.opaque, self.set, subscopes];
+    return [NSString stringWithFormat:@"%@, %@, Regex Pattern: %@, opaque: %i, indexesSet:%@ \nsubscopes, %@", NSStringFromClass(self.class), self.identifier, self.expression, self.opaque, self.set, subscopes];
 }
 
 @end
