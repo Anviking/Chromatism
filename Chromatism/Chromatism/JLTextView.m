@@ -27,7 +27,7 @@
 #import "Chromatism.h"
 
 @implementation JLTextView
-@synthesize theme = _theme;
+@synthesize theme = _theme, tokenizer = _tokenizer;
 
 #pragma mark - Initialization & Setup
 
@@ -70,13 +70,8 @@
 - (void)setup
 {
     // Setup tokenizer
-    self.syntaxTokenizer = [[JLTokenizer alloc] init];
-    self.textStorage.delegate = self.syntaxTokenizer;
+    self.tokenizer = [[JLTokenizer alloc] init];
     self.theme = JLTokenizerThemeDusk;
-    
-    // Delegates
-    self.layoutManager.delegate = self.syntaxTokenizer;
-    self.delegate = self.syntaxTokenizer;
     
     // Set default properties
     self.scrollEnabled = YES;
@@ -87,20 +82,29 @@
     
 }
 
+- (void)setTokenizer:(JLTokenizer *)tokenizer
+{
+    _tokenizer = tokenizer;
+    
+    self.textStorage.delegate = self.tokenizer;
+    self.layoutManager.delegate = self.tokenizer;
+    self.delegate = self.tokenizer;
+}
+
 #pragma mark - Color Themes
 
 -(void)setTheme:(JLTokenizerTheme)theme
 {
-    self.syntaxTokenizer.colors = [Chromatism colorsForTheme:theme];
-    self.typingAttributes = @{ NSForegroundColorAttributeName : self.syntaxTokenizer.colors[JLTokenTypeText]};
+    self.tokenizer.colors = [Chromatism colorsForTheme:theme];
+    self.typingAttributes = @{ NSForegroundColorAttributeName : self.tokenizer.colors[JLTokenTypeText]};
     _theme = theme;
     
     //Set font, text color and background color back to default
-    UIColor *backgroundColor = self.syntaxTokenizer.colors[JLTokenTypeBackground];
+    UIColor *backgroundColor = self.tokenizer.colors[JLTokenTypeBackground];
     [self setBackgroundColor:backgroundColor ? backgroundColor : [UIColor whiteColor] ];
     
     // Refresh Tokenization
-    [self.syntaxTokenizer tokenizeTextStorage:self.textStorage withRange:NSMakeRange(0, self.textStorage.length)];
+    [self.tokenizer tokenizeTextStorage:self.textStorage withRange:NSMakeRange(0, self.textStorage.length)];
 }
 
 - (JLTokenizerTheme)theme

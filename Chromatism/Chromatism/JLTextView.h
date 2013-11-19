@@ -30,6 +30,6 @@
 
 @interface JLTextView : UITextView
 
-@property (nonatomic, strong) JLTokenizer *syntaxTokenizer;
+@property (nonatomic, strong) JLTokenizer *tokenizer;
 @property (nonatomic, assign) JLTokenizerTheme theme;
 @end
