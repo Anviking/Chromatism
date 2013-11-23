@@ -9,6 +9,8 @@
 #import <Chromatism/Chromatism.h>
 
 /// Very unsure about the idea of this class
-@interface JLDiffTokenizer : JLTokenizer
+@interface JLDiffTokenizer : NSObject
+
++ (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
 
 @end
