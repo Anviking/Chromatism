@@ -71,7 +71,7 @@
 - (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
 {
     if (textStorage.editedMask == NSTextStorageEditedAttributes) return;
-    [self tokenizeTextStorage:textStorage withRange:[textStorage.string lineRangeForRange:editedRange]];
+    [self tokenizeTextStorage:textStorage withScope:[self documentScopeForTokenizingTextStorage:textStorage inRange:editedRange]];
 }
 
 #pragma mark - NSLayoutManager delegeate
@@ -121,16 +121,13 @@
 
 #pragma mark - Tokenizing
 
-- (void)tokenizeTextStorage:(NSTextStorage *)textStorage
+- (void)refreshTokenizationOfTextStorage:(NSTextStorage *)textStorage;
 {
-    [self tokenizeTextStorage:textStorage withRange:NSMakeRange(0, textStorage.length)];
+    [self tokenizeTextStorage:textStorage withScope:[self documentScopeForTokenizingTextStorage:textStorage inRange:NSMakeRange(0, textStorage.length)]];
 }
 
-- (void)tokenizeTextStorage:(NSTextStorage *)storage withRange:(NSRange)range
+- (JLScope *)documentScopeForTokenizingTextStorage:(NSTextStorage *)textStorage inRange:(NSRange)range
 {
-    [storage beginEditing];
-    [self.operationQueue setSuspended:YES];
-    
     JLScope *documentScope = [JLScope new];
     JLScope *lineScope = [JLScope new];
     
@@ -139,18 +136,20 @@
     
     [documentScope addSubscope:lineScope];
     
-    [self.operationQueue addOperation:lineScope];
-    [self.operationQueue addOperation:documentScope];
+    [self clearColorAttributesInRange:range textStorage:textStorage];
     
-    [self clearColorAttributesInRange:range textStorage:storage];
+    [documentScope setTextStorage:textStorage];
+    [documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, textStorage.length)]];
+    [lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:[textStorage.string lineRangeForRange:range]]];
     
-    [documentScope setTextStorage:storage];
-    [documentScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, storage.length)]];
-    [lineScope setSet:[NSMutableIndexSet indexSetWithIndexesInRange:range]];
-    
-    [self.operationQueue setSuspended:NO];
-    [self.operationQueue waitUntilAllOperationsAreFinished];
-    [storage endEditing];
+    return documentScope;
+}
+
+- (void)tokenizeTextStorage:(NSTextStorage *)textStorage withScope:(JLScope *)scope
+{
+    [textStorage beginEditing];
+    [self.operationQueue addOperations:[[scope recursiveSubscopes] allObjects] waitUntilFinished:YES];
+    [textStorage endEditing];
 }
 
 #pragma mark - Setup Token Patterns
@@ -198,8 +197,6 @@
     token.color = self.colors[type];
 
     [token addScope:scope];
-    
-    [self.operationQueue addOperation:token];
     
     return token;
 }

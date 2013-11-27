@@ -23,16 +23,21 @@ typedef NS_ENUM(NSInteger, JLTokenizerIntendtationAction) {
 
 @interface JLTokenizer : NSObject <NSTextStorageDelegate, NSLayoutManagerDelegate, UITextViewDelegate>
 
+- (void)refreshTokenizationOfTextStorage:(NSTextStorage *)textStorage;
+
+- (void)tokenizeTextStorage:(NSTextStorage *)textStorage withScope:(JLScope *)scope;
+- (JLScope *)documentScopeForTokenizingTextStorage:(NSTextStorage *)textStorage inRange:(NSRange)range;
+
 // Override these two methods and add your own scopes and tokenPatterns
 - (void)prepareDocumentScope:(JLScope *)documentScope;
 - (void)prepareLineScope:(JLScope *)lineScope;
+
+- (NSMutableArray *)symbolsWithPattern:(NSString *)pattern captureGroup:(int)group textStorage:(NSTextStorage *)textStorage;
 
 // Creates JLTokenPatterns and adds them to the operationQueue
 - (JLTokenPattern *)addToken:(NSString *)type withPattern:(NSString *)pattern andScope:(JLScope *)scope;
 - (JLTokenPattern *)addToken:(NSString *)type withKeywords:(NSString *)keywords andScope:(JLScope *)scope;
 
-- (void)tokenizeTextStorage:(NSTextStorage *)textStorage withRange:(NSRange)range;
-- (void)tokenizeTextStorage:(NSTextStorage *)textStorage;
 
 - (void)clearColorAttributesInRange:(NSRange)range textStorage:(NSTextStorage *)storage;
 

@@ -32,12 +32,14 @@
 
 @property (nonatomic, strong) NSMutableIndexSet *set;
 
-
 /// Used by subclasses
 - (void)performInIndexSet:(NSMutableIndexSet *)set;
 
 - (void)addSubscope:(JLScope *)scope;
 - (void)addScope:(JLScope *)scope;
+
+/// Returns a set of ALL subscopes recursivly. The instance-scope adds itself to the set as well.
+- (NSMutableSet *)recursiveSubscopes;
 
 /// NSHashTable with weak references to parent scopes
 @property (nonatomic, strong) NSHashTable *scopes;

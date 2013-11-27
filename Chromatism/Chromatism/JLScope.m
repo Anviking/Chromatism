@@ -110,6 +110,17 @@
     [scope addSubscope:self];
 }
 
+- (NSMutableSet *)recursiveSubscopes
+{
+    NSMutableSet *recursiveSubscopes = [NSMutableSet setWithObject:self];
+    for (JLScope *scope in self.subscopes) {
+        for (JLScope *aScope in [scope recursiveSubscopes]) {
+            [recursiveSubscopes addObject:aScope];
+        }
+    }
+    return recursiveSubscopes;
+}
+
 #pragma mark - Properties
 
 - (NSString *)string
