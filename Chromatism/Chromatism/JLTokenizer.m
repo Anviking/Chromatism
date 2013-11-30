@@ -147,9 +147,9 @@
 
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage withScope:(JLScope *)scope
 {
-    [textStorage beginEditing];
+    //[textStorage beginEditing];
     [self.operationQueue addOperations:[[scope recursiveSubscopes] allObjects] waitUntilFinished:YES];
-    [textStorage endEditing];
+    //[textStorage endEditing];
 }
 
 #pragma mark - Setup Token Patterns

@@ -63,9 +63,11 @@
 
 #pragma mark - Symbolication
 
- - (void)symbolicate
- {
-// [self.scopes[PROJECT_CLASS_NAMES] setPattern:[NSString stringWithFormat:@"\\b(%@)\\b", [[self symbolsWithPattern:@"^@implementation (\\w+)" captureGroup:1] componentsJoinedByString:@"|"]]];
+- (void)prepareSymbolicateScope:(JLScope *)scope
+{
+    //NSString *pattern = [NSString stringWithFormat:@"\\b(%@)\\b", [[self symbolsWithPattern:@"^@implementation (\\w+)" captureGroup:1 textStorage:scope.textStorage] componentsJoinedByString:@"|"]];
+    //JLTokenizer *pattern = [JLTokenPattern tokenPatternWithRegularExpression:[NSRegularExpression regularExpressionWithPattern:pattern options:0 error:NULL]];
+
 // [self.scopes[PROJECT_METHOD_NAMES] setPattern:[NSString stringWithFormat:@"\\b(%@)\\b", [[self symbolsWithPattern:@"^@property \\(.*?\\)\\s*\\w+[\\s*]+(\\w+);" captureGroup:1] componentsJoinedByString:@"|"]]];
  }
 
