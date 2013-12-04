@@ -25,7 +25,7 @@ MIT, see [LICENSE.txt](https://github.com/Anviking/Chromatism/blob/master/LICENS
 
 
 ## Implementing your own syntax highlighting for another language
-1. Subclass `JLTokenizer.
+1. Subclass `JLTokenizer`.
 2. Checkout `JLObjectiveCTokenizer` to see what to do next.
 3. (Optional) Be awesome and submit a PR.
 
