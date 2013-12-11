@@ -14,7 +14,7 @@
 		3260A15617A884EC008792E6 /* JLTokenizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3260A15517A884EC008792E6 /* JLTokenizerTests.m */; };
 		8F3AB92A1781C0BA0023348A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB9291781C0BA0023348A /* XCTest.framework */; };
 		8F3AB92B1781C0BB0023348A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB91B1781C0BA0023348A /* Foundation.framework */; };
-		8F3AB92D1781C0BB0023348A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB92C1781C0BB0023348A /* UIKit.framework */; };
+		8F3AB92D1781C0BB0023348A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB92C1781C0BB0023348A /* UIKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		8F3AB9301781C0BB0023348A /* libChromatism.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB9181781C0BA0023348A /* libChromatism.a */; };
 		8F3AB9361781C0BB0023348A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F3AB9341781C0BB0023348A /* InfoPlist.strings */; };
 		8F3AB9381781C0BB0023348A /* ChromatismTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9371781C0BB0023348A /* ChromatismTests.m */; };
@@ -31,12 +31,19 @@
 		8F54EF221781CD87008C1609 /* JLTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9541781C1250023348A /* JLTextViewController.m */; };
 		8F54EF231781CD87008C1609 /* JLTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9561781C1250023348A /* JLTokenizer.m */; };
 		8F54EF241781CD87008C1609 /* JLTokenPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9581781C1250023348A /* JLTokenPattern.m */; };
-		8F9F6BC81822F09D00DE15A8 /* JLDiffTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F9F6BC61822F09D00DE15A8 /* JLDiffTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F9F6BC91822F09D00DE15A8 /* JLDiffTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9F6BC71822F09D00DE15A8 /* JLDiffTokenizer.m */; };
 		8FA0CB0F1795F41B00FF8EB1 /* JLTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8FA0CB101795F41B00FF8EB1 /* JLTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */; };
 		8FE2796517C3842900DD933A /* UIColor+Chromatism.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FE2796317C3842900DD933A /* UIColor+Chromatism.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8FE2796617C3842900DD933A /* UIColor+Chromatism.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE2796417C3842900DD933A /* UIColor+Chromatism.m */; };
+		F3D5E0531851183F00DFC642 /* asp.plist in Resources */ = {isa = PBXBuildFile; fileRef = F3D5E04C1851183F00DFC642 /* asp.plist */; };
+		F3D5E0541851183F00DFC642 /* css.plist in Resources */ = {isa = PBXBuildFile; fileRef = F3D5E04D1851183F00DFC642 /* css.plist */; };
+		F3D5E0551851183F00DFC642 /* html.plist in Resources */ = {isa = PBXBuildFile; fileRef = F3D5E04E1851183F00DFC642 /* html.plist */; };
+		F3D5E0561851183F00DFC642 /* js.plist in Resources */ = {isa = PBXBuildFile; fileRef = F3D5E04F1851183F00DFC642 /* js.plist */; };
+		F3D5E0571851183F00DFC642 /* jsp.plist in Resources */ = {isa = PBXBuildFile; fileRef = F3D5E0501851183F00DFC642 /* jsp.plist */; };
+		F3D5E0581851183F00DFC642 /* php.plist in Resources */ = {isa = PBXBuildFile; fileRef = F3D5E0511851183F00DFC642 /* php.plist */; };
+		F3D5E0591851183F00DFC642 /* xml.plist in Resources */ = {isa = PBXBuildFile; fileRef = F3D5E0521851183F00DFC642 /* xml.plist */; };
+		F3F7FA4D184C1DB500312CDD /* JLDiffTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = F3F7FA4B184C1DB500312CDD /* JLDiffTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F3F7FA4E184C1DB500312CDD /* JLDiffTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = F3F7FA4C184C1DB500312CDD /* JLDiffTokenizer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,14 +82,20 @@
 		8F3AB9561781C1250023348A /* JLTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTokenizer.m; sourceTree = "<group>"; };
 		8F3AB9571781C1250023348A /* JLTokenPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTokenPattern.h; sourceTree = "<group>"; };
 		8F3AB9581781C1250023348A /* JLTokenPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTokenPattern.m; sourceTree = "<group>"; };
-		8F3AB95F1781C12F0023348A /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		8F3AB9611781C26A0023348A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		8F9F6BC61822F09D00DE15A8 /* JLDiffTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JLDiffTokenizer.h; path = ../../../Chromatism/Chromatism/Chromatism/JLDiffTokenizer.h; sourceTree = "<group>"; };
-		8F9F6BC71822F09D00DE15A8 /* JLDiffTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JLDiffTokenizer.m; path = ../../../Chromatism/Chromatism/Chromatism/JLDiffTokenizer.m; sourceTree = "<group>"; };
 		8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTextView.h; sourceTree = "<group>"; };
 		8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTextView.m; sourceTree = "<group>"; };
 		8FE2796317C3842900DD933A /* UIColor+Chromatism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Chromatism.h"; sourceTree = "<group>"; };
 		8FE2796417C3842900DD933A /* UIColor+Chromatism.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Chromatism.m"; sourceTree = "<group>"; };
+		F3D5E04C1851183F00DFC642 /* asp.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = asp.plist; sourceTree = "<group>"; };
+		F3D5E04D1851183F00DFC642 /* css.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = css.plist; sourceTree = "<group>"; };
+		F3D5E04E1851183F00DFC642 /* html.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = html.plist; sourceTree = "<group>"; };
+		F3D5E04F1851183F00DFC642 /* js.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = js.plist; sourceTree = "<group>"; };
+		F3D5E0501851183F00DFC642 /* jsp.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = jsp.plist; sourceTree = "<group>"; };
+		F3D5E0511851183F00DFC642 /* php.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = php.plist; sourceTree = "<group>"; };
+		F3D5E0521851183F00DFC642 /* xml.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = xml.plist; sourceTree = "<group>"; };
+		F3F7FA4B184C1DB500312CDD /* JLDiffTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLDiffTokenizer.h; sourceTree = "<group>"; };
+		F3F7FA4C184C1DB500312CDD /* JLDiffTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLDiffTokenizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,10 +157,10 @@
 				8F3AB9201781C0BA0023348A /* Chromatism.h */,
 				32102EE017A948F900CFA161 /* Chromatism+Internal.h */,
 				8F3AB9221781C0BA0023348A /* Chromatism.m */,
+				F3F7FA4B184C1DB500312CDD /* JLDiffTokenizer.h */,
+				F3F7FA4C184C1DB500312CDD /* JLDiffTokenizer.m */,
 				8F3AB9551781C1250023348A /* JLTokenizer.h */,
 				8F3AB9561781C1250023348A /* JLTokenizer.m */,
-				8F9F6BC61822F09D00DE15A8 /* JLDiffTokenizer.h */,
-				8F9F6BC71822F09D00DE15A8 /* JLDiffTokenizer.m */,
 				8F3AB9531781C1250023348A /* JLTextViewController.h */,
 				8F3AB9541781C1250023348A /* JLTextViewController.m */,
 				8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */,
@@ -168,7 +181,13 @@
 		8F3AB91E1781C0BA0023348A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8F3AB95F1781C12F0023348A /* test.json */,
+				F3D5E04C1851183F00DFC642 /* asp.plist */,
+				F3D5E04D1851183F00DFC642 /* css.plist */,
+				F3D5E04E1851183F00DFC642 /* html.plist */,
+				F3D5E04F1851183F00DFC642 /* js.plist */,
+				F3D5E0501851183F00DFC642 /* jsp.plist */,
+				F3D5E0511851183F00DFC642 /* php.plist */,
+				F3D5E0521851183F00DFC642 /* xml.plist */,
 				8F3AB91F1781C0BA0023348A /* Chromatism-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -203,13 +222,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				32102EE117A948F900CFA161 /* Chromatism+Internal.h in Headers */,
-				8F9F6BC81822F09D00DE15A8 /* JLDiffTokenizer.h in Headers */,
 				8FA0CB0F1795F41B00FF8EB1 /* JLTextView.h in Headers */,
 				8F54EF0E1781C776008C1609 /* Chromatism.h in Headers */,
 				8F54EF101781C788008C1609 /* Helpers.h in Headers */,
 				8FE2796517C3842900DD933A /* UIColor+Chromatism.h in Headers */,
 				8F54EF111781C788008C1609 /* JLScope.h in Headers */,
 				8F54EF131781C788008C1609 /* JLTextViewController.h in Headers */,
+				F3F7FA4D184C1DB500312CDD /* JLDiffTokenizer.h in Headers */,
 				8F54EF141781C788008C1609 /* JLTokenizer.h in Headers */,
 				8F54EF151781C788008C1609 /* JLTokenPattern.h in Headers */,
 			);
@@ -285,9 +304,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3D5E0571851183F00DFC642 /* jsp.plist in Resources */,
 				8F3AB9361781C0BB0023348A /* InfoPlist.strings in Resources */,
+				F3D5E0591851183F00DFC642 /* xml.plist in Resources */,
+				F3D5E0551851183F00DFC642 /* html.plist in Resources */,
 				32102EEE17A95E2900CFA161 /* description.txt in Resources */,
+				F3D5E0561851183F00DFC642 /* js.plist in Resources */,
+				F3D5E0581851183F00DFC642 /* php.plist in Resources */,
 				32102EED17A95E2900CFA161 /* demo.txt in Resources */,
+				F3D5E0531851183F00DFC642 /* asp.plist in Resources */,
+				F3D5E0541851183F00DFC642 /* css.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,7 +325,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F54EF241781CD87008C1609 /* JLTokenPattern.m in Sources */,
-				8F9F6BC91822F09D00DE15A8 /* JLDiffTokenizer.m in Sources */,
+				F3F7FA4E184C1DB500312CDD /* JLDiffTokenizer.m in Sources */,
 				8F54EF201781CD87008C1609 /* JLScope.m in Sources */,
 				8FE2796617C3842900DD933A /* UIColor+Chromatism.m in Sources */,
 				8FA0CB101795F41B00FF8EB1 /* JLTextView.m in Sources */,
@@ -378,6 +404,7 @@
 				PRODUCT_NAME = Chromatism;
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/Chromatism;
 				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Debug;
 		};

@@ -64,53 +64,61 @@
 
 - (void)setup
 {
+	if (_syntax == nil) return;
+
     JLScope *documentScope = [JLScope new];
     JLScope *lineScope = [JLScope new];
+	NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile: [[NSBundle mainBundle] pathForResource: _syntax ofType: @"plist"]];
     
-    // Block and line comments
-    JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withIdentifier:BLOCK_COMMENT pattern:@"" andScope:documentScope];
-    blockComment.triggeringCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"/*"];
-    blockComment.expression = [NSRegularExpression regularExpressionWithPattern:@"/\\*.*?\\*/" options:NSRegularExpressionDotMatchesLineSeparators error:nil];
-    
-    [self addToken:JLTokenTypeComment withIdentifier:LINE_COMMENT pattern:@"//.*+$" andScope:lineScope];
-    
-    // Preprocessor macros
-    JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withIdentifier:nil pattern:@"^#.*+$" andScope:lineScope];
-    
-    // #import <Library/Library.h>
-    // In xcode it only works for #import and #include, not all preprocessor statements.
-    [self addToken:JLTokenTypeString withPattern:@"<.*?>" andScope:preprocessor];
-    
-    // Strings
-    [[self addToken:JLTokenTypeString withPattern:@"(\"|@\")[^\"\\n]*(@\"|\")" andScope:lineScope] addScope:preprocessor];
-    
-    // Numbers
-    [self addToken:JLTokenTypeNumber withPattern:@"(?<=\\s)\\d+" andScope:lineScope];
-    
-    // New literals, for example @[]
-    // TODO: Highlight the closing bracket too, but with some special "nested-token-pattern"
-    [[self addToken:JLTokenTypeNumber withPattern:@"@[\\[|\\{|\\(]" andScope:lineScope] setOpaque:NO];
-    
-    // C function names
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\w+\\s*(?>\\(.*\\)" andScope:lineScope] setCaptureGroup:1];
-    
-    // Dot notation
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\.(\\w+)" andScope:lineScope] setCaptureGroup:1];
-    
-    // Method Calls
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(\\w+)\\]" andScope:lineScope] setCaptureGroup:1];
-    
-    // Method call parts
-    [[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(?<=\\w+):" andScope:lineScope] setCaptureGroup:0];
-    
-    NSString *keywords = @"true false yes no YES TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super";
-    
-    [self addToken:JLTokenTypeKeyword withKeywords:keywords andScope:lineScope];
-    [self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:lineScope];
-    
-    // Other Class Names
-    [self addToken:JLTokenTypeOtherClassNames withPattern:@"\\b[A-Z]{3}[a-zA-Z]*\\b" andScope:lineScope];
-    
+	if (![_syntax  isEqual: @"default"]) {
+		// Block and line comments
+		if (![_syntax  isEqual: @"html"] && ![_syntax  isEqual: @"xml"]) {
+			JLTokenPattern *blockComment = [self addToken:JLTokenTypeComment withIdentifier:BLOCK_COMMENT pattern:@"" andScope:documentScope];
+			blockComment.triggeringCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"/*"];
+			blockComment.expression = [NSRegularExpression regularExpressionWithPattern:@"/\\*.*?\\*/" options:NSRegularExpressionDotMatchesLineSeparators error:nil];
+			
+			[self addToken:JLTokenTypeComment withIdentifier:LINE_COMMENT pattern:@"//.*+$" andScope:lineScope];
+		} else {
+			[self addToken:JLTokenTypeComment withIdentifier:LINE_COMMENT pattern: @"<!--(.*?)-->" andScope:lineScope];
+		}
+		
+		// Preprocessor macros
+		//JLTokenPattern *preprocessor = [self addToken:JLTokenTypePreprocessor withIdentifier:nil pattern:@"^#.*+$" andScope:lineScope];
+		
+		// #import <Library/Library.h>
+		// In xcode it only works for #import and #include, not all preprocessor statements.
+		//[self addToken:JLTokenTypeString withPattern:@"<.*?>" andScope:preprocessor];
+		
+		// Strings
+		[self addToken:JLTokenTypeString withPattern:[dictionary valueForKey:@"string"] andScope:lineScope];
+		
+		// Numbers
+		[self addToken:JLTokenTypeNumber withPattern:[dictionary valueForKey:@"number"] andScope:lineScope];
+		
+		// New literals, for example @[]
+		// TODO: Highlight the closing bracket too, but with some special "nested-token-pattern"
+		[[self addToken:JLTokenTypeNumber withPattern:@"@[\\[|\\{|\\(]" andScope:lineScope] setOpaque:NO];
+		
+		// C function names
+		//[[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\w+\\s*(?>\\(.*\\)" andScope:lineScope] setCaptureGroup:1];
+		
+		// Dot notation
+		//[[self addToken:JLTokenTypeOtherMethodNames withPattern:@"\\.(\\w+)" andScope:lineScope] setCaptureGroup:1];
+		
+		// Method Calls
+		//[[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(\\w+)\\]" andScope:lineScope] setCaptureGroup:1];
+		
+		// Method call parts
+		//[[self addToken:JLTokenTypeOtherMethodNames withPattern:@"(?<=\\w+):" andScope:lineScope] setCaptureGroup:0];
+		
+		if (![_syntax  isEqual: @"css"])
+			[self addToken:JLTokenTypeKeyword withPattern:[dictionary valueForKey:@"keyword"] andScope:lineScope];
+		//[self addToken:JLTokenTypeKeyword withPattern:@"@[a-zA-Z0-9_]+" andScope:lineScope];
+		
+		// Other Class Names
+		//[self addToken:JLTokenTypeOtherClassNames withPattern:@"\\b[A-Z]{3}[a-zA-Z]*\\b" andScope:lineScope];
+	}
+	
     [documentScope addSubscope:lineScope];
     
     self.documentScope = documentScope;
@@ -288,7 +296,7 @@
         // Multicharacter edit
     }
     
-    if ([text isEqualToString:@"\n"]) {
+    if ([text isEqualToString:@"\n"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"AutoIndent"]) {
         // Return
         // Start the new line with as many tabs or white spaces as the previous one.
         
@@ -299,7 +307,7 @@
             
             prefixString = [prefixString stringByAppendingString:@"    "];
         } else if ([lastCharacter isEqualToString:@"}"]) {
-            if ([[prefixString substringFromIndex:prefixString.length - 4] isEqualToString:@"    "]) {
+            if ([[prefixString substringFromIndex:prefixString.length - 4] isEqualToString:@"    "]) { //Crash here...
                 prefixString = [prefixString substringToIndex:prefixString.length - 4];
             }
             else if ([[prefixString substringFromIndex:prefixString.length - 1] isEqualToString:@"\t"]) {

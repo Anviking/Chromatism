@@ -26,7 +26,12 @@
 
 typedef NS_ENUM(NSInteger, JLTokenizerTheme) {
     JLTokenizerThemeDefault,
-    JLTokenizerThemeDusk
+    JLTokenizerThemeDusk,
+    JLTokenizerThemeLowKey,
+    JLTokenizerThemeMidnight,
+    JLTokenizerThemePresentation,
+    JLTokenizerThemePrinting,
+    JLTokenizerThemeSunset
 };
 
 #ifdef DEBUG

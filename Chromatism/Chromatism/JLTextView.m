@@ -72,7 +72,7 @@
     // Setup tokenizer
     self.syntaxTokenizer = [[JLTokenizer alloc] init];
     self.textStorage.delegate = self.syntaxTokenizer;
-    self.theme = JLTokenizerThemeDusk;
+    self.theme = JLTokenizerThemeDefault;
     
     // Delegates
     self.layoutManager.delegate = self.syntaxTokenizer;
@@ -81,10 +81,8 @@
     // Set default properties
     self.scrollEnabled = YES;
     self.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-    self.font = [UIFont fontWithName:@"Menlo" size:12];
     self.autocorrectionType = UITextAutocorrectionTypeNo;
     self.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    
 }
 
 #pragma mark - Color Themes
@@ -98,8 +96,13 @@
     //Set font, text color and background color back to default
     UIColor *backgroundColor = self.syntaxTokenizer.colors[JLTokenTypeBackground];
     [self setBackgroundColor:backgroundColor ? backgroundColor : [UIColor whiteColor] ];
+	
+	self.font = [UIFont fontWithName:[[NSUserDefaults standardUserDefaults] stringForKey:@"FontType"]
+								size:([[NSUserDefaults standardUserDefaults] integerForKey:@"FontSize"] *
+									  (([[NSUserDefaults standardUserDefaults] integerForKey:@"JLViewTheme"] == JLTokenizerThemePresentation) ? 1.3 : 1))];
     
     // Refresh Tokenization
+	self.syntaxTokenizer.syntax = _syntax;
     [self.syntaxTokenizer tokenizeTextStorage:self.textStorage withRange:NSMakeRange(0, self.textStorage.length)];
 }
 

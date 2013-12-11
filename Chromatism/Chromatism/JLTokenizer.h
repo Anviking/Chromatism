@@ -26,6 +26,7 @@
 + (NSMutableAttributedString *)tokenizeString:(NSString *)string withDefaultAttributes:(NSDictionary *)attributes;
 
 @property (nonatomic, strong) NSDictionary *colors;
+@property (nonatomic, strong) NSString *syntax;
 
 // @property (nonatomic, assign) BOOL needsValidation;
 
