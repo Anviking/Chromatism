@@ -61,6 +61,12 @@
     return self;
 }
 
+
+- (void)waitUntilFinished
+{
+    [self.operationQueue waitUntilAllOperationsAreFinished];
+}
+
 #pragma mark - NSTextStorageDelegate
 
 - (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta

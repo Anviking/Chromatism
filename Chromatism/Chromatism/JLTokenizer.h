@@ -23,6 +23,8 @@ typedef NS_ENUM(NSInteger, JLTokenizerIntendtationAction) {
 
 @interface JLTokenizer : NSObject <NSTextStorageDelegate, NSLayoutManagerDelegate, UITextViewDelegate>
 
+- (void)waitUntilFinished; /// Wait untill all syntax-highlighting operations are finished.
+
 - (void)refreshTokenizationOfTextStorage:(NSTextStorage *)textStorage;
 
 - (void)tokenizeTextStorage:(NSTextStorage *)textStorage withScope:(JLScope *)scope;
