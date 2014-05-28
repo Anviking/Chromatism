@@ -30,4 +30,6 @@
 #import "JLTextView.h"
 #import "UIColor+Chromatism.h"
 #import "JLDiffTokenizer.h"
+#import "JLTokenizer+Additions.h"
+#import "JLObjectiveCTokenizer.h"
 #import "Chromatism+Internal.h"
