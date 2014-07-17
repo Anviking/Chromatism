@@ -31,14 +31,14 @@ class JLToken: JLScope {
         self.contentCaptureGroup = contentCaptureGroup
     }
     
-    override func perform(inIndexSet parentIndexSet: NSIndexSet) -> NSIndexSet {
+    override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) -> NSIndexSet {
         let indexSet = NSMutableIndexSet()
         let contentIndexSet = NSMutableIndexSet()
         parentIndexSet.enumerateRangesUsingBlock({ (range, stop) in
-            self.regularExpression.enumerateMatchesInString(self.attributedString.string, options: nil, range: range, usingBlock: {(result, flags, stop) in
+            self.regularExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: {(result, flags, stop) in
                 let range = result.rangeAtIndex(self.captureGroup)
                 indexSet.addIndexesInRange(range)
-                self.attributedString.addAttribute(NSForegroundColorAttributeName, value: self.color, range: range)
+                attributedString.addAttribute(NSForegroundColorAttributeName, value: self.color, range: range)
                 if let captureGroup = self.contentCaptureGroup {
                     contentIndexSet.addIndexesInRange(result.rangeAtIndex(captureGroup))
                 }
@@ -46,7 +46,7 @@ class JLToken: JLScope {
             })
         
         if contentCaptureGroup {
-            performSubscopesInIndexSet(contentIndexSet)
+            performSubscopes(attributedString, indexSet: contentIndexSet)
             println(contentIndexSet)
         }
         

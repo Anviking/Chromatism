@@ -18,6 +18,8 @@
 		8FBFC18F1974190A00F75A76 /* JLScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18B19738B7900F75A76 /* JLScope.swift */; };
 		8FBFC1901974190D00F75A76 /* NSIndexSet+Intersection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18D197418E300F75A76 /* NSIndexSet+Intersection.swift */; };
 		8FBFC19219741B6B00F75A76 /* JLScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */; };
+		8FCDBFF519787AEA00F4B3EC /* JLTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF419787AEA00F4B3EC /* JLTokenizer.swift */; };
+		8FCDBFF719787C7C00F4B3EC /* JLLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,8 @@
 		8FBFC18B19738B7900F75A76 /* JLScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLScope.swift; sourceTree = "<group>"; };
 		8FBFC18D197418E300F75A76 /* NSIndexSet+Intersection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSIndexSet+Intersection.swift"; sourceTree = "<group>"; };
 		8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLScopeTests.swift; sourceTree = "<group>"; };
+		8FCDBFF419787AEA00F4B3EC /* JLTokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTokenizer.swift; sourceTree = "<group>"; };
+		8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLLanguage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +92,8 @@
 				8FBFC18B19738B7900F75A76 /* JLScope.swift */,
 				8F95989D197437BF002EA4AB /* JLToken.swift */,
 				8FBFC18D197418E300F75A76 /* NSIndexSet+Intersection.swift */,
+				8FCDBFF419787AEA00F4B3EC /* JLTokenizer.swift */,
+				8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */,
 				8FBFC17219738B0400F75A76 /* Supporting Files */,
 			);
 			path = Chromatism;
@@ -229,8 +235,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F95989E197437BF002EA4AB /* JLToken.swift in Sources */,
+				8FCDBFF519787AEA00F4B3EC /* JLTokenizer.swift in Sources */,
 				8FBFC18C19738B7900F75A76 /* JLScope.swift in Sources */,
 				8FBFC18E197418E300F75A76 /* NSIndexSet+Intersection.swift in Sources */,
+				8FCDBFF719787C7C00F4B3EC /* JLLanguage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

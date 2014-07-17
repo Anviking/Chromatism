@@ -10,17 +10,15 @@ import UIKit
 
 class JLScope {
     
-    init(attributedString: NSMutableAttributedString) {
-        self.attributedString = attributedString
+    init() {
+        
     }
     
     init(scope: JLScope) {
-        self.attributedString = scope.attributedString
         scope.addSubscope(self)
     }
     
     var indexSet: NSIndexSet?
-    var attributedString: NSMutableAttributedString
     
     var subscopes: [JLScope] = []
     
@@ -28,11 +26,11 @@ class JLScope {
         self.subscopes += subscope
     }
     
-    func perform() {
-        perform(inIndexSet: NSIndexSet(indexesInRange: NSMakeRange(0, attributedString.length)))
+    func perform(attributedString: NSMutableAttributedString)() {
+        perform(attributedString, parentIndexSet: NSIndexSet(indexesInRange: NSMakeRange(0, attributedString.length)))
     }
     
-    func perform(inIndexSet parentIndexSet: NSIndexSet) -> NSIndexSet {
+    func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) -> NSIndexSet {
         
         // If the indexSet-property is set, intersect it with the parent scope index set.
         var indexSet: NSMutableIndexSet
@@ -45,15 +43,15 @@ class JLScope {
         // Create a copy of the indexSet and call perform to subscopes
         // The results of the subscope is removed from the indexSet copy before the next subscope is performed
         let indexSetCopy = indexSet.mutableCopy() as NSMutableIndexSet
-        performSubscopesInIndexSet(indexSetCopy)
+        performSubscopes(attributedString, indexSet: indexSetCopy)
         
         return indexSet
     }
     
-    func performSubscopesInIndexSet(indexSet: NSMutableIndexSet) {
+    // Will change indexSet
+    func performSubscopes(attributedString: NSMutableAttributedString, indexSet: NSMutableIndexSet) {
         for scope in self.subscopes {
-            scope.attributedString = attributedString
-            indexSet.removeIndexes(scope.perform(inIndexSet: indexSet))
+            indexSet.removeIndexes(scope.perform(attributedString, parentIndexSet: indexSet))
         }
     }
 }

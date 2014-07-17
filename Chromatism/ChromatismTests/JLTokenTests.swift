@@ -11,7 +11,7 @@ import XCTest
 
 class JLTokenTests: XCTestCase {
     
-    let attributedString = NSMutableAttributedString(string: "//Hello World!\nHello", attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.systemFontOfSize(15)])
+    var attributedString = NSMutableAttributedString(string: "//Hello World!\nHello", attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.systemFontOfSize(15)])
     let commentColor = UIColor.greenColor()
     let worldColor = UIColor.blueColor()
     
@@ -20,7 +20,7 @@ class JLTokenTests: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         let documentScope = JLScope(attributedString: attributedString)
-        let comment = JLToken(pattern: "\\/\\/(.*)", color: commentColor, scope: documentScope, contentCaptureGroup: 1)
+        let comment = JLToken(pattern: "//(.*)", color: commentColor, scope: documentScope, contentCaptureGroup: 1)
         let world = JLToken(pattern: "World", color: worldColor, scope: comment)
         documentScope.perform()
     }
