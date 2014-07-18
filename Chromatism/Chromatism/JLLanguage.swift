@@ -15,11 +15,12 @@ class JLLanguage: NSObject, UITextViewDelegate {
 
 class JLCLanguage: JLLanguage {
     init()  {
-        JLToken(pattern: "//(.*)", color: commentColor, scope: documentScope, contentCaptureGroup: 1)
-        
+        super.init()
+        JLToken(pattern: "//(.*)", tokenType: .Comment, scope: documentScope, contentCaptureGroup: 1)
     }
 }
 
+/*
 - (void)prepareLineScope:(JLScope *)lineScope
 {
     [super prepareLineScope:lineScope];
@@ -47,3 +48,4 @@ class JLCLanguage: JLLanguage {
     
     [self addToken:JLTokenTypeKeyword withKeywords:keywords andScope:lineScope];
 }
+*/

@@ -20,6 +20,7 @@
 		8FBFC19219741B6B00F75A76 /* JLScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */; };
 		8FCDBFF519787AEA00F4B3EC /* JLTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF419787AEA00F4B3EC /* JLTokenizer.swift */; };
 		8FCDBFF719787C7C00F4B3EC /* JLLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */; };
+		8FCDBFF91978834D00F4B3EC /* JLTokenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLScopeTests.swift; sourceTree = "<group>"; };
 		8FCDBFF419787AEA00F4B3EC /* JLTokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTokenizer.swift; sourceTree = "<group>"; };
 		8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLLanguage.swift; sourceTree = "<group>"; };
+		8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTokenType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				8F95989D197437BF002EA4AB /* JLToken.swift */,
 				8FBFC18D197418E300F75A76 /* NSIndexSet+Intersection.swift */,
 				8FCDBFF419787AEA00F4B3EC /* JLTokenizer.swift */,
+				8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */,
 				8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */,
 				8FBFC17219738B0400F75A76 /* Supporting Files */,
 			);
@@ -235,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F95989E197437BF002EA4AB /* JLToken.swift in Sources */,
+				8FCDBFF91978834D00F4B3EC /* JLTokenType.swift in Sources */,
 				8FCDBFF519787AEA00F4B3EC /* JLTokenizer.swift in Sources */,
 				8FBFC18C19738B7900F75A76 /* JLScope.swift in Sources */,
 				8FBFC18E197418E300F75A76 /* NSIndexSet+Intersection.swift in Sources */,
