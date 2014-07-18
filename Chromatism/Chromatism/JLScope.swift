@@ -26,7 +26,7 @@ class JLScope {
         self.subscopes += subscope
     }
     
-    func perform(attributedString: NSMutableAttributedString, delegate: JLScopeDelegate)() {
+    func perform(attributedString: NSMutableAttributedString, delegate: JLScopeDelegate) {
         perform(attributedString, delegate: delegate, parentIndexSet: NSIndexSet(indexesInRange: NSMakeRange(0, attributedString.length)))
     }
     
