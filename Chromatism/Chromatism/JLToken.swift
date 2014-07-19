@@ -50,6 +50,7 @@ class JLToken: JLScope {
         
         delegate.scope(self, didPerformInAttributedString: attributedString, parentIndexSet: parentIndexSet, resultIndexSet: indexSet)
         
+        self.indexSet = indexSet
         return indexSet
     }
 }

@@ -19,7 +19,16 @@ class JLScope {
         scope.addSubscope(self)
     }
     
-    var indexSet: NSIndexSet?
+    var editedIndexSet: NSIndexSet?
+    
+    // Store the result-indexSet until next perform to calculate deltas
+    // This may not be a good idea, and JLScope's use of this property is different, JLToken should
+    // probably conform to a protocol instead of subclass JLScope, but it's inconvenient at the same time
+    var indexSet: NSIndexSet? {
+    didSet  {
+        let (additions, deletions) = NSIndexSetDelta(oldValue, indexSet)
+    }
+    }
     var subscopes: [JLScope] = []
     
     func addSubscope(subscope: JLScope) {
@@ -34,8 +43,8 @@ class JLScope {
         
         // If the indexSet-property is set, intersect it with the parent scope index set.
         var indexSet: NSMutableIndexSet
-        if let propertyIndexSet = self.indexSet {
-            indexSet = propertyIndexSet.intersectionWithSet(parentIndexSet)
+        if let editedIndexSet = self.editedIndexSet {
+            indexSet = editedIndexSet.intersectionWithSet(parentIndexSet)
         } else {
             indexSet = parentIndexSet.mutableCopy() as NSMutableIndexSet
         }
@@ -45,12 +54,22 @@ class JLScope {
         let indexSetCopy = indexSet.mutableCopy() as NSMutableIndexSet
         performSubscopes(attributedString, delegate: delegate, indexSet: indexSetCopy)
         
+        self.indexSet = indexSet
+        
         return indexSet
     }
     
     // Will change indexSet
     func performSubscopes(attributedString: NSMutableAttributedString, delegate: JLScopeDelegate, indexSet: NSMutableIndexSet) {
-        for scope in self.subscopes {
+        
+        var lookForDiffs = false
+        for scope in subscopes {
+            if scope.editedIndexSet {
+                lookForDiffs = true
+            }
+        }
+        
+        for scope in subscopes {
             indexSet.removeIndexes(scope.perform(attributedString, delegate: delegate, parentIndexSet: indexSet))
         }
     }
