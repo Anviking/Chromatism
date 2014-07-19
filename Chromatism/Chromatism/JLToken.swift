@@ -30,7 +30,7 @@ class JLToken: JLScope {
         self.contentCaptureGroup = contentCaptureGroup
     }
     
-    override func perform(attributedString: NSMutableAttributedString, delegate: JLScopeDelegate, parentIndexSet: NSIndexSet) -> NSIndexSet {
+    override func perform(attributedString: NSMutableAttributedString, delegate: JLScopeDelegate, parentIndexSet: NSIndexSet) {
         let indexSet = NSMutableIndexSet()
         let contentIndexSet = NSMutableIndexSet()
         parentIndexSet.enumerateRangesUsingBlock({ (range, stop) in
@@ -51,6 +51,5 @@ class JLToken: JLScope {
         delegate.scope(self, didPerformInAttributedString: attributedString, parentIndexSet: parentIndexSet, resultIndexSet: indexSet)
         
         self.indexSet = indexSet
-        return indexSet
     }
 }

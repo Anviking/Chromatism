@@ -39,7 +39,7 @@ class JLScope {
         perform(attributedString, delegate: delegate, parentIndexSet: NSIndexSet(indexesInRange: NSMakeRange(0, attributedString.length)))
     }
     
-    func perform(attributedString: NSMutableAttributedString, delegate: JLScopeDelegate, parentIndexSet: NSIndexSet) -> NSIndexSet {
+    func perform(attributedString: NSMutableAttributedString, delegate: JLScopeDelegate, parentIndexSet: NSIndexSet) {
         
         // If the indexSet-property is set, intersect it with the parent scope index set.
         var indexSet: NSMutableIndexSet
@@ -55,8 +55,6 @@ class JLScope {
         performSubscopes(attributedString, delegate: delegate, indexSet: indexSetCopy)
         
         self.indexSet = indexSet
-        
-        return indexSet
     }
     
     // Will change indexSet
@@ -70,7 +68,8 @@ class JLScope {
         }
         
         for scope in subscopes {
-            indexSet.removeIndexes(scope.perform(attributedString, delegate: delegate, parentIndexSet: indexSet))
+            scope.perform(attributedString, delegate: delegate, parentIndexSet: indexSet)
+            indexSet.removeIndexes(scope.indexSet)
         }
     }
 }
