@@ -24,7 +24,7 @@ class JLScope {
     // Store the result-indexSet until next perform to calculate deltas
     // This may not be a good idea, and JLScope's use of this property is different, JLToken should
     // probably conform to a protocol instead of subclass JLScope, but it's inconvenient at the same time
-    var indexSet: NSIndexSet? {
+    var indexSet: NSMutableIndexSet = NSMutableIndexSet() {
     didSet  {
         let (additions, deletions) = NSIndexSetDelta(oldValue, indexSet)
     }

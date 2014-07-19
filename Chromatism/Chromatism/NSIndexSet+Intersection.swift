@@ -20,10 +20,7 @@ extension NSIndexSet {
     }
 }
 
-func NSIndexSetDelta(oldSet: NSIndexSet?, newSet: NSIndexSet?) -> (additions: NSMutableIndexSet, deletions: NSMutableIndexSet) {
-    var deletions: NSMutableIndexSet
-    var additions: NSMutableIndexSet
-    
+func NSIndexSetDelta(oldSet: NSIndexSet, newSet: NSIndexSet) -> (additions: NSMutableIndexSet, deletions: NSMutableIndexSet) {
     // Old: ABC
     // ∆(-)  B
     // ∆(+)    D
@@ -32,24 +29,9 @@ func NSIndexSetDelta(oldSet: NSIndexSet?, newSet: NSIndexSet?) -> (additions: NS
     // deletions = old - new
     // additions = new - old
     
-    // Since new and old values are optional, there are four possible cases
-    if let oldSet = oldSet {
-        if let newSet = newSet {
-            additions = newSet - oldSet
-            deletions = oldSet - newSet
-        } else {
-            additions = NSMutableIndexSet()
-            deletions = oldSet.mutableCopy() as NSMutableIndexSet
-        }
-    } else {
-        if let newSet = newSet {
-            additions = newSet.mutableCopy() as NSMutableIndexSet
-            deletions = NSMutableIndexSet()
-        } else {
-            additions = NSMutableIndexSet()
-            deletions = NSMutableIndexSet()
-        }
-    }
+    let additions = newSet - oldSet
+    let deletions = oldSet - newSet
+
     return (additions, deletions)
 }
 
