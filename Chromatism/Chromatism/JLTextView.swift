@@ -19,30 +19,45 @@ class JLTextView: UITextView {
     }
     }
     
-    init(frame: CGRect, tokenizer: JLTokenizer) {
+    init(tokenizer: JLTokenizer) {
         syntaxTokenizer = tokenizer
         language = tokenizer.language
+        let frame = CGRect.zeroRect
         super.init(frame: frame, textContainer: nil)
         self.textStorage.delegate = tokenizer
+        self.backgroundColor = syntaxTokenizer.colorDictionary[JLTokenType.Background]
+        self.font = UIFont(name: "Menlo-Regular", size: 15)
     }
     
-    convenience init(coder: NSCoder?) {
-        let frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-        let language = JLLanguage()
-        let tokenizer = JLTokenizer(language: language)
-        
-        self.init(frame: frame, tokenizer:  tokenizer)
+    override var attributedText: NSAttributedString! {
+    didSet {
+        self.syntaxTokenizer.tokenizeAttributedString(textStorage)
+    }
     }
     
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––
     
-
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect)
-    {
-        // Drawing code
+    func updateTypingAttributes() {
+        let color = syntaxTokenizer.colorDictionary[JLTokenType.Text]!
+        typingAttributes = [NSForegroundColorAttributeName: color, NSFontAttributeName: font]
     }
-    */
-
+    
+    override var text: String! {
+    didSet {
+        updateTypingAttributes()
+        attributedText = NSAttributedString(string: text, attributes: typingAttributes)
+    }
+    }
+    
+    override var textColor: UIColor! {
+    didSet {
+        updateTypingAttributes()
+    }
+    }
+    
+    override var font: UIFont! {
+    didSet {
+        updateTypingAttributes()
+    }
+    }
 }

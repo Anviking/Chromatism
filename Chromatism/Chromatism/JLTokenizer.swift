@@ -36,12 +36,9 @@ extension JLTokenizer: NSTextStorageDelegate {
     }
     
     func textStorage(textStorage: NSTextStorage!, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
-        if !(textStorage.editedMask & NSTextStorageEditActions.EditedAttributes) {
-            let editedLineRange = textStorage.string.bridgeToObjectiveC().lineRangeForRange(editedRange)
-            tokenizeAttributedString(textStorage, editedLineRange: editedLineRange)
-        }
+        let editedLineRange = textStorage.string.bridgeToObjectiveC().lineRangeForRange(editedRange)
+        tokenizeAttributedString(textStorage, editedLineRange: editedLineRange)
     }
-    
 }
 
 extension JLTokenizer: JLScopeDelegate {
@@ -49,6 +46,7 @@ extension JLTokenizer: JLScopeDelegate {
         if let token = scope as? JLToken {
             resultIndexSet.enumerateRangesUsingBlock({ (range, stop) in
                 if let color = self.colorDictionary[token.tokenType] {
+                    attributedString.removeAttribute(NSForegroundColorAttributeName, range: range)
                     attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                 }
                 })

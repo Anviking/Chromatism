@@ -23,6 +23,7 @@
 		8FCDBFF91978834D00F4B3EC /* JLTokenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */; };
 		8FCDBFFB1979615D00F4B3EC /* JLColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */; };
 		8FCDBFFD1979940200F4B3EC /* JLTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFC1979940200F4B3EC /* JLTextView.swift */; };
+		8FCDC00019799B6700F4B3EC /* JLTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTokenType.swift; sourceTree = "<group>"; };
 		8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLColorTheme.swift; sourceTree = "<group>"; };
 		8FCDBFFC1979940200F4B3EC /* JLTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTextView.swift; sourceTree = "<group>"; };
+		8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTextViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 				8FBFC18D197418E300F75A76 /* NSIndexSet+Intersection.swift */,
 				8FCDBFF419787AEA00F4B3EC /* JLTokenizer.swift */,
 				8FCDBFFC1979940200F4B3EC /* JLTextView.swift */,
+				8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */,
 				8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */,
 				8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */,
 				8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */,
@@ -243,6 +246,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FCDC00019799B6700F4B3EC /* JLTextViewController.swift in Sources */,
 				8F95989E197437BF002EA4AB /* JLToken.swift in Sources */,
 				8FCDBFFD1979940200F4B3EC /* JLTextView.swift in Sources */,
 				8FCDBFF91978834D00F4B3EC /* JLTokenType.swift in Sources */,
