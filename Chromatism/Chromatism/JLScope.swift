@@ -8,17 +8,19 @@
 
 import UIKit
 
-protocol JLScopeDelegate {
-    func scope(scope: JLScope, didPerformInAttributedString attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet, resultIndexSet: NSIndexSet)
-}
-
 class JLScope {
     
-    init() { }
-    init(scope: JLScope) {
+    init(colorDictionary: [JLTokenType: UIColor]) {
+        self.colorDictionary = colorDictionary
+    }
+    
+    convenience init(scope: JLScope) {
+        self.init(colorDictionary: scope.colorDictionary)
         scope.addSubscope(self)
     }
     
+    let colorDictionary: [JLTokenType: UIColor]
+    var multiline = false
     var editedIndexSet: NSIndexSet?
     
     // Store the result-indexSet until next perform to calculate deltas
@@ -35,11 +37,11 @@ class JLScope {
         self.subscopes += subscope
     }
     
-    func perform(attributedString: NSMutableAttributedString, delegate: JLScopeDelegate) {
-        perform(attributedString, delegate: delegate, parentIndexSet: NSIndexSet(indexesInRange: NSMakeRange(0, attributedString.length)))
+    func perform(attributedString: NSMutableAttributedString) {
+        perform(attributedString, parentIndexSet: NSIndexSet(indexesInRange: NSMakeRange(0, attributedString.length)))
     }
     
-    func perform(attributedString: NSMutableAttributedString, delegate: JLScopeDelegate, parentIndexSet: NSIndexSet) {
+    func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
         
         // If the indexSet-property is set, intersect it with the parent scope index set.
         var indexSet: NSMutableIndexSet
@@ -52,24 +54,20 @@ class JLScope {
         // Create a copy of the indexSet and call perform to subscopes
         // The results of the subscope is removed from the indexSet copy before the next subscope is performed
         let indexSetCopy = indexSet.mutableCopy() as NSMutableIndexSet
-        performSubscopes(attributedString, delegate: delegate, indexSet: indexSetCopy)
+        performSubscopes(attributedString, indexSet: indexSetCopy)
         
         self.indexSet = indexSet
     }
     
     // Will change indexSet
-    func performSubscopes(attributedString: NSMutableAttributedString, delegate: JLScopeDelegate, indexSet: NSMutableIndexSet) {
-        
-        var lookForDiffs = false
+    func performSubscopes(attributedString: NSMutableAttributedString, indexSet: NSMutableIndexSet) {
         for scope in subscopes {
-            if scope.editedIndexSet {
-                lookForDiffs = true
+            if scope.multiline {
+                scope.perform(attributedString, parentIndexSet: indexSet)
+            } else {
+                scope.perform(attributedString, parentIndexSet: indexSet)
+                indexSet.removeIndexes(scope.indexSet)
             }
-        }
-        
-        for scope in subscopes {
-            scope.perform(attributedString, delegate: delegate, parentIndexSet: indexSet)
-            indexSet.removeIndexes(scope.indexSet)
         }
     }
 }

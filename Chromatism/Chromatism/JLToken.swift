@@ -17,7 +17,8 @@ class JLToken: JLScope {
     init(regularExpression: NSRegularExpression, tokenType: JLTokenType, scope: JLScope) {
         self.regularExpression = regularExpression
         self.tokenType = tokenType
-        super.init(scope: scope)
+        super.init(colorDictionary: scope.colorDictionary)
+        scope.addSubscope(self)
     }
     
     convenience init(pattern: String, tokenType: JLTokenType, scope: JLScope) {
@@ -30,12 +31,15 @@ class JLToken: JLScope {
         self.contentCaptureGroup = contentCaptureGroup
     }
     
-    override func perform(attributedString: NSMutableAttributedString, delegate: JLScopeDelegate, parentIndexSet: NSIndexSet) {
+    override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
         let indexSet = NSMutableIndexSet()
         let contentIndexSet = NSMutableIndexSet()
         parentIndexSet.enumerateRangesUsingBlock({ (range, stop) in
             self.regularExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: {(result, flags, stop) in
                 let range = result.rangeAtIndex(self.captureGroup)
+                
+                attributedString.addAttribute(NSForegroundColorAttributeName, value: self.colorDictionary[self.tokenType], range: range)
+                
                 indexSet.addIndexesInRange(range)
                 if let captureGroup = self.contentCaptureGroup {
                     contentIndexSet.addIndexesInRange(result.rangeAtIndex(captureGroup))
@@ -44,11 +48,9 @@ class JLToken: JLScope {
             })
         
         if contentCaptureGroup {
-            performSubscopes(attributedString, delegate: delegate, indexSet: contentIndexSet)
+            performSubscopes(attributedString, indexSet: contentIndexSet)
             println(contentIndexSet)
         }
-        
-        delegate.scope(self, didPerformInAttributedString: attributedString, parentIndexSet: parentIndexSet, resultIndexSet: indexSet)
         
         self.indexSet = indexSet
     }

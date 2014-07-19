@@ -21,12 +21,12 @@ class JLTokenizer: NSObject {
     
     func tokenizeAttributedString(attributedString: NSMutableAttributedString) {
         language.lineScope.editedIndexSet = nil
-        language.documentScope.perform(attributedString, delegate: self)
+        language.documentScope.perform(attributedString)
     }
     
     func tokenizeAttributedString(attributedString: NSMutableAttributedString, editedLineRange: NSRange) {
         language.lineScope.editedIndexSet = NSIndexSet(indexesInRange: editedLineRange)
-        language.documentScope.perform(attributedString, delegate: self)
+        language.documentScope.perform(attributedString)
     }
 }
 
@@ -38,18 +38,5 @@ extension JLTokenizer: NSTextStorageDelegate {
     func textStorage(textStorage: NSTextStorage!, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
         let editedLineRange = textStorage.string.bridgeToObjectiveC().lineRangeForRange(editedRange)
         tokenizeAttributedString(textStorage, editedLineRange: editedLineRange)
-    }
-}
-
-extension JLTokenizer: JLScopeDelegate {
-    func scope(scope: JLScope, didPerformInAttributedString attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet, resultIndexSet: NSIndexSet)  {
-        if let token = scope as? JLToken {
-            resultIndexSet.enumerateRangesUsingBlock({ (range, stop) in
-                if let color = self.colorDictionary[token.tokenType] {
-                    attributedString.removeAttribute(NSForegroundColorAttributeName, range: range)
-                    attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
-                }
-                })
-        }
     }
 }

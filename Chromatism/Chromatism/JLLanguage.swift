@@ -8,15 +8,25 @@
 
 import UIKit
 
+
 class JLLanguage: NSObject, UITextViewDelegate {
-    let documentScope = JLScope()
-    let lineScope = JLScope()
+    let documentScope: JLScope
+    let lineScope: JLScope
+    
+    init(colorDictionary: [JLTokenType: UIColor]) {
+        documentScope = JLScope(colorDictionary: colorDictionary)
+        lineScope = JLScope(scope: documentScope)
+        super.init()
+    }
 }
 
 class JLCLanguage: JLLanguage {
-    init()  {
-        super.init()
-        JLToken(pattern: "//(.*)", tokenType: .Comment, scope: documentScope, contentCaptureGroup: 1)
+    init(colorDictionary: [JLTokenType : UIColor])   {
+        super.init(colorDictionary: colorDictionary)
+        JLToken(pattern: "//(.*)", tokenType: .Comment, scope: lineScope, contentCaptureGroup: 1)
+        let expression = NSRegularExpression.regularExpressionWithPattern("/\\*.*?\\*/", options:.DotMatchesLineSeparators, error: nil)
+        JLToken(regularExpression: expression, tokenType: .Comment, scope: documentScope)
+        JLToken(pattern: "self", tokenType: .Keyword, scope: lineScope)
     }
 }
 
