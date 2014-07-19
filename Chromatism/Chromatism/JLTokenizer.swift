@@ -20,12 +20,12 @@ class JLTokenizer: NSObject {
     }
     
     func tokenizeAttributedString(attributedString: NSMutableAttributedString) {
-        language.lineScope.indexSet = nil
+        language.lineScope.editedIndexSet = nil
         language.documentScope.perform(attributedString, delegate: self)
     }
     
     func tokenizeAttributedString(attributedString: NSMutableAttributedString, editedLineRange: NSRange) {
-        language.lineScope.indexSet = NSIndexSet(indexesInRange: editedLineRange)
+        language.lineScope.editedIndexSet = NSIndexSet(indexesInRange: editedLineRange)
         language.documentScope.perform(attributedString, delegate: self)
     }
 }
