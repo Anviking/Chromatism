@@ -11,7 +11,7 @@ import XCTest
 
 class JLTokenTests: XCTestCase {
     
-    var attributedString = NSMutableAttributedString(string: "//Hello World!\nHello", attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.systemFontOfSize(15)])
+    var attributedString = "//Hello World!\nHello".text
     let commentColor = JLColorTheme.Default.dictionary[.Comment]!
     let worldColor = JLColorTheme.Default.dictionary[.Keyword]!
     
@@ -32,11 +32,8 @@ class JLTokenTests: XCTestCase {
     }
 
     func testContentCaptureGroup() {
-        let tester = NSAttributedStringTester(attributedString: attributedString)
-        tester.expect("//Hello ", toHaveColor: commentColor)
-        tester.expect("World", toHaveColor: worldColor)
-        tester.expect("!", toHaveColor: commentColor)
-        tester.expect("\nHello", toHaveColor: UIColor.blackColor())
+        let expectedString = "//Hello ".comment + "World".keyword + "!".comment + "\nHello".text
+        XCTAssertEqualObjects(expectedString, attributedString)
     }
 
     func testTokenizationPerformance() {
@@ -46,49 +43,4 @@ class JLTokenTests: XCTestCase {
         }
     }
 
-}
-
-extension NSAttributedString {
-    func expect(theme: JLColorTheme, expectations: [(string: String, tokenType: JLTokenType)]) {
-        let tester = NSAttributedStringTester(attributedString: self)
-        tester.expect(expectations, theme: theme)
-    }
-}
-
-class NSAttributedStringTester {
-    init(attributedString: NSAttributedString) {
-        self.attributedString = attributedString
-    }
-    
-    var index = 0
-    var attributedString: NSAttributedString
-    
-    func expect(expectations: [(string: String, tokenType: JLTokenType)], theme: JLColorTheme) {
-        let dictionary = theme.dictionary
-        for (string, tokenType) in expectations {
-            expect(string, toHaveColor: dictionary[tokenType]!)
-        }
-    }
-    
-    func expect(string: String, toHaveColor color: UIColor) {
-                println("Index: \(index)")
-        println("String:\(attributedString.string)")
-        println("Other Range: \(NSMakeRange(index, attributedString.length-index))")
-        let range = attributedString.string.bridgeToObjectiveC().rangeOfString(string, options: nil, range: NSMakeRange(index, attributedString.length-index))
-        if range.location == NSNotFound {
-            XCTFail("Could not find:\"\(string)\" in attributed string")
-        }
-        println("Range:\(range)")
-        expect(range, toHaveColor: color)
-        index = NSMaxRange(range)
-    }
-    
-    func expect(range: NSRange, toHaveColor color: UIColor) {
-        var effectiveRangePointer = NSRangePointer.alloc(sizeof(NSRange))
-        XCTAssertEqualObjects(attributedString.attribute(NSForegroundColorAttributeName, atIndex: index, effectiveRange: effectiveRangePointer) as UIColor, color, "")
-        
-        let effectiveRange = effectiveRangePointer.memory
-        let value = NSEqualRanges(effectiveRange, range)
-        XCTAssertTrue(value, "range: \(range) and effectiveRange: \(effectiveRange) are not equal")
-    }
 }

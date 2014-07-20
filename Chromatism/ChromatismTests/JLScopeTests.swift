@@ -25,9 +25,11 @@ class JLScopeTests: XCTestCase {
     }
     
     func testLaziness() {
-        var attributedString = NSMutableAttributedString(string: "[Hello World]")
+        var attributedString = "[Hello World]".text
         let colors = JLColorTheme.Default.dictionary
         let documentScope = JLScope()
+        
+        // Setup scopes
         documentScope.colorDictionary = colors
         JLToken(pattern: "\\[.*\\]", tokenType: .Comment, scope: documentScope)
         
@@ -36,13 +38,11 @@ class JLScopeTests: XCTestCase {
         JLToken(pattern: "World", tokenType: .Keyword, scope: lineScope)
         
         documentScope.perform(attributedString)
-        attributedString.expect(.Default, expectations:[("[Hello World]", .Comment)])
+        XCTAssertEqualObjects("[Hello World]".comment, attributedString)
         
         attributedString.deleteCharactersInRange(NSMakeRange(attributedString.length - 1, 1))
-        
         documentScope.perform(attributedString)
-        
-        attributedString.expect(.Default, expectations:[("[Hello ", .Text), ("World", .Keyword)])
+        XCTAssertEqualObjects("[Hello ".text + "World".keyword, attributedString)
         
     }
 
@@ -53,4 +53,22 @@ class JLScopeTests: XCTestCase {
         }
     }
 
+}
+
+extension String {
+    // I'm lazy
+    var comment: NSMutableAttributedString { return attributedStringWithTokenType(.Comment) }
+    var text: NSMutableAttributedString { return attributedStringWithTokenType(.Text) }
+    var keyword: NSMutableAttributedString { return attributedStringWithTokenType(.Keyword) }
+    
+    func attributedStringWithTokenType(token: JLTokenType) -> NSMutableAttributedString {
+        let colors = JLColorTheme.Default.dictionary
+        return NSMutableAttributedString(string: self, attributes: [NSForegroundColorAttributeName:colors[token]! ])
+    }
+}
+
+@infix func + (left: NSAttributedString, right: NSAttributedString) -> NSMutableAttributedString {
+    let string = left.mutableCopy() as NSMutableAttributedString
+    string.appendAttributedString(right)
+    return string
 }
