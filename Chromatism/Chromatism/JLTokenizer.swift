@@ -28,9 +28,8 @@ class JLTokenizer: NSObject {
         self.lineScope = lineScope
     }
     
-    convenience init(language: JLLanguageType, theme: JLColorTheme) {
-        let dataSource = language.languageObject
-        self.init(colorDictionary: theme.dictionary, documentScope: dataSource.documentScope, lineScope: dataSource.lineScope)
+    convenience init(language: JLLanguage, theme: JLColorTheme) {
+        self.init(colorDictionary: theme.dictionary, documentScope: language.documentScope, lineScope: language.lineScope)
     }
 
     func tokenizeAttributedString(attributedString: NSMutableAttributedString) {

@@ -14,30 +14,29 @@ class JLToken: JLScope {
     var contentCaptureGroup: Int?
     var tokenType: JLTokenType
     
-    init(regularExpression: NSRegularExpression, tokenType: JLTokenType, scope: JLScope) {
+    init(regularExpression: NSRegularExpression, tokenType: JLTokenType) {
         self.regularExpression = regularExpression
         self.tokenType = tokenType
         super.init()
-        scope.addSubscope(self)
     }
     
-    convenience init(pattern: String, tokenType: JLTokenType, scope: JLScope) {
-        self.init(pattern: pattern, options: .AnchorsMatchLines, tokenType: tokenType, scope: scope)
+    convenience init(pattern: String, tokenType: JLTokenType) {
+        self.init(pattern: pattern, options: .AnchorsMatchLines, tokenType: tokenType)
     }
     
-    convenience init(pattern: String, options: NSRegularExpressionOptions, tokenType: JLTokenType, scope: JLScope) {
+    convenience init(pattern: String, options: NSRegularExpressionOptions, tokenType: JLTokenType) {
         let expression = NSRegularExpression(pattern: pattern, options: options, error: nil)
-        self.init(regularExpression: expression, tokenType: tokenType, scope: scope)
+        self.init(regularExpression: expression, tokenType: tokenType)
     }
     
     convenience init(pattern: String, tokenType: JLTokenType, scope: JLScope, contentCaptureGroup: Int) {
-        self.init(pattern: pattern, tokenType: tokenType, scope: scope)
+        self.init(pattern: pattern, tokenType: tokenType)
         self.contentCaptureGroup = contentCaptureGroup
     }
     
-    convenience init(keywords: [String], tokenType: JLTokenType, scope: JLScope) {
+    convenience init(keywords: [String], tokenType: JLTokenType) {
         let pattern = "\\b(%" + join("|", keywords) + ")\\b"
-        self.init(pattern: pattern, tokenType: tokenType, scope: scope)
+        self.init(pattern: pattern, tokenType: tokenType)
     }
     
     override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
