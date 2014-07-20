@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JLScope: NSObject {
+class JLScope: NSObject, Printable {
     
     init() {
         super.init()
@@ -49,6 +49,7 @@ class JLScope: NSObject {
         var indexSet: NSMutableIndexSet
         if let editedIndexSet = self.editedIndexSet {
             indexSet = editedIndexSet.intersectionWithSet(parentIndexSet)
+            println("Scope with parentIndexSet: \(parentIndexSet), editedLineIndexSet: \(editedIndexSet) is merging to indexSet: \(indexSet)")
         } else {
             indexSet = parentIndexSet.mutableCopy() as NSMutableIndexSet
         }
@@ -79,5 +80,10 @@ class JLScope: NSObject {
                 indexSet.removeIndexes(scope.indexSet)
             }
         }
+    }
+    
+    // Printable
+    override var description: String {
+    return "JLScope"
     }
 }

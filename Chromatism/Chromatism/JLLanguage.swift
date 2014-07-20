@@ -14,8 +14,7 @@ class JLLanguage: NSObject, UITextViewDelegate {
     
     init() {
         documentScope = JLScope()
-        lineScope = JLScope(scope: documentScope)
-        lineScope.clearWithTextColorBeforePerform = true
+        lineScope = JLScope()
         super.init()
     }
 }
@@ -27,6 +26,9 @@ class JLCLanguage: JLLanguage {
         let expression = NSRegularExpression.regularExpressionWithPattern("/\\*.*?\\*/", options:.DotMatchesLineSeparators, error: nil)
         JLToken(regularExpression: expression, tokenType: .Comment, scope: documentScope)
         JLToken(pattern: "self", tokenType: .Keyword, scope: lineScope)
+        
+        lineScope.clearWithTextColorBeforePerform = true
+        documentScope.addSubscope(lineScope)
     }
 }
 
