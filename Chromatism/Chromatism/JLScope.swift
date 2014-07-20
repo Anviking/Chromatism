@@ -25,14 +25,7 @@ class JLScope: NSObject, Printable {
     // Will set the color to .Text in this scope's parentIndexSet before performing.
     var clearWithTextColorBeforePerform = false
     
-    // Store the result-indexSet until next perform to calculate deltas
-    // This may not be a good idea, and JLScope's use of this property is different, JLToken should
-    // probably conform to a protocol instead of subclass JLScope, but it's inconvenient at the same time
-    var indexSet: NSMutableIndexSet = NSMutableIndexSet() {
-    didSet  {
-        let (additions, deletions) = NSIndexSetDelta(oldValue, indexSet)
-    }
-    }
+    var indexSet = NSMutableIndexSet()
     var subscopes = [JLScope]()
     
     func addSubscope(subscope: JLScope) {
@@ -51,7 +44,6 @@ class JLScope: NSObject, Printable {
                 attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                 })
         }
-        
         // Create a copy of the indexSet and call perform to subscopes
         // The results of the subscope is removed from the indexSet copy before the next subscope is performed
         let indexSetCopy = parentIndexSet.mutableCopy() as NSMutableIndexSet
@@ -63,24 +55,16 @@ class JLScope: NSObject, Printable {
     // Will change indexSet
     func performSubscopes(attributedString: NSMutableAttributedString, indexSet: NSMutableIndexSet) {
         
-        // In advance, see if we have to calculate deltas
-        // If a scope is lazily evaluated with a editedIndexSet, it needs to listed
-        var calculateDelta = false
-        for scope in subscopes {
-            if scope.editedIndexSet {
-                calculateDelta = true
-                break
-            }
-        }
+        // If a subscope is "lazy" (has a set editedIndexSet), we must check sibling scopes for deletions.
+        // If "*/" is removed, the comment token will not match, and we see that some indexes where deleted for that token.
+        // Then we just tell the "lazy" scope to perform in those indexes
         
         var deletions = NSMutableIndexSet()
-        
         for (index, scope) in enumerate(subscopes) {
             scope.colorDictionary = colorDictionary
-            if calculateDelta {
+            if containsSubscopeWithEditedIndexSet {
                 if let editedIndexSet = scope.editedIndexSet {
                     let set = indexSet.intersectionWithSet(editedIndexSet) + deletions
-                    println("set: \(set)")
                     scope.perform(attributedString, parentIndexSet: set)
                     indexSet -= scope.indexSet
                 } else {
@@ -89,13 +73,21 @@ class JLScope: NSObject, Printable {
                     var newSet = scope.indexSet
                     indexSet -= newSet
                     deletions += NSIndexSetDelta(oldSet, newSet).deletions
-                    println("Deletions: \(deletions)")
                 }
             } else {
                 scope.perform(attributedString, parentIndexSet: indexSet)
                 indexSet -= scope.indexSet
             }
         }
+    }
+    
+    var containsSubscopeWithEditedIndexSet: Bool {
+        for scope in subscopes {
+            if scope.editedIndexSet {
+                return true
+            }
+        }
+        return false
     }
     
     // Printable
