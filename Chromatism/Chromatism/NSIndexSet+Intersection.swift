@@ -46,3 +46,11 @@ func NSIndexSetDelta(oldSet: NSIndexSet, newSet: NSIndexSet) -> (additions: NSMu
     indexSet.addIndexes(right)
     return indexSet
 }
+
+@infix func -=(left: NSMutableIndexSet, right: NSMutableIndexSet) {
+    left.removeIndexes(right)
+}
+
+@infix func +=(left: NSMutableIndexSet, right: NSMutableIndexSet) {
+    left.addIndexes(right)
+}
