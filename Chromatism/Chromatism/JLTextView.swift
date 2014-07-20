@@ -11,8 +11,8 @@ import UIKit
 class JLTextView: UITextView {
     
     var syntaxTokenizer: JLTokenizer { didSet{ self.textStorage.delegate = syntaxTokenizer }}
-    var language: JLLanguage { didSet{
-        let dataSource = language.languageDataSource
+    var language: JLLanguageType { didSet{
+        let dataSource = language.languageObject
         syntaxTokenizer.documentScope = dataSource.documentScope
         syntaxTokenizer.lineScope = dataSource.lineScope
     }}
@@ -22,10 +22,11 @@ class JLTextView: UITextView {
         syntaxTokenizer.colorDictionary = theme.dictionary
     }}
     
-    init(language: JLLanguage, theme: JLColorTheme) {
+    init(language: JLLanguageType, theme: JLColorTheme) {
         self.language = language
         self.theme = theme
-        self.syntaxTokenizer = JLTokenizer(colorDictionary: theme.dictionary, languageDataSource: language.languageDataSource)
+        let language = language.languageObject
+        self.syntaxTokenizer = JLTokenizer(colorDictionary: theme.dictionary, documentScope: language.documentScope, lineScope: language.lineScope)
         
         let frame = CGRect.zeroRect
         super.init(frame: frame, textContainer: nil)

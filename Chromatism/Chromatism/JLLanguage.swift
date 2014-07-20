@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JLLanguageDataSource: NSObject, UITextViewDelegate {
+class JLLanguage: NSObject, UITextViewDelegate {
     let documentScope: JLScope
     let lineScope: JLScope
     
@@ -20,7 +20,7 @@ class JLLanguageDataSource: NSObject, UITextViewDelegate {
     }
 }
 
-class JLCLanguageDataSource: JLLanguageDataSource {
+class JLCLanguage: JLLanguage {
     init()   {
         super.init()
         JLToken(pattern: "//(.*)", tokenType: .Comment, scope: lineScope, contentCaptureGroup: 1)
@@ -30,13 +30,13 @@ class JLCLanguageDataSource: JLLanguageDataSource {
     }
 }
 
-enum JLLanguage  {
+enum JLLanguageType  {
     case C
     
-    var languageDataSource: JLLanguageDataSource {
+    var languageObject: JLLanguage {
     switch self {
     case C:
-        return JLCLanguageDataSource()
+        return JLCLanguage()
     default:
         break
         }

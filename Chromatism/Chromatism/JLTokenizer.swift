@@ -8,11 +8,6 @@
 
 import UIKit
 
-protocol JLTokenizerScopeDataSource {
-    var documentScope: JLScope {get}
-    var lineScope: JLScope {get}
-}
-
 class JLTokenizer: NSObject {
     
     var documentScope: JLScope
@@ -33,12 +28,8 @@ class JLTokenizer: NSObject {
         self.lineScope = lineScope
     }
     
-    convenience init (colorDictionary: Dictionary<JLTokenType, UIColor>, languageDataSource: JLLanguageDataSource) {
-        self.init(colorDictionary: colorDictionary, documentScope: languageDataSource.documentScope, lineScope: languageDataSource.lineScope)
-    }
-    
-    convenience init(language: JLLanguage, theme: JLColorTheme) {
-        let dataSource = language.languageDataSource
+    convenience init(language: JLLanguageType, theme: JLColorTheme) {
+        let dataSource = language.languageObject
         self.init(colorDictionary: theme.dictionary, documentScope: dataSource.documentScope, lineScope: dataSource.lineScope)
     }
 
