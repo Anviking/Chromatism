@@ -12,8 +12,8 @@ class JLTextViewController: UIViewController {
     
     var textView: JLTextView
     
-    init(text: String, tokenizer: JLTokenizer) {
-        textView = JLTextView(tokenizer: tokenizer)
+    init(text: String, language: JLLanguage, theme: JLColorTheme) {
+        textView = JLTextView(language: language, theme: theme)
         textView.text = text
         super.init(nibName: nil, bundle: nil)
     }

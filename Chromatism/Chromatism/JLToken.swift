@@ -17,7 +17,7 @@ class JLToken: JLScope {
     init(regularExpression: NSRegularExpression, tokenType: JLTokenType, scope: JLScope) {
         self.regularExpression = regularExpression
         self.tokenType = tokenType
-        super.init(colorDictionary: scope.colorDictionary)
+        super.init()
         scope.addSubscope(self)
     }
     
@@ -38,7 +38,9 @@ class JLToken: JLScope {
             self.regularExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: {(result, flags, stop) in
                 let range = result.rangeAtIndex(self.captureGroup)
                 
-                attributedString.addAttribute(NSForegroundColorAttributeName, value: self.colorDictionary[self.tokenType], range: range)
+                if let color = self.colorDictionary?[self.tokenType] {
+                    attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+                }
                 
                 indexSet.addIndexesInRange(range)
                 if let captureGroup = self.contentCaptureGroup {

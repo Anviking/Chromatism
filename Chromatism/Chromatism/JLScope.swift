@@ -8,20 +8,23 @@
 
 import UIKit
 
-class JLScope {
+class JLScope: NSObject {
     
-    init(colorDictionary: [JLTokenType: UIColor]) {
-        self.colorDictionary = colorDictionary
+    init() {
+        super.init()
     }
     
-    convenience init(scope: JLScope) {
-        self.init(colorDictionary: scope.colorDictionary)
+    init(scope: JLScope) {
+        super.init()
         scope.addSubscope(self)
     }
     
-    let colorDictionary: [JLTokenType: UIColor]
+    var colorDictionary: Dictionary<JLTokenType, UIColor>?
     var multiline = false
     var editedIndexSet: NSIndexSet?
+    
+    // Will set the color to .Text in this scope's parentIndexSet before performing.
+    var clearWithTextColorBeforePerform = false
     
     // Store the result-indexSet until next perform to calculate deltas
     // This may not be a good idea, and JLScope's use of this property is different, JLToken should
@@ -31,7 +34,7 @@ class JLScope {
         let (additions, deletions) = NSIndexSetDelta(oldValue, indexSet)
     }
     }
-    var subscopes: [JLScope] = []
+    var subscopes = [JLScope]()
     
     func addSubscope(subscope: JLScope) {
         self.subscopes += subscope
@@ -42,13 +45,19 @@ class JLScope {
     }
     
     func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
-        
         // If the indexSet-property is set, intersect it with the parent scope index set.
         var indexSet: NSMutableIndexSet
         if let editedIndexSet = self.editedIndexSet {
             indexSet = editedIndexSet.intersectionWithSet(parentIndexSet)
         } else {
             indexSet = parentIndexSet.mutableCopy() as NSMutableIndexSet
+        }
+        
+        if clearWithTextColorBeforePerform {
+            indexSet.enumerateRangesUsingBlock({(range, stop) in
+                let color = self.colorDictionary?[.Text]
+                attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+                })
         }
         
         // Create a copy of the indexSet and call perform to subscopes
@@ -62,6 +71,7 @@ class JLScope {
     // Will change indexSet
     func performSubscopes(attributedString: NSMutableAttributedString, indexSet: NSMutableIndexSet) {
         for scope in subscopes {
+            scope.colorDictionary = colorDictionary
             if scope.multiline {
                 scope.perform(attributedString, parentIndexSet: indexSet)
             } else {

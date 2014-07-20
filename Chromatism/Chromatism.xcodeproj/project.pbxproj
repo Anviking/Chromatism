@@ -7,23 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8F95989E197437BF002EA4AB /* JLToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F95989D197437BF002EA4AB /* JLToken.swift */; };
 		8F9598A2197448B4002EA4AB /* JLTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9598A1197448B4002EA4AB /* JLTokenTests.swift */; };
 		8F9598A3197448CA002EA4AB /* JLToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F95989D197437BF002EA4AB /* JLToken.swift */; };
 		8FBFC17519738B0400F75A76 /* Chromatism.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FBFC17419738B0400F75A76 /* Chromatism.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8FBFC17B19738B0400F75A76 /* Chromatism.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FBFC16F19738B0400F75A76 /* Chromatism.framework */; };
 		8FBFC18219738B0400F75A76 /* ChromatismTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18119738B0400F75A76 /* ChromatismTests.swift */; };
-		8FBFC18C19738B7900F75A76 /* JLScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18B19738B7900F75A76 /* JLScope.swift */; };
 		8FBFC18E197418E300F75A76 /* NSIndexSet+Intersection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18D197418E300F75A76 /* NSIndexSet+Intersection.swift */; };
 		8FBFC18F1974190A00F75A76 /* JLScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18B19738B7900F75A76 /* JLScope.swift */; };
 		8FBFC1901974190D00F75A76 /* NSIndexSet+Intersection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18D197418E300F75A76 /* NSIndexSet+Intersection.swift */; };
 		8FBFC19219741B6B00F75A76 /* JLScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */; };
-		8FCDBFF519787AEA00F4B3EC /* JLTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF419787AEA00F4B3EC /* JLTokenizer.swift */; };
-		8FCDBFF719787C7C00F4B3EC /* JLLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */; };
 		8FCDBFF91978834D00F4B3EC /* JLTokenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */; };
 		8FCDBFFB1979615D00F4B3EC /* JLColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */; };
-		8FCDBFFD1979940200F4B3EC /* JLTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFC1979940200F4B3EC /* JLTextView.swift */; };
-		8FCDC00019799B6700F4B3EC /* JLTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */; };
+		8FE1291B197B1D5D0084E506 /* JLScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18B19738B7900F75A76 /* JLScope.swift */; };
+		8FE1291C197B21900084E506 /* JLToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F95989D197437BF002EA4AB /* JLToken.swift */; };
+		8FE1291D197B21900084E506 /* JLTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF419787AEA00F4B3EC /* JLTokenizer.swift */; };
+		8FE1291E197B21900084E506 /* JLTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFC1979940200F4B3EC /* JLTextView.swift */; };
+		8FE1291F197B21900084E506 /* JLTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */; };
+		8FE12920197B21900084E506 /* JLLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -246,15 +246,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FCDC00019799B6700F4B3EC /* JLTextViewController.swift in Sources */,
-				8F95989E197437BF002EA4AB /* JLToken.swift in Sources */,
-				8FCDBFFD1979940200F4B3EC /* JLTextView.swift in Sources */,
+				8FE1291E197B21900084E506 /* JLTextView.swift in Sources */,
+				8FE1291B197B1D5D0084E506 /* JLScope.swift in Sources */,
+				8FE12920197B21900084E506 /* JLLanguage.swift in Sources */,
 				8FCDBFF91978834D00F4B3EC /* JLTokenType.swift in Sources */,
-				8FCDBFF519787AEA00F4B3EC /* JLTokenizer.swift in Sources */,
-				8FBFC18C19738B7900F75A76 /* JLScope.swift in Sources */,
 				8FCDBFFB1979615D00F4B3EC /* JLColorTheme.swift in Sources */,
 				8FBFC18E197418E300F75A76 /* NSIndexSet+Intersection.swift in Sources */,
-				8FCDBFF719787C7C00F4B3EC /* JLLanguage.swift in Sources */,
+				8FE1291C197B21900084E506 /* JLToken.swift in Sources */,
+				8FE1291D197B21900084E506 /* JLTokenizer.swift in Sources */,
+				8FE1291F197B21900084E506 /* JLTextViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

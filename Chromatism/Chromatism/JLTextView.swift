@@ -11,20 +11,25 @@ import UIKit
 class JLTextView: UITextView {
     
     var syntaxTokenizer: JLTokenizer { didSet{ self.textStorage.delegate = syntaxTokenizer }}
-    var language: JLLanguage { didSet{ syntaxTokenizer.language = language }}
-    var theme: JLColorTheme = JLColorTheme.Default {
+    var language: JLLanguage { didSet{
+        let dataSource = language.languageDataSource
+        syntaxTokenizer.documentScope = dataSource.documentScope
+        syntaxTokenizer.lineScope = dataSource.lineScope
+    }}
+    var theme: JLColorTheme {
     didSet {
+        backgroundColor = syntaxTokenizer.colorDictionary[JLTokenType.Background]
         syntaxTokenizer.colorDictionary = theme.dictionary
-        self.backgroundColor = syntaxTokenizer.colorDictionary[JLTokenType.Background]
-    }
-    }
+    }}
     
-    init(tokenizer: JLTokenizer) {
-        syntaxTokenizer = tokenizer
-        language = tokenizer.language
+    init(language: JLLanguage, theme: JLColorTheme) {
+        self.language = language
+        self.theme = theme
+        self.syntaxTokenizer = JLTokenizer(colorDictionary: theme.dictionary, languageDataSource: language.languageDataSource)
+        
         let frame = CGRect.zeroRect
         super.init(frame: frame, textContainer: nil)
-        self.textStorage.delegate = tokenizer
+        self.textStorage.delegate = syntaxTokenizer
         self.backgroundColor = syntaxTokenizer.colorDictionary[JLTokenType.Background]
         self.font = UIFont(name: "Menlo-Regular", size: 15)
     }
