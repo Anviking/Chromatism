@@ -12,17 +12,18 @@ import XCTest
 class JLTokenTests: XCTestCase {
     
     var attributedString = NSMutableAttributedString(string: "//Hello World!\nHello", attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.systemFontOfSize(15)])
-    let commentColor = UIColor.greenColor()
-    let worldColor = UIColor.blueColor()
+    let commentColor = JLColorTheme.Default.dictionary[.Comment]!
+    let worldColor = JLColorTheme.Default.dictionary[.Keyword]!
     
 
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        let documentScope = JLScope(attributedString: attributedString)
-        let comment = JLToken(pattern: "//(.*)", color: commentColor, scope: documentScope, contentCaptureGroup: 1)
-        let world = JLToken(pattern: "World", color: worldColor, scope: comment)
-        documentScope.perform()
+        let documentScope = JLScope()
+        documentScope.colorDictionary = JLColorTheme.Default.dictionary
+        let comment = JLToken(pattern: "//(.*)", tokenType: .Comment, scope: documentScope, contentCaptureGroup: 1)
+        let world = JLToken(pattern: "World", tokenType: .Keyword, scope: comment)
+        documentScope.perform(attributedString)
     }
     
     override func tearDown() {
@@ -47,6 +48,13 @@ class JLTokenTests: XCTestCase {
 
 }
 
+extension NSAttributedString {
+    func expect(theme: JLColorTheme, expectations: [(string: String, tokenType: JLTokenType)]) {
+        let tester = NSAttributedStringTester(attributedString: self)
+        tester.expect(expectations, theme: theme)
+    }
+}
+
 class NSAttributedStringTester {
     init(attributedString: NSAttributedString) {
         self.attributedString = attributedString
@@ -54,6 +62,14 @@ class NSAttributedStringTester {
     
     var index = 0
     var attributedString: NSAttributedString
+    
+    func expect(expectations: [(string: String, tokenType: JLTokenType)], theme: JLColorTheme) {
+        let dictionary = theme.dictionary
+        for (string, tokenType) in expectations {
+            expect(string, toHaveColor: dictionary[tokenType]!)
+        }
+    }
+    
     func expect(string: String, toHaveColor color: UIColor) {
                 println("Index: \(index)")
         println("String:\(attributedString.string)")
