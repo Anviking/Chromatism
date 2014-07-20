@@ -20,7 +20,6 @@ class JLScope: NSObject, Printable {
     }
     
     var colorDictionary: Dictionary<JLTokenType, UIColor>?
-    var multiline = false
     var editedIndexSet: NSIndexSet?
     
     // Will set the color to .Text in this scope's parentIndexSet before performing.
@@ -45,17 +44,9 @@ class JLScope: NSObject, Printable {
     }
     
     func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
-        // If the indexSet-property is set, intersect it with the parent scope index set.
-        var indexSet: NSMutableIndexSet
-        if let editedIndexSet = self.editedIndexSet {
-            indexSet = editedIndexSet.intersectionWithSet(parentIndexSet)
-            println("Scope with parentIndexSet: \(parentIndexSet), editedLineIndexSet: \(editedIndexSet) is merging to indexSet: \(indexSet)")
-        } else {
-            indexSet = parentIndexSet.mutableCopy() as NSMutableIndexSet
-        }
         
         if clearWithTextColorBeforePerform {
-            indexSet.enumerateRangesUsingBlock({(range, stop) in
+            parentIndexSet.enumerateRangesUsingBlock({(range, stop) in
                 let color = self.colorDictionary?[.Text]
                 attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                 })
@@ -63,21 +54,46 @@ class JLScope: NSObject, Printable {
         
         // Create a copy of the indexSet and call perform to subscopes
         // The results of the subscope is removed from the indexSet copy before the next subscope is performed
-        let indexSetCopy = indexSet.mutableCopy() as NSMutableIndexSet
+        let indexSetCopy = parentIndexSet.mutableCopy() as NSMutableIndexSet
         performSubscopes(attributedString, indexSet: indexSetCopy)
         
-        self.indexSet = indexSet
+        self.indexSet = parentIndexSet.mutableCopy() as NSMutableIndexSet
     }
     
     // Will change indexSet
     func performSubscopes(attributedString: NSMutableAttributedString, indexSet: NSMutableIndexSet) {
+        
+        // In advance, see if we have to calculate deltas
+        // If a scope is lazily evaluated with a editedIndexSet, it needs to listed
+        var calculateDelta = false
         for scope in subscopes {
+            if scope.editedIndexSet {
+                calculateDelta = true
+                break
+            }
+        }
+        
+        var deletions = NSMutableIndexSet()
+        
+        for (index, scope) in enumerate(subscopes) {
             scope.colorDictionary = colorDictionary
-            if scope.multiline {
-                scope.perform(attributedString, parentIndexSet: indexSet)
+            if calculateDelta {
+                if let editedIndexSet = scope.editedIndexSet {
+                    let set = indexSet.intersectionWithSet(editedIndexSet) + deletions
+                    println("set: \(set)")
+                    scope.perform(attributedString, parentIndexSet: set)
+                    indexSet -= scope.indexSet
+                } else {
+                    var oldSet = scope.indexSet
+                    scope.perform(attributedString, parentIndexSet: indexSet)
+                    var newSet = scope.indexSet
+                    indexSet -= newSet
+                    deletions += NSIndexSetDelta(oldSet, newSet).deletions
+                    println("Deletions: \(deletions)")
+                }
             } else {
                 scope.perform(attributedString, parentIndexSet: indexSet)
-                indexSet.removeIndexes(scope.indexSet)
+                indexSet -= scope.indexSet
             }
         }
     }

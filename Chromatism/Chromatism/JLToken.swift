@@ -34,7 +34,6 @@ class JLToken: JLScope {
     override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
         let indexSet = NSMutableIndexSet()
         let contentIndexSet = NSMutableIndexSet()
-        println("Token performing in indexes: \(parentIndexSet)")
         parentIndexSet.enumerateRangesUsingBlock({ (range, stop) in
             self.regularExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: {(result, flags, stop) in
                 let range = result.rangeAtIndex(self.captureGroup)
