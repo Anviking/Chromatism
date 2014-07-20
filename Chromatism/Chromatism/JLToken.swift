@@ -22,13 +22,22 @@ class JLToken: JLScope {
     }
     
     convenience init(pattern: String, tokenType: JLTokenType, scope: JLScope) {
-        let expression = NSRegularExpression(pattern: pattern, options: .AnchorsMatchLines, error: nil)
+        self.init(pattern: pattern, options: .AnchorsMatchLines, tokenType: tokenType, scope: scope)
+    }
+    
+    convenience init(pattern: String, options: NSRegularExpressionOptions, tokenType: JLTokenType, scope: JLScope) {
+        let expression = NSRegularExpression(pattern: pattern, options: options, error: nil)
         self.init(regularExpression: expression, tokenType: tokenType, scope: scope)
     }
     
     convenience init(pattern: String, tokenType: JLTokenType, scope: JLScope, contentCaptureGroup: Int) {
         self.init(pattern: pattern, tokenType: tokenType, scope: scope)
         self.contentCaptureGroup = contentCaptureGroup
+    }
+    
+    convenience init(keywords: [String], tokenType: JLTokenType, scope: JLScope) {
+        let pattern = "\\b(%" + join("|", keywords) + ")\\b"
+        self.init(pattern: pattern, tokenType: tokenType, scope: scope)
     }
     
     override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
