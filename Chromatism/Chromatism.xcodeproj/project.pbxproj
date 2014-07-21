@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8F311E84197C6DA20030B553 /* JLLanguageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F311E83197C6DA20030B553 /* JLLanguageType.swift */; };
+		8F311E86197C8F040030B553 /* JLLanguageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F311E85197C8F040030B553 /* JLLanguageTests.swift */; };
 		8F9598A2197448B4002EA4AB /* JLTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9598A1197448B4002EA4AB /* JLTokenTests.swift */; };
 		8F9598A3197448CA002EA4AB /* JLToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F95989D197437BF002EA4AB /* JLToken.swift */; };
 		8FB33CB7197C2621004F6A02 /* JLDocumentScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE12922197B5D780084E506 /* JLDocumentScope.swift */; };
@@ -49,6 +50,7 @@
 
 /* Begin PBXFileReference section */
 		8F311E83197C6DA20030B553 /* JLLanguageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLLanguageType.swift; sourceTree = "<group>"; };
+		8F311E85197C8F040030B553 /* JLLanguageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLLanguageTests.swift; sourceTree = "<group>"; };
 		8F95989D197437BF002EA4AB /* JLToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLToken.swift; sourceTree = "<group>"; };
 		8F9598A1197448B4002EA4AB /* JLTokenTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTokenTests.swift; sourceTree = "<group>"; };
 		8FBFC16F19738B0400F75A76 /* Chromatism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Chromatism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -142,6 +144,7 @@
 				8FBFC18119738B0400F75A76 /* ChromatismTests.swift */,
 				8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */,
 				8F9598A1197448B4002EA4AB /* JLTokenTests.swift */,
+				8F311E85197C8F040030B553 /* JLLanguageTests.swift */,
 				8FBFC17F19738B0400F75A76 /* Supporting Files */,
 			);
 			path = ChromatismTests;
@@ -289,6 +292,7 @@
 				8F9598A2197448B4002EA4AB /* JLTokenTests.swift in Sources */,
 				8FB33CB8197C2621004F6A02 /* JLLineScope.swift in Sources */,
 				8FB33CBA197C2621004F6A02 /* JLTextView.swift in Sources */,
+				8F311E86197C8F040030B553 /* JLLanguageTests.swift in Sources */,
 				8FB33CB9197C2621004F6A02 /* JLTokenizer.swift in Sources */,
 				8F9598A3197448CA002EA4AB /* JLToken.swift in Sources */,
 				8FBFC18F1974190A00F75A76 /* JLScope.swift in Sources */,

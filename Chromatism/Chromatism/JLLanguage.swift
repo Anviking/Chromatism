@@ -29,6 +29,7 @@ class JLLanguage {
         
         var preprocessor = JLToken(pattern: "^#.*+$", tokenType: .Preprocessor)
         var strings = JLToken(pattern: "(\"|@\")[^\"\\n]*(@\"|\")", tokenType: .String)
+        var angularImports = JLToken(pattern: "<.*?>", tokenType: .String)
         var numbers = JLToken(pattern: "(?<=\\s)\\d+", tokenType: .Number)
         var functions = JLToken(pattern: "\\w+\\s*(?>\\(.*\\)", tokenType: .OtherMethodNames)
         
@@ -41,7 +42,7 @@ class JLLanguage {
                 blockComments,
                 lineScope => [
                     lineComments,
-                    preprocessor => [strings],
+                    preprocessor => [strings, angularImports],
                     strings,
                     numbers,
                     functions,
@@ -52,16 +53,28 @@ class JLLanguage {
     }
     
     class ObjectiveC: C {
+        // Long time since I wrote these regexes. They should probably be updated
+        var dotNotation = JLToken(pattern: "\\.\\w+", tokenType: .OtherMethodNames)
+        var methodCalls = JLToken(pattern: "(\\w+)\\]", tokenType: .OtherMethodNames, captureGroup: 1)
+        var methodCallParts = JLToken(pattern: "(\\w+)\\]", tokenType: .OtherMethodNames, captureGroup: 1)
+        var otherClassNames = JLToken(pattern: "\\b[A-Z]{3}[a-zA-Z]*\\b", tokenType: .OtherClassNames)
+        
+        // http://www.learn-cocos2d.com/2011/10/complete-list-objectivec-20-compiler-directives/
+        var objcKeywords = JLToken(pattern: "@(class|defs|protocol|required|optional|interface|public|package|protected|private|property|end|implementation|synthesize|dynamic|end|throw|try|catch|finally|synchronized|autoreleasepool|selector|encode|compatibility_alias)\\b", tokenType: .Keyword )
         init() {
-            
+            super.init()
+            lineScope.subscopes += [dotNotation, methodCalls, methodCallParts, objcKeywords, otherClassNames]
         }
     }
 }
 
-// Operator for "add subscope". Can be nested, since it returns the left value.
+
+// Operator for "set subscopes". Can be nested, since it returns the left value.
 operator infix => { associativity right}
 func => (left: JLScope, right: [JLScope]) -> JLScope {
     left.subscopes = right
     return left
 }
+
+
 

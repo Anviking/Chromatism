@@ -76,7 +76,9 @@ class JLScope: NSObject, Printable {
                 }
             } else {
                 scope.perform(attributedString, parentIndexSet: indexSet)
+                println("Removing indexSet:\(scope.indexSet)")
                 indexSet -= scope.indexSet
+                println(indexSet)
             }
         }
     }

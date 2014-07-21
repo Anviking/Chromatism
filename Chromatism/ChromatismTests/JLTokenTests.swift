@@ -21,8 +21,12 @@ class JLTokenTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         let documentScope = JLScope()
         documentScope.colorDictionary = JLColorTheme.Default.dictionary
-        let comment = JLToken(pattern: "//(.*)", tokenType: .Comment, scope: documentScope, contentCaptureGroup: 1)
-        let world = JLToken(pattern: "World", tokenType: .Keyword, scope: comment)
+        let comment = JLToken(pattern: "//(.*)", tokenType: .Comment)
+        comment.contentCaptureGroup = 1
+        let world = JLToken(pattern: "World", tokenType: .Keyword)
+        
+        documentScope => [ comment => [world] ]
+        
         documentScope.perform(attributedString)
     }
     

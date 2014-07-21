@@ -24,6 +24,11 @@ class JLToken: JLScope {
         self.init(pattern: pattern, options: .AnchorsMatchLines, tokenType: tokenType)
     }
     
+    convenience init(pattern: String, tokenType: JLTokenType, captureGroup: Int) {
+        self.init(pattern: pattern, tokenType: tokenType)
+        self.captureGroup = captureGroup
+    }
+    
     convenience init(pattern: String, options: NSRegularExpressionOptions, tokenType: JLTokenType) {
         let expression = NSRegularExpression(pattern: pattern, options: options, error: nil)
         self.init(regularExpression: expression, tokenType: tokenType)
@@ -40,17 +45,22 @@ class JLToken: JLScope {
     }
     
     override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
-        let indexSet = NSMutableIndexSet()
+        let indexSet = self.indexSet - parentIndexSet
         let contentIndexSet = NSMutableIndexSet()
         parentIndexSet.enumerateRangesUsingBlock({ (range, stop) in
             self.regularExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: {(result, flags, stop) in
-                let range = result.rangeAtIndex(self.captureGroup)
+                
+                var range = result.rangeAtIndex(self.captureGroup)
+                
+                println("range: \(range) flags: \(flags)")
+                indexSet.addIndexesInRange(range)
+                println("indexSet: \(indexSet)")
+
                 
                 if let color = self.colorDictionary?[self.tokenType] {
                     attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                 }
                 
-                indexSet.addIndexesInRange(range)
                 if let captureGroup = self.contentCaptureGroup {
                     contentIndexSet.addIndexesInRange(result.rangeAtIndex(captureGroup))
                 }
@@ -59,6 +69,8 @@ class JLToken: JLScope {
         
         if contentCaptureGroup {
             performSubscopes(attributedString, indexSet: contentIndexSet)
+        } else if subscopes.count > 0{
+            performSubscopes(attributedString, indexSet: indexSet.mutableCopy() as NSMutableIndexSet)
         }
         
         self.indexSet = indexSet

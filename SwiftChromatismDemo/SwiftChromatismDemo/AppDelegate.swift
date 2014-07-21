@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url = NSBundle.mainBundle().URLForResource("demo", withExtension: "txt");
         let string = NSString(contentsOfURL: url, encoding: NSUTF8StringEncoding, error: nil)
         
-        let viewController = JLTextViewController(text: string, language: JLLanguage.C(), theme: .Default)
+        let viewController = JLTextViewController(text: string, language: JLLanguage.ObjectiveC(), theme: .Default)
         
         viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Resign", style: .Plain, target: viewController.textView, action:"resignFirstResponder")
         

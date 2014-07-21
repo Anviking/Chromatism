@@ -31,11 +31,17 @@ class JLScopeTests: XCTestCase {
         
         // Setup scopes
         documentScope.colorDictionary = colors
-        JLToken(pattern: "\\[.*\\]", tokenType: .Comment, scope: documentScope)
         
         let lineScope = JLScope(scope: documentScope)
         lineScope.clearWithTextColorBeforePerform = true
-        JLToken(pattern: "World", tokenType: .Keyword, scope: lineScope)
+
+        
+        documentScope => [
+            JLToken(pattern: "\\[.*\\]", tokenType: .Comment),
+            lineScope => [
+                JLToken(pattern: "World", tokenType: .Keyword)
+            ]
+        ]
         
         documentScope.perform(attributedString)
         XCTAssertEqualObjects("[Hello World]".comment, attributedString)
