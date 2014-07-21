@@ -17,7 +17,7 @@ class JLLanguage {
         lineScope = JLScope()
         
         lineScope.clearWithTextColorBeforePerform = true
-        documentScope => [
+        documentScope[
             lineScope
         ]
     }
@@ -38,11 +38,11 @@ class JLLanguage {
         
         init() {
             super.init()
-            documentScope => [
+            documentScope[
                 blockComments,
-                lineScope => [
+                lineScope[
                     lineComments,
-                    preprocessor => [strings, angularImports],
+                    preprocessor[strings, angularImports],
                     strings,
                     numbers,
                     functions,
@@ -67,14 +67,5 @@ class JLLanguage {
         }
     }
 }
-
-
-// Operator for "set subscopes". Can be nested, since it returns the left value.
-operator infix => { associativity right}
-func => (left: JLScope, right: [JLScope]) -> JLScope {
-    left.subscopes = right
-    return left
-}
-
 
 

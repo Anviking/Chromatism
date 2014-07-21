@@ -84,10 +84,10 @@ class JLScope: NSObject, Printable {
     }
     
     var containsSubscopeWithEditedIndexSet: Bool {
-        for scope in subscopes {
-            if scope.editedIndexSet {
-                return true
-            }
+    for scope in subscopes {
+        if scope.editedIndexSet {
+            return true
+        }
         }
         return false
     }
@@ -95,5 +95,12 @@ class JLScope: NSObject, Printable {
     // Printable
     override var description: String {
     return "JLScope"
+    }
+}
+
+extension JLScope {
+    subscript(scopes: JLScope...) -> JLScope {
+        self.subscopes = scopes
+        return self
     }
 }
