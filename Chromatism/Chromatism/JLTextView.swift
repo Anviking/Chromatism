@@ -31,6 +31,7 @@ class JLTextView: UITextView {
         self.textStorage.delegate = syntaxTokenizer
         self.backgroundColor = syntaxTokenizer.colorDictionary[JLTokenType.Background]
         self.font = UIFont(name: "Menlo-Regular", size: 15)
+        self.layoutManager.allowsNonContiguousLayout = true
     }
     
     override var attributedText: NSAttributedString! {
