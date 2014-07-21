@@ -52,9 +52,7 @@ class JLToken: JLScope {
                 
                 var range = result.rangeAtIndex(self.captureGroup)
                 
-                println("range: \(range) flags: \(flags)")
                 indexSet.addIndexesInRange(range)
-                println("indexSet: \(indexSet)")
 
                 
                 if let color = self.colorDictionary?[self.tokenType] {

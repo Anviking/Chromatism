@@ -24,8 +24,9 @@ class JLLanguage {
     
     class C: JLLanguage {
         
-        var blockComments = JLToken(pattern: "/\\*.*?\\*/", options: .DotMatchesLineSeparators, tokenType: .Comment)
+        var blockComments = JLNestedToken(incrementingToken: JLToken(pattern: "/\\*", tokenType: .Comment), decrementingToken: JLToken(pattern: "\\*/", tokenType: .Comment))
         var lineComments = JLToken(pattern: "//(.*)", tokenType: .Comment)
+        
         
         var preprocessor = JLToken(pattern: "^#.*+$", tokenType: .Preprocessor)
         var strings = JLToken(pattern: "(\"|@\")[^\"\\n]*(@\"|\")", tokenType: .String)
