@@ -79,6 +79,7 @@
     self.font = [UIFont fontWithName:@"Menlo" size:12];
     self.autocorrectionType = UITextAutocorrectionTypeNo;
     self.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.layoutManager.allowsNonContiguousLayout = YES;
     
 }
 
