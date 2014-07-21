@@ -44,10 +44,13 @@ class JLScope: NSObject, Printable {
     func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
         
         if clearWithTextColorBeforePerform {
+            
             parentIndexSet.enumerateRangesUsingBlock({(range, stop) in
                 let color = self.colorDictionary?[.Text]
                 attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                 })
+            
+            clearAttributesInIndexSet(parentIndexSet, attributedString: attributedString)
         }
         // Create a copy of the indexSet and call perform to subscopes
         // The results of the subscope is removed from the indexSet copy before the next subscope is performed
@@ -84,6 +87,10 @@ class JLScope: NSObject, Printable {
                 indexSet -= scope.indexSet
             }
         }
+    }
+    
+    func clearAttributesInIndexSet(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
+        for scope in subscopes { scope.clearAttributesInIndexSet(indexSet, attributedString: attributedString) }
     }
     
     var containsSubscopeWithEditedIndexSet: Bool {

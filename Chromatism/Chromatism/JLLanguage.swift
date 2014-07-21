@@ -24,7 +24,7 @@ class JLLanguage {
     
     class C: JLLanguage {
         
-        var blockComments = JLNestedToken(incrementingToken: JLToken(pattern: "/\\*", tokenType: .Comment), decrementingToken: JLToken(pattern: "\\*/", tokenType: .Comment))
+        var blockComments = JLNestedToken(identifier: "BlockComment", incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .Comment)
         var lineComments = JLToken(pattern: "//(.*)", tokenType: .Comment)
         
         
@@ -39,8 +39,8 @@ class JLLanguage {
         init() {
             super.init()
             documentScope[
-                blockComments,
                 lineScope[
+                    blockComments,
                     lineComments,
                     preprocessor[strings, angularImports],
                     strings,
