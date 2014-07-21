@@ -33,8 +33,7 @@ class JLLanguage {
         var numbers = JLToken(pattern: "(?<=\\s)\\d+", tokenType: .Number)
         var functions = JLToken(pattern: "\\w+\\s*(?>\\(.*\\)", tokenType: .OtherMethodNames)
         
-        var keywords = "true false yes no YES TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super".componentsSeparatedByString(" ")
-        @lazy var keywordToken: JLToken = { JLToken(keywords: self.keywords, tokenType: .Keyword) }()
+        var keywords = JLToken(keywords: "true false yes no YES TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super".componentsSeparatedByString(" "), tokenType: .Keyword)
         
         init() {
             super.init()
@@ -46,7 +45,7 @@ class JLLanguage {
                     strings,
                     numbers,
                     functions,
-                    keywordToken
+                    keywords
                 ]
             ]
         }
