@@ -19,6 +19,11 @@ class JLScope: NSObject, Printable {
         scope.addSubscope(self)
     }
     
+    subscript(scopes: JLScope...) -> JLScope {
+        self.subscopes = scopes
+            return self
+    }
+    
     var colorDictionary: Dictionary<JLTokenType, UIColor>?
     var editedIndexSet: NSIndexSet?
     
@@ -95,12 +100,5 @@ class JLScope: NSObject, Printable {
     // Printable
     override var description: String {
     return "JLScope"
-    }
-}
-
-extension JLScope {
-    subscript(scopes: JLScope...) -> JLScope {
-        self.subscopes = scopes
-        return self
     }
 }
