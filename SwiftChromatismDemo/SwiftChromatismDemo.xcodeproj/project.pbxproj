@@ -11,9 +11,6 @@
 		8F105F29194D1C8100BF037F /* SwiftChromatismDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F105F28194D1C8100BF037F /* SwiftChromatismDemoTests.swift */; };
 		8F26E488195714590055D235 /* demo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8F26E487195714590055D235 /* demo.txt */; };
 		8F729300197DFA920006D903 /* Chromatism.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7292FD197DFA880006D903 /* Chromatism.framework */; };
-		8F729313197DFB160006D903 /* test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F729308197DFB160006D903 /* test.framework */; };
-		8F72931D197DFB160006D903 /* test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F729308197DFB160006D903 /* test.framework */; };
-		8F72931E197DFB160006D903 /* test.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8F729308197DFB160006D903 /* test.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8FCDC0031979EE7F00F4B3EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F105F1A194D1C8100BF037F /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,82 +36,12 @@
 			remoteGlobalIDString = 8FBFC17A19738B0400F75A76;
 			remoteInfo = ChromatismTests;
 		};
-		8F729314197DFB160006D903 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8F105F0D194D1C8100BF037F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8F729307197DFB160006D903;
-			remoteInfo = test;
-		};
-		8F72931B197DFB160006D903 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8F105F0D194D1C8100BF037F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8F729307197DFB160006D903;
-			remoteInfo = test;
-		};
-		8F72931F197DFB160006D903 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8F105F0D194D1C8100BF037F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8F729307197DFB160006D903;
-			remoteInfo = test;
-		};
-		8F729328197DFB160006D903 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8F105F0D194D1C8100BF037F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8F729307197DFB160006D903;
-			remoteInfo = test;
-		};
-		8F72932A197DFB160006D903 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8F105F0D194D1C8100BF037F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8F729307197DFB160006D903;
-			remoteInfo = test;
-		};
-		8F72932C197DFB170006D903 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8F105F0D194D1C8100BF037F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8F729307197DFB160006D903;
-			remoteInfo = test;
-		};
 		8F72932E197DFB200006D903 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8F105F0D194D1C8100BF037F /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 8F105F14194D1C8100BF037F;
 			remoteInfo = SwiftChromatismDemo;
-		};
-		8F729330197DFB240006D903 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8F105F0D194D1C8100BF037F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8F729307197DFB160006D903;
-			remoteInfo = test;
-		};
-		8F8D9673197E04A100E6D6D6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8F105F0D194D1C8100BF037F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8F729307197DFB160006D903;
-			remoteInfo = test;
-		};
-		8FF1FC8C197DFD8F003F33BE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8F105F0D194D1C8100BF037F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8F729307197DFB160006D903;
-			remoteInfo = test;
-		};
-		8FF1FC8E197DFD90003F33BE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8F105F0D194D1C8100BF037F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8F729307197DFB160006D903;
-			remoteInfo = test;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -125,7 +52,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8F72931E197DFB160006D903 /* test.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,8 +68,6 @@
 		8F105F28194D1C8100BF037F /* SwiftChromatismDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftChromatismDemoTests.swift; sourceTree = "<group>"; };
 		8F26E487195714590055D235 /* demo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = demo.txt; sourceTree = "<group>"; };
 		8F7292F7197DFA880006D903 /* Chromatism.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Chromatism.xcodeproj; path = ../../Chromatism/Chromatism.xcodeproj; sourceTree = "<group>"; };
-		8F729308197DFB160006D903 /* test.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = test.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F729312197DFB160006D903 /* testTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = testTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,7 +75,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F72931D197DFB160006D903 /* test.framework in Frameworks */,
 				8F729300197DFA920006D903 /* Chromatism.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -160,21 +83,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8F729304197DFB160006D903 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8F72930F197DFB160006D903 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8F729313197DFB160006D903 /* test.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,8 +103,6 @@
 			children = (
 				8F105F15194D1C8100BF037F /* SwiftChromatismDemo.app */,
 				8F105F22194D1C8100BF037F /* SwiftChromatismDemoTests.xctest */,
-				8F729308197DFB160006D903 /* test.framework */,
-				8F729312197DFB160006D903 /* testTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -249,16 +155,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		8F729305197DFB160006D903 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
 		8F105F14194D1C8100BF037F /* SwiftChromatismDemo */ = {
 			isa = PBXNativeTarget;
@@ -272,8 +168,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				8F72931C197DFB160006D903 /* PBXTargetDependency */,
-				8F729320197DFB160006D903 /* PBXTargetDependency */,
 			);
 			name = SwiftChromatismDemo;
 			productName = SwiftChromatismDemo;
@@ -299,49 +193,6 @@
 			productReference = 8F105F22194D1C8100BF037F /* SwiftChromatismDemoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		8F729307197DFB160006D903 /* test */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 8F729321197DFB160006D903 /* Build configuration list for PBXNativeTarget "test" */;
-			buildPhases = (
-				8F729303197DFB160006D903 /* Sources */,
-				8F729304197DFB160006D903 /* Frameworks */,
-				8F729305197DFB160006D903 /* Headers */,
-				8F729306197DFB160006D903 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = test;
-			productName = test;
-			productReference = 8F729308197DFB160006D903 /* test.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		8F729311197DFB160006D903 /* testTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 8F729325197DFB160006D903 /* Build configuration list for PBXNativeTarget "testTests" */;
-			buildPhases = (
-				8F72930E197DFB160006D903 /* Sources */,
-				8F72930F197DFB160006D903 /* Frameworks */,
-				8F729310197DFB160006D903 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				8F729315197DFB160006D903 /* PBXTargetDependency */,
-				8F729329197DFB160006D903 /* PBXTargetDependency */,
-				8F72932B197DFB160006D903 /* PBXTargetDependency */,
-				8F72932D197DFB170006D903 /* PBXTargetDependency */,
-				8F729331197DFB240006D903 /* PBXTargetDependency */,
-				8FF1FC8D197DFD8F003F33BE /* PBXTargetDependency */,
-				8FF1FC8F197DFD90003F33BE /* PBXTargetDependency */,
-				8F8D9674197E04A100E6D6D6 /* PBXTargetDependency */,
-			);
-			name = testTests;
-			productName = testTests;
-			productReference = 8F729312197DFB160006D903 /* testTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -357,13 +208,6 @@
 					8F105F21194D1C8100BF037F = {
 						CreatedOnToolsVersion = 6.0;
 						TestTargetID = 8F105F14194D1C8100BF037F;
-					};
-					8F729307197DFB160006D903 = {
-						CreatedOnToolsVersion = 6.0;
-					};
-					8F729311197DFB160006D903 = {
-						CreatedOnToolsVersion = 6.0;
-						TestTargetID = 8F729307197DFB160006D903;
 					};
 				};
 			};
@@ -387,8 +231,6 @@
 			targets = (
 				8F105F14194D1C8100BF037F /* SwiftChromatismDemo */,
 				8F105F21194D1C8100BF037F /* SwiftChromatismDemoTests */,
-				8F729307197DFB160006D903 /* test */,
-				8F729311197DFB160006D903 /* testTests */,
 			);
 		};
 /* End PBXProject section */
@@ -427,20 +269,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8F729306197DFB160006D903 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8F729310197DFB160006D903 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -460,20 +288,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8F729303197DFB160006D903 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8F72930E197DFB160006D903 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -482,60 +296,10 @@
 			target = 8F105F14194D1C8100BF037F /* SwiftChromatismDemo */;
 			targetProxy = 8F105F23194D1C8100BF037F /* PBXContainerItemProxy */;
 		};
-		8F729315197DFB160006D903 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8F729307197DFB160006D903 /* test */;
-			targetProxy = 8F729314197DFB160006D903 /* PBXContainerItemProxy */;
-		};
-		8F72931C197DFB160006D903 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8F729307197DFB160006D903 /* test */;
-			targetProxy = 8F72931B197DFB160006D903 /* PBXContainerItemProxy */;
-		};
-		8F729320197DFB160006D903 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8F729307197DFB160006D903 /* test */;
-			targetProxy = 8F72931F197DFB160006D903 /* PBXContainerItemProxy */;
-		};
-		8F729329197DFB160006D903 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8F729307197DFB160006D903 /* test */;
-			targetProxy = 8F729328197DFB160006D903 /* PBXContainerItemProxy */;
-		};
-		8F72932B197DFB160006D903 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8F729307197DFB160006D903 /* test */;
-			targetProxy = 8F72932A197DFB160006D903 /* PBXContainerItemProxy */;
-		};
-		8F72932D197DFB170006D903 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8F729307197DFB160006D903 /* test */;
-			targetProxy = 8F72932C197DFB170006D903 /* PBXContainerItemProxy */;
-		};
 		8F72932F197DFB200006D903 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8F105F14194D1C8100BF037F /* SwiftChromatismDemo */;
 			targetProxy = 8F72932E197DFB200006D903 /* PBXContainerItemProxy */;
-		};
-		8F729331197DFB240006D903 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8F729307197DFB160006D903 /* test */;
-			targetProxy = 8F729330197DFB240006D903 /* PBXContainerItemProxy */;
-		};
-		8F8D9674197E04A100E6D6D6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8F729307197DFB160006D903 /* test */;
-			targetProxy = 8F8D9673197E04A100E6D6D6 /* PBXContainerItemProxy */;
-		};
-		8FF1FC8D197DFD8F003F33BE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8F729307197DFB160006D903 /* test */;
-			targetProxy = 8FF1FC8C197DFD8F003F33BE /* PBXContainerItemProxy */;
-		};
-		8FF1FC8F197DFD90003F33BE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8F729307197DFB160006D903 /* test */;
-			targetProxy = 8FF1FC8E197DFD90003F33BE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -677,85 +441,6 @@
 			};
 			name = Release;
 		};
-		8F729322197DFB160006D903 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = test/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		8F729323197DFB160006D903 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = test/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		8F729326197DFB160006D903 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = testTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		8F729327197DFB160006D903 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = testTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -782,24 +467,6 @@
 			buildConfigurations = (
 				8F105F30194D1C8100BF037F /* Debug */,
 				8F105F31194D1C8100BF037F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8F729321197DFB160006D903 /* Build configuration list for PBXNativeTarget "test" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8F729322197DFB160006D903 /* Debug */,
-				8F729323197DFB160006D903 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8F729325197DFB160006D903 /* Build configuration list for PBXNativeTarget "testTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8F729326197DFB160006D903 /* Debug */,
-				8F729327197DFB160006D903 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
