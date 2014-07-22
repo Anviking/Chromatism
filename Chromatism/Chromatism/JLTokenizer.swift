@@ -10,26 +10,25 @@ import UIKit
 
 public class JLTokenizer: NSObject {
     
-    var documentScope: JLScope
-    var lineScope: JLScope
+    let documentScope: JLScope
+    let lineScope: JLScope
+
+    public var theme: JLColorTheme { didSet { documentScope.theme = theme }}
     
-    var colorDictionary: Dictionary<JLTokenType, UIColor> {
-    didSet {
-        documentScope.colorDictionary = colorDictionary; lineScope.colorDictionary = colorDictionary
-    }
-    }
-    
-    init (colorDictionary: Dictionary<JLTokenType, UIColor>, documentScope: JLScope, lineScope: JLScope) {
-        documentScope.colorDictionary = colorDictionary
-        lineScope.colorDictionary = colorDictionary
-        
-        self.colorDictionary = colorDictionary
+    public init (documentScope: JLScope, lineScope: JLScope, theme: JLColorTheme) {
+        documentScope.theme = theme
+        self.theme = theme
         self.documentScope = documentScope
         self.lineScope = lineScope
     }
     
     convenience init(language: JLLanguage, theme: JLColorTheme) {
-        self.init(colorDictionary: theme.dictionary, documentScope: language.documentScope, lineScope: language.lineScope)
+        self.init(documentScope: language.documentScope, lineScope: language.lineScope, theme: theme)
+    }
+    
+    convenience init(language: JLLanguage, theme: JLColorTheme, textStorage: NSTextStorage) {
+        self.init(documentScope: language.documentScope, lineScope: language.lineScope, theme: theme)
+        textStorage.delegate = self
     }
 
     func tokenizeAttributedString(attributedString: NSMutableAttributedString) {

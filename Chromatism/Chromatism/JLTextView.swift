@@ -11,27 +11,26 @@ import UIKit
 public class JLTextView: UITextView {
     
     var syntaxTokenizer: JLTokenizer { didSet{ self.textStorage.delegate = syntaxTokenizer }}
-    public var language: JLLanguage { didSet{
-        syntaxTokenizer.documentScope = language.documentScope
-        syntaxTokenizer.lineScope = language.lineScope
-    }}
+    
+    public var language: JLLanguage { didSet{ syntaxTokenizer = JLTokenizer(language: language, theme: theme) }}
     public var theme: JLColorTheme {
     didSet {
-        backgroundColor = syntaxTokenizer.colorDictionary[JLTokenType.Background]
-        syntaxTokenizer.colorDictionary = theme.dictionary
+        backgroundColor = theme[.Background]
+        syntaxTokenizer.theme = theme
     }}
     
     public init(language: JLLanguage, theme: JLColorTheme) {
         self.language = language
         self.theme = theme
-        self.syntaxTokenizer = JLTokenizer(colorDictionary: theme.dictionary, documentScope: language.documentScope, lineScope: language.lineScope)
+        syntaxTokenizer = JLTokenizer(language: language, theme: theme)
         
         let frame = CGRect.zeroRect
         super.init(frame: frame, textContainer: nil)
-        self.textStorage.delegate = syntaxTokenizer
-        self.backgroundColor = syntaxTokenizer.colorDictionary[JLTokenType.Background]
-        self.font = UIFont(name: "Menlo-Regular", size: 15)
-        self.layoutManager.allowsNonContiguousLayout = true
+        
+        textStorage.delegate = syntaxTokenizer
+        backgroundColor = theme[JLTokenType.Background]
+        font = UIFont(name: "Menlo-Regular", size: 15)
+        layoutManager.allowsNonContiguousLayout = true
     }
     
     override public var attributedText: NSAttributedString! {
@@ -43,7 +42,7 @@ public class JLTextView: UITextView {
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––
     
     func updateTypingAttributes() {
-        let color = syntaxTokenizer.colorDictionary[JLTokenType.Text]!
+        let color = syntaxTokenizer.theme[JLTokenType.Text]!
         typingAttributes = [NSForegroundColorAttributeName: color, NSFontAttributeName: font]
     }
     

@@ -55,7 +55,7 @@ public class JLToken: JLScope {
                 indexSet.addIndexesInRange(range)
 
                 
-                if let color = self.colorDictionary?[self.tokenType] {
+                if let color = self.theme?[self.tokenType] {
                     attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                 }
                 

@@ -71,7 +71,7 @@ public class JLNestedToken: JLScope {
                 })
             self.matches += array
             if let range = rangeOfSurroundingTokenPair(range) {
-                if let color = self.colorDictionary?[self.tokenType] {
+                if let color = self.theme?[self.tokenType] {
                     attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                 }
             }
@@ -86,10 +86,10 @@ public class JLNestedToken: JLScope {
             if result.delta > 0 {
                 startIndexes[depth] = result.range.location
             } else if let startIndex = startIndexes[depth + result.delta] {
-                let endIndex = NSMaxRange(result.range)
+                let endIndex = result.range.end
                 let range = NSMakeRange(startIndex, endIndex - startIndex)
                 self.indexSet.addIndexesInRange(range)
-                if let color = self.colorDictionary?[tokenType] {
+                if let color = theme?[tokenType] {
                     attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                 }
             }
@@ -100,7 +100,6 @@ public class JLNestedToken: JLScope {
     override func attributedStringDidChange(range: NSRange, delta: Int)  {
         for (index, result) in enumerate(matches.reverse()) {
             if result.range.location < range.end { break }
-            println("Shifting: \(result) by delta: \(delta)")
             result.range = NSMakeRange(result.range.location + delta, range.length)
             
         }
@@ -124,6 +123,6 @@ public class JLNestedToken: JLScope {
 
 extension NSRange {
     var end: Int {
-    return NSMaxRange(self)
+    return location + length
     }
 }
