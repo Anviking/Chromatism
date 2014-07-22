@@ -45,13 +45,14 @@ class JLTokenizer: NSObject {
 
 extension JLTokenizer: NSTextStorageDelegate {
     func textStorage(textStorage: NSTextStorage!, willProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
-        
     }
     
     func textStorage(textStorage: NSTextStorage!, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
+
         if editedMask & NSTextStorageEditActions.EditedCharacters {
-        let editedLineRange = textStorage.string.bridgeToObjectiveC().lineRangeForRange(editedRange)
-        tokenizeAttributedString(textStorage, editedLineIndexSet: NSIndexSet(indexesInRange: editedLineRange))
+            documentScope.cascade { $0.attributedStringDidChange(editedRange, delta: delta) }
+            let editedLineRange = textStorage.string.bridgeToObjectiveC().lineRangeForRange(editedRange)
+            tokenizeAttributedString(textStorage, editedLineIndexSet: NSIndexSet(indexesInRange: editedLineRange))
         }
     }
 }

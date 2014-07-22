@@ -29,59 +29,53 @@ class JLNestedToken: JLScope {
     
     override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
         
-        var editingInside = false
-        var needsToBeRefreshed = [Token]()
-        
-        let compareResult = Token(delta: 0, range: NSMakeRange(Int.max, Int.max))
-        indexSet.intersectionWithSet(parentIndexSet).enumerateRangesUsingBlock { (range, _) in
-            var effectiveRangePointer = NSRangePointer.alloc(sizeof(NSRange))
-            attributedString.attribute(self.identifier, atIndex: range.location, effectiveRange: effectiveRangePointer)
-            let effectiveRange = effectiveRangePointer.memory
-        }
-        
-        println("Refresh: \(needsToBeRefreshed)")
-        
-        parentIndexSet.enumerateIndexesUsingBlock { (index, _) in
-            if self.indexSet.containsIndex(index) {
-                //needsToBeRefreshed+=
-            }
-        }
-        
         indexSet -= parentIndexSet
-        var oldMatches = matches.filter { parentIndexSet.containsIndexesInRange($0.range) }
-        //println("Outdated matches: \(oldMatches)")
         matches = matches.filter { !(parentIndexSet.containsIndexesInRange($0.range)) }
         
+        func tokensClosestToRange(range: NSRange) -> (previous: Token?, next: Token?) {
+            if self.matches.count == 0 { return (nil, nil) }
+            var previousToken: Token? = self.matches[self.matches.startIndex]
+            var nextToken: Token?
+            
+            for token in self.matches {
+                if token.range.location < range.location {
+                    previousToken = token
+                } else if token.range.end > range.end {
+                    nextToken = token
+                    break
+                }
+            }
+            
+            return (previousToken, nextToken)
+        }
+        
+        func rangeOfSurroundingTokenPair(range: NSRange) -> NSRange? {
+            let tokens = tokensClosestToRange(range)
+            if let previousToken = tokens.previous {
+                if let nextToken = tokens.next {
+                    if previousToken.delta > 0 && nextToken.delta < 0 {
+                        return NSMakeRange(previousToken.range.location, nextToken.range.end - previousToken.range.location)
+                    }
+                }
+            }
+            return nil
+        }
         
         parentIndexSet.enumerateRangesUsingBlock { (range, _) in
             var array: [Token] = []
             self.incrementingExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
                 array += Token(delta: 1, range: range)
                 })
-            self.incrementingExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
+            self.decrementingExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
                 array += Token(delta: -1, range: range)
                 })
-            
-            if array.count == 0 {
-                
-                var nextToken: Token
-                let afterRange = NSMakeRange(range.end, attributedString.length - range.end)
-                let nextIncrementingToken = self.incrementingExpression.firstMatchInString(attributedString.string, options: nil, range: afterRange)
-                let nextDecrementingToken = self.decrementingExpression.firstMatchInString(attributedString.string, options: nil, range: afterRange)
-                
-                attributedString.enumerateAttribute(self.identifier, inRange: range, options: nil, usingBlock: { (object, range, stop) in
-                    if object {
-                        if let color = self.colorDictionary?[self.tokenType] {
-                            attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
-                        }
-                    }
-                    })
-                
-            } else {
-                self.matches += array
+            self.matches += array
+            if let range = rangeOfSurroundingTokenPair(range) {
+                if let color = self.colorDictionary?[self.tokenType] {
+                    attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+                }
             }
         }
-        
         
         matches.sort { $0.range.location < $1.range.location }
         
@@ -96,7 +90,6 @@ class JLNestedToken: JLScope {
                 let range = NSMakeRange(startIndex, endIndex - startIndex)
                 self.indexSet.addIndexesInRange(range)
                 if let color = self.colorDictionary?[tokenType] {
-                    attributedString.addAttribute(identifier, value: identifier, range: range)
                     attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                 }
             }
@@ -104,22 +97,18 @@ class JLNestedToken: JLScope {
         }
     }
     
-    override func clearAttributesInIndexSet(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
-        indexSet.enumerateRangesUsingBlock { (range, stop) in
-            //attributedString.removeAttribute(self.identifier, range: range)
+    override func attributedStringDidChange(range: NSRange, delta: Int)  {
+        for (index, result) in enumerate(matches.reverse()) {
+            if result.range.location < range.end { break }
+            println("Shifting: \(result) by delta: \(delta)")
+            result.range = NSMakeRange(result.range.location + delta, range.length)
+            
         }
+        super.attributedStringDidChange(range, delta: delta)
     }
     
-    class Range {
-        var incrementingToken: Token
-        var decrementingToken: Token
-        init(incrementingToken: Token, decrementingToken: Token) {
-            self.incrementingToken = incrementingToken
-            self.decrementingToken = decrementingToken
-        }
-    }
     
-    struct Token: Printable {
+    class Token: Printable {
         var range: NSRange
         var delta: Int // Set to +1 to increment by one level, or -1 to decrement
         

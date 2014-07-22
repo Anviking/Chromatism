@@ -12,7 +12,7 @@ class JLLanguage {
     let documentScope: JLScope
     let lineScope: JLScope
     
-    @required init() {
+    required init() {
         documentScope = JLScope()
         lineScope = JLScope()
         

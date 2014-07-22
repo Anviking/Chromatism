@@ -10,7 +10,7 @@
 		8F105F1D194D1C8100BF037F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F105F1C194D1C8100BF037F /* Images.xcassets */; };
 		8F105F29194D1C8100BF037F /* SwiftChromatismDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F105F28194D1C8100BF037F /* SwiftChromatismDemoTests.swift */; };
 		8F26E488195714590055D235 /* demo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8F26E487195714590055D235 /* demo.txt */; };
-		8F5D7ADE197D3AA900D73B8E /* Chromatism.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F5D7ADB197D3A9D00D73B8E /* Chromatism.framework */; };
+		8F729300197DFA920006D903 /* Chromatism.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7292FD197DFA880006D903 /* Chromatism.framework */; };
 		8FCDC0031979EE7F00F4B3EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F105F1A194D1C8100BF037F /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -22,16 +22,16 @@
 			remoteGlobalIDString = 8F105F14194D1C8100BF037F;
 			remoteInfo = SwiftChromatismDemo;
 		};
-		8F5D7ADA197D3A9D00D73B8E /* PBXContainerItemProxy */ = {
+		8F7292FC197DFA880006D903 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8F5D7AD5197D3A9D00D73B8E /* Chromatism.xcodeproj */;
+			containerPortal = 8F7292F7197DFA880006D903 /* Chromatism.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 8FBFC16F19738B0400F75A76;
 			remoteInfo = Chromatism;
 		};
-		8F5D7ADC197D3A9D00D73B8E /* PBXContainerItemProxy */ = {
+		8F7292FE197DFA880006D903 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8F5D7AD5197D3A9D00D73B8E /* Chromatism.xcodeproj */;
+			containerPortal = 8F7292F7197DFA880006D903 /* Chromatism.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 8FBFC17A19738B0400F75A76;
 			remoteInfo = ChromatismTests;
@@ -47,7 +47,7 @@
 		8F105F27194D1C8100BF037F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F105F28194D1C8100BF037F /* SwiftChromatismDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftChromatismDemoTests.swift; sourceTree = "<group>"; };
 		8F26E487195714590055D235 /* demo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = demo.txt; sourceTree = "<group>"; };
-		8F5D7AD5197D3A9D00D73B8E /* Chromatism.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Chromatism.xcodeproj; path = ../../Chromatism/Chromatism.xcodeproj; sourceTree = "<group>"; };
+		8F7292F7197DFA880006D903 /* Chromatism.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Chromatism.xcodeproj; path = ../../Chromatism/Chromatism.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F5D7ADE197D3AA900D73B8E /* Chromatism.framework in Frameworks */,
+				8F729300197DFA920006D903 /* Chromatism.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,7 +102,7 @@
 			children = (
 				8F26E487195714590055D235 /* demo.txt */,
 				8F105F19194D1C8100BF037F /* Info.plist */,
-				8F5D7AD5197D3A9D00D73B8E /* Chromatism.xcodeproj */,
+				8F7292F7197DFA880006D903 /* Chromatism.xcodeproj */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -124,11 +124,11 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		8F5D7AD6197D3A9D00D73B8E /* Products */ = {
+		8F7292F8197DFA880006D903 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8F5D7ADB197D3A9D00D73B8E /* Chromatism.framework */,
-				8F5D7ADD197D3A9D00D73B8E /* ChromatismTests.xctest */,
+				8F7292FD197DFA880006D903 /* Chromatism.framework */,
+				8F7292FF197DFA880006D903 /* ChromatismTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,8 +201,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 8F5D7AD6197D3A9D00D73B8E /* Products */;
-					ProjectRef = 8F5D7AD5197D3A9D00D73B8E /* Chromatism.xcodeproj */;
+					ProductGroup = 8F7292F8197DFA880006D903 /* Products */;
+					ProjectRef = 8F7292F7197DFA880006D903 /* Chromatism.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -214,18 +214,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		8F5D7ADB197D3A9D00D73B8E /* Chromatism.framework */ = {
+		8F7292FD197DFA880006D903 /* Chromatism.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Chromatism.framework;
-			remoteRef = 8F5D7ADA197D3A9D00D73B8E /* PBXContainerItemProxy */;
+			remoteRef = 8F7292FC197DFA880006D903 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		8F5D7ADD197D3A9D00D73B8E /* ChromatismTests.xctest */ = {
+		8F7292FF197DFA880006D903 /* ChromatismTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ChromatismTests.xctest;
-			remoteRef = 8F5D7ADC197D3A9D00D73B8E /* PBXContainerItemProxy */;
+			remoteRef = 8F7292FE197DFA880006D903 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

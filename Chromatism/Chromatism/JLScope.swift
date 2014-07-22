@@ -102,8 +102,23 @@ class JLScope: NSObject, Printable {
         return false
     }
     
+    func cascade(block: (scope: JLScope) -> Void) {
+        block(scope: self)
+        for scope in subscopes {
+            scope.cascade(block)
+        }
+    }
+    
     // Printable
     override var description: String {
     return "JLScope"
     }
+}
+
+extension JLScope {
+    func attributedStringDidChange(range: NSRange, delta: Int) {
+        self.indexSet.removeIndexesInRange(range)
+        self.indexSet.shiftIndexesStartingAtIndex(range.location, by: delta)
+    }
+    
 }
