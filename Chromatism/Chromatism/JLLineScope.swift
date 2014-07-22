@@ -8,6 +8,6 @@
 
 import UIKit
 
-class JLLineScope: JLScope {
+public class JLLineScope: JLScope {
    
 }

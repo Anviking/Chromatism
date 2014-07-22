@@ -8,20 +8,20 @@
 
 import UIKit
 
-class JLTextView: UITextView {
+public class JLTextView: UITextView {
     
     var syntaxTokenizer: JLTokenizer { didSet{ self.textStorage.delegate = syntaxTokenizer }}
-    var language: JLLanguage { didSet{
+    public var language: JLLanguage { didSet{
         syntaxTokenizer.documentScope = language.documentScope
         syntaxTokenizer.lineScope = language.lineScope
     }}
-    var theme: JLColorTheme {
+    public var theme: JLColorTheme {
     didSet {
         backgroundColor = syntaxTokenizer.colorDictionary[JLTokenType.Background]
         syntaxTokenizer.colorDictionary = theme.dictionary
     }}
     
-    init(language: JLLanguage, theme: JLColorTheme) {
+    public init(language: JLLanguage, theme: JLColorTheme) {
         self.language = language
         self.theme = theme
         self.syntaxTokenizer = JLTokenizer(colorDictionary: theme.dictionary, documentScope: language.documentScope, lineScope: language.lineScope)
@@ -34,7 +34,7 @@ class JLTextView: UITextView {
         self.layoutManager.allowsNonContiguousLayout = true
     }
     
-    override var attributedText: NSAttributedString! {
+    override public var attributedText: NSAttributedString! {
     didSet {
         self.syntaxTokenizer.tokenizeAttributedString(textStorage)
     }
@@ -47,20 +47,20 @@ class JLTextView: UITextView {
         typingAttributes = [NSForegroundColorAttributeName: color, NSFontAttributeName: font]
     }
     
-    override var text: String! {
+    override public var text: String! {
     didSet {
         updateTypingAttributes()
         attributedText = NSAttributedString(string: text, attributes: typingAttributes)
     }
     }
     
-    override var textColor: UIColor! {
+    override public var textColor: UIColor! {
     didSet {
         updateTypingAttributes()
     }
     }
     
-    override var font: UIFont! {
+    override public var font: UIFont! {
     didSet {
         updateTypingAttributes()
     }

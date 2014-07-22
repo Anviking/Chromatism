@@ -8,6 +8,6 @@
 
 import UIKit
 
-class JLDocumentScope: JLScope {
+public class JLDocumentScope: JLScope {
 
 }

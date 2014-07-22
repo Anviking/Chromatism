@@ -8,11 +8,11 @@
 
 import UIKit
 
-class JLLanguage {
+public class JLLanguage {
     let documentScope: JLScope
     let lineScope: JLScope
     
-    required init() {
+    public init() {
         documentScope = JLScope()
         lineScope = JLScope()
         
@@ -22,7 +22,7 @@ class JLLanguage {
         ]
     }
     
-    class C: JLLanguage {
+    public class C: JLLanguage {
         
         var blockComments = JLNestedToken(identifier: "BlockComment", incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .Comment)
         var lineComments = JLToken(pattern: "//(.*)", tokenType: .Comment)
@@ -36,7 +36,7 @@ class JLLanguage {
         
         var keywords = JLToken(keywords: "true false yes no YES TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super".componentsSeparatedByString(" "), tokenType: .Keyword)
         
-        init() {
+        public init() {
             super.init()
             documentScope[
                 lineScope[
@@ -52,7 +52,7 @@ class JLLanguage {
         }
     }
     
-    class ObjectiveC: C {
+    public class ObjectiveC: C {
         // Long time since I wrote these regexes. They should probably be updated
         var dotNotation = JLToken(pattern: "\\.\\w+", tokenType: .OtherMethodNames)
         var methodCalls = JLToken(pattern: "(\\w+)\\]", tokenType: .OtherMethodNames, captureGroup: 1)
@@ -61,7 +61,7 @@ class JLLanguage {
         
         // http://www.learn-cocos2d.com/2011/10/complete-list-objectivec-20-compiler-directives/
         var objcKeywords = JLToken(pattern: "@(class|defs|protocol|required|optional|interface|public|package|protected|private|property|end|implementation|synthesize|dynamic|end|throw|try|catch|finally|synchronized|autoreleasepool|selector|encode|compatibility_alias)\\b", tokenType: .Keyword )
-        init() {
+        public init() {
             super.init()
             lineScope.subscopes += [dotNotation, methodCalls, methodCallParts, objcKeywords, otherClassNames]
         }

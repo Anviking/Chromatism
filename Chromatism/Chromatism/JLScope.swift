@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JLScope: NSObject, Printable {
+public class JLScope: NSObject, Printable {
     
     init() {
         super.init()
@@ -110,7 +110,7 @@ class JLScope: NSObject, Printable {
     }
     
     // Printable
-    override var description: String {
+    override public var description: String {
     return "JLScope"
     }
 }

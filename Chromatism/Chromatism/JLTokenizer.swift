@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JLTokenizer: NSObject {
+public class JLTokenizer: NSObject {
     
     var documentScope: JLScope
     var lineScope: JLScope
@@ -44,9 +44,9 @@ class JLTokenizer: NSObject {
 }
 
 extension JLTokenizer: NSTextStorageDelegate {
-    func textStorage(textStorage: NSTextStorage!, willProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
+    public func textStorage(textStorage: NSTextStorage!, willProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
     }
-    
+  public   
     func textStorage(textStorage: NSTextStorage!, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
 
         if editedMask & NSTextStorageEditActions.EditedCharacters {

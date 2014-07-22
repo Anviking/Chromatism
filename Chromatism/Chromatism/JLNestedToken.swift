@@ -9,7 +9,7 @@
 import UIKit
 
 // This class shows that there is a fundamental problem with JLScope. It two tokens matches next to each other the indexSet will merge them to one. Concidering relying on the attributedString instead.
-class JLNestedToken: JLScope {
+public class JLNestedToken: JLScope {
     
     var incrementingExpression: NSRegularExpression
     var decrementingExpression: NSRegularExpression

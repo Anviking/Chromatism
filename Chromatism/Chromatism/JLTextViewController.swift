@@ -8,17 +8,17 @@
 
 import UIKit
 
-class JLTextViewController: UIViewController {
+public class JLTextViewController: UIViewController {
     
-    var textView: JLTextView
+    public var textView: JLTextView
     
-    init(text: String, language: JLLanguage, theme: JLColorTheme) {
+    public init(text: String, language: JLLanguage, theme: JLColorTheme) {
         textView = JLTextView(language: language, theme: theme)
         textView.text = text
         super.init(nibName: nil, bundle: nil)
     }
     
-    override func loadView()  {
+    override public func loadView()  {
         view = textView
     }
 }

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-class JLToken: JLScope {
+public class JLToken: JLScope {
     
     var regularExpression: NSRegularExpression
     var captureGroup = 0
@@ -74,7 +74,7 @@ class JLToken: JLScope {
         self.indexSet = indexSet
     }
     
-    override var description: String {
+    override public var description: String {
         return "JLToken"
     }
 }
