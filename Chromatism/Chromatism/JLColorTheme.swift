@@ -19,7 +19,7 @@ public enum JLColorTheme {
         return dictionary[type]
     }
     
-    static let defaultTheme: [JLTokenType: UIColor] = [
+    private static let defaultTheme: [JLTokenType: UIColor] = [
         .Text:                         UIColor.blackColor(),
         .Background:                   UIColorRGB(255, 255, 255),
         .Comment:                      UIColorRGB(0, 131, 39),
@@ -38,7 +38,7 @@ public enum JLColorTheme {
         .ProjectMethodNames :          UIColorRGB(38, 71, 75)
     ]
     
-    static let duskTheme: [JLTokenType: UIColor] = [
+    private static let duskTheme: [JLTokenType: UIColor] = [
         .Text:                         UIColor.whiteColor(),
         .Background:                   UIColorRGB(30, 32, 40),
         .Comment:                      UIColorRGB(72, 190, 102),
