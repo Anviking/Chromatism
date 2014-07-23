@@ -80,18 +80,6 @@ class ObjectiveC: XCTestCase {
         }
     }
     
-    func testMethodCalls() {
-        measureBlock {
-            self.language.methodCalls.perform(self.attributedString)
-        }
-    }
-    
-    func testMethodCallParts() {
-        measureBlock {
-            self.language.methodCallParts.perform(self.attributedString)
-        }
-    }
-    
     func testObjectiveCKeywords() {
         measureBlock {
             self.language.objcKeywords.perform(self.attributedString)

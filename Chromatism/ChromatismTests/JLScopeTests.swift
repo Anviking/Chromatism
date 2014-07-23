@@ -31,9 +31,9 @@ class JLScopeTests: XCTestCase {
         let documentScope = JLScope()
         
         documentScope[
-            JLToken(pattern: "\\[.*\\]", tokenType: .Comment),
+            JLToken(pattern: "\\[.*\\]", tokenTypes: .Comment),
             JLLineScope()[
-                JLToken(pattern: "World", tokenType: .Keyword)
+                JLToken(pattern: "World", tokenTypes: .Keyword)
             ]
         ]
         
