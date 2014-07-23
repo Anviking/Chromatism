@@ -40,12 +40,13 @@ public class JLToken: JLScope {
     
     override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
         indexSet = self.indexSet - parentIndexSet
-        let contentIndexSet = NSMutableIndexSet()
         parentIndexSet.enumerateRangesUsingBlock({ (range, stop) in
             self.regularExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: {(result, flags, stop) in
                     self.process(result, attributedString: attributedString)
                 })
             })
+        
+        performSubscopes(attributedString, indexSet: indexSet.mutableCopy() as NSMutableIndexSet)
     }
     
     private func process(result: NSTextCheckingResult, attributedString: NSMutableAttributedString) {

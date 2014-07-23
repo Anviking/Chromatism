@@ -28,10 +28,6 @@ public class JLNestedToken: JLScope {
     var matches: [Token] = []
     
     override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
-        
-        indexSet -= parentIndexSet
-        matches = matches.filter { !(parentIndexSet.containsIndexesInRange($0.range)) }
-        
         func tokensClosestToRange(range: NSRange) -> (previous: Token?, next: Token?) {
             if self.matches.count == 0 { return (nil, nil) }
             var previousToken: Token? = self.matches[self.matches.startIndex]
@@ -61,6 +57,11 @@ public class JLNestedToken: JLScope {
             return nil
         }
         
+        
+        indexSet -= parentIndexSet
+        matches = matches.filter { !(parentIndexSet.containsIndexesInRange($0.range)) }
+        
+        // Find Matches
         parentIndexSet.enumerateRangesUsingBlock { (range, _) in
             var array: [Token] = []
             self.incrementingExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
