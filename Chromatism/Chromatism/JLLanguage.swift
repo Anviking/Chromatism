@@ -14,9 +14,7 @@ public class JLLanguage {
     
     public init() {
         documentScope = JLScope()
-        lineScope = JLScope()
-        
-        lineScope.clearWithTextColorBeforePerform = true
+        lineScope = JLLineScope()
         documentScope[
             lineScope
         ]
