@@ -22,17 +22,19 @@ public class JLLanguage {
     
     public class C: JLLanguage {
         
+        
+        
         var blockComments = JLNestedToken(identifier: "BlockComment", incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .Comment)
-        var lineComments = JLToken(pattern: "//(.*)", tokenType: .Comment)
+        var lineComments = JLToken(pattern: "//(.*)", tokenTypes: .Comment)
         
         
-        var preprocessor = JLToken(pattern: "^#.*+$", tokenType: .Preprocessor)
-        var strings = JLToken(pattern: "(\"|@\")[^\"\\n]*(@\"|\")", tokenType: .String)
-        var angularImports = JLToken(pattern: "<.*?>", tokenType: .String)
-        var numbers = JLToken(pattern: "(?<=\\s)\\d+", tokenType: .Number)
-        var functions = JLToken(pattern: "\\w+\\s*(?>\\(.*\\)", tokenType: .OtherMethodNames)
+        var preprocessor = JLToken(pattern: "^#.*+$", tokenTypes: .Preprocessor)
+        var strings = JLToken(pattern: "(\"|@\")[^\"\\n]*(@\"|\")", tokenTypes: .String)
+        var angularImports = JLToken(pattern: "<.*?>", tokenTypes: .String)
+        var numbers = JLToken(pattern: "(?<=\\s)\\d+", tokenTypes: .Number)
+        var functions = JLToken(pattern: "\\w+\\s*(?>\\(.*\\)", tokenTypes: .OtherMethodNames)
         
-        var keywords = JLToken(keywords: "true false yes no YES TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super".componentsSeparatedByString(" "), tokenType: .Keyword)
+        var keywords = JLToken(keywords: "true false yes no YES TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super".componentsSeparatedByString(" "), tokenTypes: .Keyword)
         
         public init() {
             super.init()
@@ -52,16 +54,16 @@ public class JLLanguage {
     
     public class ObjectiveC: C {
         // Long time since I wrote these regexes. They should probably be updated
-        var dotNotation = JLToken(pattern: "\\.\\w+", tokenType: .OtherMethodNames)
-        var methodCalls = JLToken(pattern: "(\\w+)\\]", tokenType: .OtherMethodNames, captureGroup: 1)
-        var methodCallParts = JLToken(pattern: "(\\w+)\\]", tokenType: .OtherMethodNames, captureGroup: 1)
-        var otherClassNames = JLToken(pattern: "\\b[A-Z]{3}[a-zA-Z]*\\b", tokenType: .OtherClassNames)
+        var dotNotation = JLToken(pattern: "\\.\\w+", tokenTypes: .OtherMethodNames)
+//        var methodCalls = JLToken(pattern: "(\\w+)\\]", tokenTypes: .OtherMethodNames)
+//        var methodCallParts = JLToken(pattern: "(\\w+)\\]", tokenTypes: .OtherMethodNames, captureGroup: 1)
+        var otherClassNames = JLToken(pattern: "\\b[A-Z]{3}[a-zA-Z]*\\b", tokenTypes: .OtherClassNames)
         
         // http://www.learn-cocos2d.com/2011/10/complete-list-objectivec-20-compiler-directives/
-        var objcKeywords = JLToken(pattern: "@(class|defs|protocol|required|optional|interface|public|package|protected|private|property|end|implementation|synthesize|dynamic|end|throw|try|catch|finally|synchronized|autoreleasepool|selector|encode|compatibility_alias)\\b", tokenType: .Keyword )
+        var objcKeywords = JLToken(pattern: "@(class|defs|protocol|required|optional|interface|public|package|protected|private|property|end|implementation|synthesize|dynamic|end|throw|try|catch|finally|synchronized|autoreleasepool|selector|encode|compatibility_alias)\\b", tokenTypes: .Keyword )
         public init() {
             super.init()
-            lineScope.subscopes += [dotNotation, methodCalls, methodCallParts, objcKeywords, otherClassNames]
+            lineScope.subscopes += [dotNotation, /*methodCalls, methodCallParts,*/ objcKeywords, otherClassNames]
         }
     }
 }
