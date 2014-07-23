@@ -20,12 +20,12 @@ class JLTokenTests: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         let documentScope = JLScope()
-        documentScope.colorDictionary = JLColorTheme.Default.dictionary
+        documentScope.theme = ChromatismTestsDefaultTheme
         let comment = JLToken(pattern: "//(.*)", tokenType: .Comment)
         comment.contentCaptureGroup = 1
         let world = JLToken(pattern: "World", tokenType: .Keyword)
         
-        documentScope => [ comment => [world] ]
+        documentScope[ comment[world] ]
         
         documentScope.perform(attributedString)
     }
@@ -37,7 +37,7 @@ class JLTokenTests: XCTestCase {
 
     func testContentCaptureGroup() {
         let expectedString = "//Hello ".comment + "World".keyword + "!".comment + "\nHello".text
-        XCTAssertEqualObjects(expectedString, attributedString)
+        XCTAssertEqual(expectedString, attributedString)
     }
 
     func testTokenizationPerformance() {

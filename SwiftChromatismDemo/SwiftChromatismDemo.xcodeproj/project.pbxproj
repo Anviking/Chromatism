@@ -11,6 +11,7 @@
 		8F105F29194D1C8100BF037F /* SwiftChromatismDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F105F28194D1C8100BF037F /* SwiftChromatismDemoTests.swift */; };
 		8F26E488195714590055D235 /* demo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8F26E487195714590055D235 /* demo.txt */; };
 		8F729300197DFA920006D903 /* Chromatism.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7292FD197DFA880006D903 /* Chromatism.framework */; };
+		8FB10D34197F0B46001A83B1 /* demo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8F26E487195714590055D235 /* demo.txt */; };
 		8FCDC0031979EE7F00F4B3EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F105F1A194D1C8100BF037F /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -266,6 +267,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FB10D34197F0B46001A83B1 /* demo.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

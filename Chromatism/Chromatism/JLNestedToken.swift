@@ -17,7 +17,7 @@ public class JLNestedToken: JLScope {
     
     var tokenType: JLTokenType
     
-    init(identifier: String, incrementingPattern: String, decrementingPattern: String, tokenType: JLTokenType) {
+    public init(identifier: String, incrementingPattern: String, decrementingPattern: String, tokenType: JLTokenType) {
         self.incrementingExpression = NSRegularExpression(pattern: incrementingPattern, options: nil, error: nil)
         self.decrementingExpression = NSRegularExpression(pattern: decrementingPattern, options: nil, error: nil)
         self.tokenType = tokenType

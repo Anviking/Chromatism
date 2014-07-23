@@ -24,9 +24,7 @@ public class JLScope: NSObject, Printable {
             return self
     }
     
-    var theme: JLColorTheme? { didSet{
-        cascadeOneLevel { $0.theme = self.theme }
-    }}
+    var theme: JLColorTheme?
     var editedIndexSet: NSIndexSet?
     
     // Will set the color to .Text in this scope's parentIndexSet before performing.
@@ -48,8 +46,9 @@ public class JLScope: NSObject, Printable {
         if clearWithTextColorBeforePerform {
             
             parentIndexSet.enumerateRangesUsingBlock({(range, stop) in
-                let color = self.theme?[.Text]
+                if let color = self.theme?[.Text] {
                 attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+                }
                 })
             
             clearAttributesInIndexSet(parentIndexSet, attributedString: attributedString)
@@ -71,6 +70,7 @@ public class JLScope: NSObject, Printable {
         
         var deletions = NSMutableIndexSet()
         for (index, scope) in enumerate(subscopes) {
+            scope.theme = theme
             if containsSubscopeWithEditedIndexSet {
                 if let editedIndexSet = scope.editedIndexSet {
                     let set = indexSet.intersectionWithSet(editedIndexSet) + deletions
@@ -107,12 +107,6 @@ public class JLScope: NSObject, Printable {
         block(scope: self)
         for scope in subscopes {
             scope.cascade(block)
-        }
-    }
-    
-    func cascadeOneLevel(block: (scope: JLScope) -> Void) {
-        for scope in subscopes {
-            block(scope: scope)
         }
     }
     

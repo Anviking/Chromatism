@@ -9,5 +9,15 @@
 import UIKit
 
 public class JLLineScope: JLScope {
+    
+    init()  {
+        super.init()
+        clearWithTextColorBeforePerform = true
+    }
+    
+    init(scope: JLScope)  {
+        super.init(scope: scope)
+        clearWithTextColorBeforePerform = true
+    }
    
 }

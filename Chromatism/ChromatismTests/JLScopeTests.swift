@@ -9,6 +9,8 @@
 import UIKit
 import XCTest
 
+let ChromatismTestsDefaultTheme = JLColorTheme.Default
+
 class JLScopeTests: XCTestCase {
     
     let blue = UIColor.blueColor()
@@ -26,29 +28,48 @@ class JLScopeTests: XCTestCase {
     
     func testLaziness() {
         var attributedString = "[Hello World]".text
-        let colors = JLColorTheme.Default.dictionary
         let documentScope = JLScope()
         
-        // Setup scopes
-        documentScope.colorDictionary = colors
-        
-        let lineScope = JLScope(scope: documentScope)
-        lineScope.clearWithTextColorBeforePerform = true
-
-        
-        documentScope => [
+        documentScope[
             JLToken(pattern: "\\[.*\\]", tokenType: .Comment),
-            lineScope => [
+            JLLineScope()[
                 JLToken(pattern: "World", tokenType: .Keyword)
             ]
         ]
         
+        documentScope.theme = .Default
         documentScope.perform(attributedString)
-        XCTAssertEqualObjects("[Hello World]".comment, attributedString)
+        XCTAssertEqual("[Hello World]".comment, attributedString)
         
         attributedString.deleteCharactersInRange(NSMakeRange(attributedString.length - 1, 1))
         documentScope.perform(attributedString)
-        XCTAssertEqualObjects("[Hello ".text + "World".keyword, attributedString)
+        XCTAssertEqual("[Hello ".text + "World".keyword, attributedString)
+        
+    }
+    
+    func testSubscripting() {
+
+        let a = JLScope()
+        let b = JLScope()
+        let c = JLScope()
+        let d = JLScope()
+        let e = JLScope()
+        let f = JLScope()
+        let g = JLScope()
+        let h = JLScope()
+        
+        a[
+            b[c,d],
+            e[f],
+            g,
+            h
+        ]
+        
+        XCTAssert(a.subscopes == [b,e,g,h], "")
+        XCTAssert(b.subscopes == [c,d], "")
+        XCTAssert(e.subscopes == [f], "")
+        XCTAssert(g.subscopes.count == 0, "")
+        XCTAssert(h.subscopes.count == 0, "")
         
     }
 

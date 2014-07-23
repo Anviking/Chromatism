@@ -42,7 +42,7 @@ class ChromatismTests: XCTestCase {
             // Put the code you want to measure the time of here.
             for _ in 1...1000 {
                 let finalSet = set1.intersectionWithSet(set2)
-                XCTAssertEqualObjects(set3, finalSet, "")
+                XCTAssertEqual(set3, finalSet, "")
             }
         }
     }
