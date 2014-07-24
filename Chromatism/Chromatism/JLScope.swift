@@ -47,7 +47,7 @@ public class JLScope: NSObject, Printable, Equatable {
             
             parentIndexSet.enumerateRangesUsingBlock({(range, stop) in
                 if let color = self.theme?[.Text] {
-                attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+                    attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                 }
                 })
             
@@ -68,25 +68,14 @@ public class JLScope: NSObject, Printable, Equatable {
         // If "*/" is removed, the comment token will not match, and we see that some indexes where deleted for that token.
         // Then we just tell the "lazy" scope to perform in those indexes
         
-        var deletions = NSMutableIndexSet()
         for (index, scope) in enumerate(subscopes) {
             scope.theme = theme
-            if containsSubscopeWithEditedIndexSet {
-                if let editedIndexSet = scope.editedIndexSet {
-                    let set = indexSet.intersectionWithSet(editedIndexSet) + deletions
-                    scope.perform(attributedString, parentIndexSet: set)
-                    indexSet -= scope.indexSet
-                } else {
-                    var oldSet = scope.indexSet
-                    scope.perform(attributedString, parentIndexSet: indexSet)
-                    var newSet = scope.indexSet
-                    indexSet -= newSet
-                    deletions += NSIndexSetDelta(oldSet, newSet).deletions
-                }
-            } else {
-                scope.perform(attributedString, parentIndexSet: indexSet)
-                indexSet -= scope.indexSet
-            }
+            
+            var oldSet = scope.indexSet
+            scope.perform(attributedString, parentIndexSet: indexSet)
+            var newSet = scope.indexSet
+            indexSet -= newSet
+            indexSet += NSIndexSetDelta(oldSet, newSet).deletions
         }
     }
     
