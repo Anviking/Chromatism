@@ -13,15 +13,13 @@ public class JLNestedToken: JLScope {
     
     var incrementingExpression: NSRegularExpression
     var decrementingExpression: NSRegularExpression
-    let identifier: String
     
-    var tokenType: JLTokenType
+    var tokenTypes: [Scope: JLTokenType]
     
-    public init(identifier: String, incrementingPattern: String, decrementingPattern: String, tokenType: JLTokenType) {
+    public init(incrementingPattern: String, decrementingPattern: String, tokenTypes: [Scope: JLTokenType]) {
         self.incrementingExpression = NSRegularExpression(pattern: incrementingPattern, options: nil, error: nil)
         self.decrementingExpression = NSRegularExpression(pattern: decrementingPattern, options: nil, error: nil)
-        self.tokenType = tokenType
-        self.identifier = identifier
+        self.tokenTypes = tokenTypes
         super.init()
     }
     
@@ -45,12 +43,12 @@ public class JLNestedToken: JLScope {
             return (previousToken, nextToken)
         }
         
-        func rangeOfSurroundingTokenPair(range: NSRange) -> NSRange? {
+        func surroundingTokenPair(range: NSRange) -> (incrementingToken: Token, decrementingToken: Token)? {
             let tokens = tokensClosestToRange(range)
             if let previousToken = tokens.previous {
                 if let nextToken = tokens.next {
                     if previousToken.delta > 0 && nextToken.delta < 0 {
-                        return NSMakeRange(previousToken.range.location, nextToken.range.end - previousToken.range.location)
+                        return (previousToken, nextToken)
                     }
                 }
             }
@@ -65,43 +63,63 @@ public class JLNestedToken: JLScope {
         parentIndexSet.enumerateRangesUsingBlock { (range, _) in
             var array: [Token] = []
             self.incrementingExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
-                array += Token(delta: 1, range: range)
+                array += Token(delta: 1, result: result)
                 })
             self.decrementingExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
-                array += Token(delta: -1, range: range)
+                array += Token(delta: -1, result: result)
                 })
             self.matches += array
-            if let range = rangeOfSurroundingTokenPair(range) {
-                if let color = self.theme?[self.tokenType] {
-                    attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
-                }
+            if let (start, end) = surroundingTokenPair(range) {
+                self.process(start, decrementingToken: end, attributedString: attributedString)
             }
         }
         
         matches.sort { $0.range.location < $1.range.location }
         
-        var startIndexes = [Int: Int]()
+        var incrementingTokens = [Int: Token]()
         var depth = 0
-        println(matches)
-        for result in matches {
-            if result.delta > 0 {
-                startIndexes[depth] = result.range.location
-            } else if let startIndex = startIndexes[depth + result.delta] {
-                let endIndex = result.range.end
-                let range = NSMakeRange(startIndex, endIndex - startIndex)
-                self.indexSet.addIndexesInRange(range)
-                if let color = theme?[tokenType] {
-                    attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
-                }
+        for token in matches {
+            if token.delta > 0 {
+                incrementingTokens[depth] = token
+            } else if let start = incrementingTokens[depth + token.delta] {
+                process(start, decrementingToken: token, attributedString: attributedString)
             }
-            depth += result.delta
+            depth += token.delta
+        }
+    }
+    
+    private func process(incrementingToken: Token, decrementingToken: Token, attributedString: NSMutableAttributedString) {
+        for (scope, type) in self.tokenTypes {
+            let range = rangeForScope(scope, incrementingToken: incrementingToken, decrementingToken: decrementingToken)
+            if let color = self.theme?[type] {
+                attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+            }
+        }
+    }
+    
+    private func rangeForScope(scope: Scope, incrementingToken: Token, decrementingToken: Token) -> NSRange {
+        let start = incrementingToken.range
+        let end = decrementingToken.range
+        
+        switch scope {
+        case .All:
+            return NSRange(start.location ..< end.location + end.length)
+        case .Incrementing(let captureGroup):
+            return incrementingToken.result.rangeAtIndex(captureGroup)
+        case .Decrementing(let captureGroup):
+            println("Decrementing[0]: \(decrementingToken.result.range)")
+            return decrementingToken.result.rangeAtIndex(captureGroup)
+        case .Between:
+            return NSRange(start.end ..< end.start)
+        default:
+            return 0
         }
     }
     
     override func attributedStringDidChange(range: NSRange, delta: Int)  {
-        for (index, result) in enumerate(matches.reverse()) {
-            if result.range.location < range.end { break }
-            result.range = NSMakeRange(result.range.location + delta, range.length)
+        for (index, token) in enumerate(matches.reverse()) {
+            if token.range.location < range.end { break }
+            token.range = NSMakeRange(token.range.location + delta, range.length)
             
         }
         super.attributedStringDidChange(range, delta: delta)
@@ -111,13 +129,35 @@ public class JLNestedToken: JLScope {
     class Token: Printable {
         var range: NSRange
         var delta: Int // Set to +1 to increment by one level, or -1 to decrement
+        var result: NSTextCheckingResult
         
-        init(delta:Int, range: NSRange) {
-            self.range = range
+        init(delta:Int, result: NSTextCheckingResult) {
+            self.range = result.range
             self.delta = delta
+            self.result = result
         }
         
         var description: String { return "∆\(delta) \(range)"}
+    }
+    
+    public enum Scope: Hashable, Equatable {
+        case All, Incrementing(Int), Decrementing(Int), Between
+        
+        public var hashValue: Int {
+        let bitsPerComponent = 8
+            switch self {
+            case All:
+                return 1
+            case Incrementing(let captureGroup):
+                return captureGroup << (1 * bitsPerComponent)
+            case Decrementing(let captureGroup):
+                return captureGroup << (2 * bitsPerComponent)
+            case Between:
+                return 1 << (3 * bitsPerComponent)
+            default:
+                return 0
+            }
+        }
     }
     
 }
@@ -126,4 +166,12 @@ extension NSRange {
     var end: Int {
     return location + length
     }
+    
+    var start: Int {
+    return location
+    }
+}
+
+public func ==(lhs: JLNestedToken.Scope, rhs: JLNestedToken.Scope) -> Bool {
+    return (lhs.hashValue == rhs.hashValue)
 }

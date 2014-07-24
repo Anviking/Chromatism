@@ -9,6 +9,7 @@
 import UIKit
 
 public enum JLTokenType {
+    case None
     case Text
     case Background
     case Comment

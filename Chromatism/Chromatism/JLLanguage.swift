@@ -24,7 +24,8 @@ public class JLLanguage {
         
         
         
-        var blockComments = JLNestedToken(identifier: "BlockComment", incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .Comment)
+        var blockComments = JLNestedToken(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenTypes: [.All: .Comment])
+        
         var lineComments = JLToken(pattern: "//(.*)", tokenTypes: .Comment)
         
         
@@ -61,9 +62,23 @@ public class JLLanguage {
         
         // http://www.learn-cocos2d.com/2011/10/complete-list-objectivec-20-compiler-directives/
         var objcKeywords = JLToken(pattern: "@(class|defs|protocol|required|optional|interface|public|package|protected|private|property|end|implementation|synthesize|dynamic|end|throw|try|catch|finally|synchronized|autoreleasepool|selector|encode|compatibility_alias)\\b", tokenTypes: .Keyword )
+        
+        var methodCalls = JLNestedToken(incrementingPattern: "(?<!\\@)\\[", decrementingPattern: "[\\s:|\\]]([\\d\\w]+)\\]", tokenTypes: [.Decrementing(1): .OtherMethodNames])
         public init() {
             super.init()
-            lineScope.subscopes += [dotNotation, /*methodCalls, methodCallParts,*/ objcKeywords, otherClassNames]
+                lineScope[
+                    blockComments,
+                    methodCalls,
+                    lineComments,
+                    preprocessor[strings, angularImports],
+                    strings,
+                    numbers,
+                    functions,
+                    keywords,
+                    dotNotation,
+                    objcKeywords,
+                    otherClassNames
+                ]
         }
     }
 }

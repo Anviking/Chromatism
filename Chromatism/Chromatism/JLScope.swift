@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class JLScope: NSObject, Printable {
+public class JLScope: NSObject, Printable, Equatable {
     
     init() {
         super.init()
@@ -112,14 +112,16 @@ public class JLScope: NSObject, Printable {
     
     // Printable
     override public var description: String {
-    return "JLScope"
+        return "JLScope"
     }
-}
-
-extension JLScope {
+    
     func attributedStringDidChange(range: NSRange, delta: Int) {
         self.indexSet.removeIndexesInRange(range)
         self.indexSet.shiftIndexesStartingAtIndex(range.location, by: delta)
     }
     
+}
+
+public func ==(lhs: JLScope, rhs: JLScope) -> Bool {
+    return lhs.subscopes == rhs.subscopes && lhs.indexSet == rhs.indexSet
 }
