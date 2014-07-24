@@ -21,6 +21,8 @@ public class JLNestedToken: JLScope {
         self.decrementingExpression = NSRegularExpression(pattern: decrementingPattern, options: nil, error: nil)
         self.tokenTypes = tokenTypes
         super.init()
+        
+        multiline = true
     }
     
     var matches: [Token] = []

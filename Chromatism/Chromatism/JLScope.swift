@@ -24,6 +24,7 @@ public class JLScope: NSObject, Printable, Equatable {
             return self
     }
     
+    var multiline = false
     var theme: JLColorTheme?
     var editedIndexSet: NSIndexSet?
     
@@ -74,8 +75,11 @@ public class JLScope: NSObject, Printable, Equatable {
             var oldSet = scope.indexSet
             scope.perform(attributedString, parentIndexSet: indexSet)
             var newSet = scope.indexSet
+            
             indexSet -= newSet
-            indexSet += NSIndexSetDelta(oldSet, newSet).deletions
+            if scope.multiline {
+                indexSet += NSIndexSetDelta(oldSet, newSet).deletions
+            }
         }
     }
     
