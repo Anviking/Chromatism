@@ -1,7 +1,7 @@
 Chromatism
 ==========
 
-iOS Syntax highlightning using Swift. This is no Clang, but hopefully alot more than a bunch of regex-expressions.
+iOS Syntax highlightning using Swift. This is no Clang, but hopefully a little more than an array of regex-expressions.
 
 Experimental-Swift branch features:
 - JLNestedToken  `/* Comment /* Another Comment */ */`. Could possible do great stuff with {}-scope-aware-auto-completion.
