@@ -70,11 +70,14 @@ public class JLNestedToken: JLScope {
                 })
             self.matches += array
             if let (start, end) = surroundingTokenPair(range) {
+                println("Inside pair: \(start) - \(end)")
                 self.process(start, decrementingToken: end, attributedString: attributedString)
             }
         }
         
         matches.sort { $0.range.location < $1.range.location }
+        
+        //println("Tokens: \(matches)")
         
         var incrementingTokens = [Int: Token]()
         var depth = 0
@@ -93,6 +96,7 @@ public class JLNestedToken: JLScope {
             let range = rangeForScope(scope, incrementingToken: incrementingToken, decrementingToken: decrementingToken)
             if let color = self.theme?[type] {
                 attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+                indexSet.addIndexesInRange(range)
             }
         }
     }
@@ -105,10 +109,9 @@ public class JLNestedToken: JLScope {
         case .All:
             return NSRange(start.location ..< end.location + end.length)
         case .Incrementing(let captureGroup):
-            return incrementingToken.result.rangeAtIndex(captureGroup)
+            return incrementingToken.ranges[captureGroup]
         case .Decrementing(let captureGroup):
-            println("Decrementing[0]: \(decrementingToken.result.range)")
-            return decrementingToken.result.rangeAtIndex(captureGroup)
+            return decrementingToken.ranges[captureGroup]
         case .Between:
             return NSRange(start.end ..< end.start)
         default:
@@ -119,22 +122,29 @@ public class JLNestedToken: JLScope {
     override func attributedStringDidChange(range: NSRange, delta: Int)  {
         for (index, token) in enumerate(matches.reverse()) {
             if token.range.location < range.end { break }
-            token.range = NSMakeRange(token.range.location + delta, range.length)
-            
+            token.shiftRanges(delta)
         }
         super.attributedStringDidChange(range, delta: delta)
     }
     
     
     class Token: Printable {
-        var range: NSRange
+        var range: NSRange { return ranges[0] }
+        var ranges: [NSRange]
         var delta: Int // Set to +1 to increment by one level, or -1 to decrement
-        var result: NSTextCheckingResult
         
         init(delta:Int, result: NSTextCheckingResult) {
-            self.range = result.range
             self.delta = delta
-            self.result = result
+            self.ranges = []
+            var i = 0
+            while i < result.numberOfRanges {
+                ranges += result.rangeAtIndex(i)
+                i++
+            }
+        }
+        
+        func shiftRanges(delta: Int) {
+            ranges = ranges.map { return NSMakeRange($0.location + delta, $0.length)}
         }
         
         var description: String { return "∆\(delta) \(range)"}
