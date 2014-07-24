@@ -56,8 +56,6 @@ public class JLNestedToken: JLScope {
         }
         
         
-        indexSet -= parentIndexSet
-        matches = matches.filter { !(parentIndexSet.containsIndexesInRange($0.range)) }
         
         // Find Matches
         parentIndexSet.enumerateRangesUsingBlock { (range, _) in
@@ -148,6 +146,12 @@ public class JLNestedToken: JLScope {
         }
         
         var description: String { return "∆\(delta) \(range)"}
+    }
+    
+    override func clearAttributesInIndexSet(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
+        self.indexSet -= indexSet
+        matches = matches.filter { !(indexSet.containsIndexesInRange($0.range)) }
+        super.clearAttributesInIndexSet(indexSet, attributedString: attributedString)
     }
     
     public enum Scope: Hashable, Equatable {
