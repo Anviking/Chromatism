@@ -9,26 +9,12 @@
 import UIKit
 
 public class JLLanguage {
-    let documentScope: JLScope
-    let lineScope: JLScope
-    
-    public init() {
-        documentScope = JLScope()
-        lineScope = JLLineScope()
-        documentScope[
-            lineScope
-        ]
-    }
+    let documentScope = JLDocumentScope()
     
     public class C: JLLanguage {
         
-        
-        
         var blockComments = JLNestedToken(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenTypes: [.All: .Comment])
-        
         var lineComments = JLToken(pattern: "//(.*)", tokenTypes: .Comment)
-        
-        
         var preprocessor = JLToken(pattern: "^#.*+$", tokenTypes: .Preprocessor)
         var strings = JLToken(pattern: "(\"|@\")[^\"\\n]*(@\"|\")", tokenTypes: .String)
         var angularImports = JLToken(pattern: "<.*?>", tokenTypes: .String)
@@ -40,45 +26,40 @@ public class JLLanguage {
         public init() {
             super.init()
             documentScope[
-                lineScope[
-                    blockComments,
-                    lineComments,
-                    preprocessor[strings, angularImports],
-                    strings,
-                    numbers,
-                    functions,
-                    keywords
-                ]
+                blockComments,
+                lineComments,
+                preprocessor[strings, angularImports],
+                strings,
+                numbers,
+                functions,
+                keywords
             ]
         }
     }
     
     public class ObjectiveC: C {
-        // Long time since I wrote these regexes. They should probably be updated
         var dotNotation = JLToken(pattern: "\\.\\w+", tokenTypes: .OtherMethodNames)
-//        var methodCalls = JLToken(pattern: "(\\w+)\\]", tokenTypes: .OtherMethodNames)
-//        var methodCallParts = JLToken(pattern: "(\\w+)\\]", tokenTypes: .OtherMethodNames, captureGroup: 1)
         var otherClassNames = JLToken(pattern: "\\b[A-Z]{3}[a-zA-Z]*\\b", tokenTypes: .OtherClassNames)
         
         // http://www.learn-cocos2d.com/2011/10/complete-list-objectivec-20-compiler-directives/
         var objcKeywords = JLToken(pattern: "@(class|defs|protocol|required|optional|interface|public|package|protected|private|property|end|implementation|synthesize|dynamic|end|throw|try|catch|finally|synchronized|autoreleasepool|selector|encode|compatibility_alias)\\b", tokenTypes: .Keyword )
-        
         var methodCalls = JLNestedToken(incrementingPattern: "(?<!\\@)\\[", decrementingPattern: "[\\s:|\\]]([\\d\\w]+)\\]", tokenTypes: [.Decrementing(1): .OtherMethodNames])
+        
         public init() {
             super.init()
-                lineScope[
-                    blockComments,
-                    methodCalls,
-                    lineComments,
-                    preprocessor[strings, angularImports],
-                    strings,
-                    numbers,
-                    functions,
-                    keywords,
-                    dotNotation,
-                    objcKeywords,
-                    otherClassNames
-                ]
+            documentScope[
+                blockComments,
+                methodCalls,
+                lineComments,
+                preprocessor[strings, angularImports],
+                strings,
+                numbers,
+                functions,
+                keywords,
+                dotNotation,
+                objcKeywords,
+                otherClassNames
+            ]
         }
     }
 }

@@ -65,10 +65,6 @@ public class JLScope: NSObject, Printable, Equatable {
     // Will change indexSet
     func performSubscopes(attributedString: NSMutableAttributedString, indexSet: NSMutableIndexSet) {
         
-        // If a subscope is "lazy" (has a set editedIndexSet), we must check sibling scopes for deletions.
-        // If "*/" is removed, the comment token will not match, and we see that some indexes where deleted for that token.
-        // Then we just tell the "lazy" scope to perform in those indexes
-        
         for (index, scope) in enumerate(subscopes) {
             scope.theme = theme
             

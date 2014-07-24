@@ -9,5 +9,10 @@
 import UIKit
 
 public class JLDocumentScope: JLScope {
+    
+    init() {
+        super.init()
+        clearWithTextColorBeforePerform = true
+    }
 
 }

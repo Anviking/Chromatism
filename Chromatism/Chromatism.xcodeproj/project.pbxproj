@@ -14,7 +14,6 @@
 		8F9598A2197448B4002EA4AB /* JLTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9598A1197448B4002EA4AB /* JLTokenTests.swift */; };
 		8FB10D21197EF104001A83B1 /* JLScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18B19738B7900F75A76 /* JLScope.swift */; };
 		8FB10D22197EF104001A83B1 /* JLDocumentScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE12922197B5D780084E506 /* JLDocumentScope.swift */; };
-		8FB10D23197EF104001A83B1 /* JLLineScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE12924197B5D840084E506 /* JLLineScope.swift */; };
 		8FB10D24197EF104001A83B1 /* JLToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F95989D197437BF002EA4AB /* JLToken.swift */; };
 		8FB10D25197EF104001A83B1 /* JLNestedToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7922C9197D39B900A94724 /* JLNestedToken.swift */; };
 		8FB10D26197EF104001A83B1 /* NSIndexSet+Intersection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18D197418E300F75A76 /* NSIndexSet+Intersection.swift */; };
@@ -39,7 +38,6 @@
 		8FE1291E197B21900084E506 /* JLTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFC1979940200F4B3EC /* JLTextView.swift */; };
 		8FE1291F197B21900084E506 /* JLTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */; };
 		8FE12923197B5D780084E506 /* JLDocumentScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE12922197B5D780084E506 /* JLDocumentScope.swift */; };
-		8FE12925197B5D840084E506 /* JLLineScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE12924197B5D840084E506 /* JLLineScope.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +73,6 @@
 		8FCDBFFC1979940200F4B3EC /* JLTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTextView.swift; sourceTree = "<group>"; };
 		8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTextViewController.swift; sourceTree = "<group>"; };
 		8FE12922197B5D780084E506 /* JLDocumentScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLDocumentScope.swift; sourceTree = "<group>"; };
-		8FE12924197B5D840084E506 /* JLLineScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLLineScope.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,7 +118,6 @@
 				8FBFC17419738B0400F75A76 /* Chromatism.h */,
 				8FBFC18B19738B7900F75A76 /* JLScope.swift */,
 				8FE12922197B5D780084E506 /* JLDocumentScope.swift */,
-				8FE12924197B5D840084E506 /* JLLineScope.swift */,
 				8F95989D197437BF002EA4AB /* JLToken.swift */,
 				8F7922C9197D39B900A94724 /* JLNestedToken.swift */,
 				8FBFC18D197418E300F75A76 /* NSIndexSet+Intersection.swift */,
@@ -287,7 +283,6 @@
 				8FE1291D197B21900084E506 /* JLTokenizer.swift in Sources */,
 				8FE1291F197B21900084E506 /* JLTextViewController.swift in Sources */,
 				8FE12923197B5D780084E506 /* JLDocumentScope.swift in Sources */,
-				8FE12925197B5D840084E506 /* JLLineScope.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,7 +293,6 @@
 				8FBFC19219741B6B00F75A76 /* JLScopeTests.swift in Sources */,
 				8FB10D22197EF104001A83B1 /* JLDocumentScope.swift in Sources */,
 				8F9598A2197448B4002EA4AB /* JLTokenTests.swift in Sources */,
-				8FB10D23197EF104001A83B1 /* JLLineScope.swift in Sources */,
 				8FB10D21197EF104001A83B1 /* JLScope.swift in Sources */,
 				8FB10D2C197EF104001A83B1 /* JLLanguage.swift in Sources */,
 				8FB10D28197EF104001A83B1 /* JLTextView.swift in Sources */,

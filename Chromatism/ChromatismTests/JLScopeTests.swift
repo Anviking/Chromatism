@@ -28,13 +28,11 @@ class JLScopeTests: XCTestCase {
     
     func testLaziness() {
         var attributedString = "[Hello World]".text
-        let documentScope = JLScope()
+        let documentScope = JLDocumentScope()
         
         documentScope[
             JLToken(pattern: "\\[.*\\]", tokenTypes: .Comment),
-            JLLineScope()[
-                JLToken(pattern: "World", tokenTypes: .Keyword)
-            ]
+            JLToken(pattern: "World", tokenTypes: .Keyword)
         ]
         
         documentScope.theme = .Default

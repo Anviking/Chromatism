@@ -22,7 +22,6 @@ class ObjectiveC: XCTestCase {
         attributedString = NSMutableAttributedString(string: string)
         language = JLLanguage.ObjectiveC()
         language.documentScope.theme = .Default
-        language.lineScope.editedIndexSet = NSIndexSet(indexesInRange: NSRangeFromString(attributedString.string))
     }
     
     func testEverything() {
@@ -35,6 +34,12 @@ class ObjectiveC: XCTestCase {
     func testBlockComments() {
         measureBlock {
             self.language.blockComments.perform(self.attributedString)
+        }
+    }
+    
+    func testMethodCalls() {
+        measureBlock {
+            self.language.methodCalls.perform(self.attributedString)
         }
     }
     

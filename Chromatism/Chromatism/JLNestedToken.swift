@@ -70,15 +70,12 @@ public class JLNestedToken: JLScope {
                 })
             self.matches += array
             if let (start, end) = surroundingTokenPair(range) {
-                println("Inside pair: \(start) - \(end)")
                 self.process(start, decrementingToken: end, attributedString: attributedString)
             }
         }
         
         matches.sort { $0.range.location < $1.range.location }
-        
-        //println("Tokens: \(matches)")
-        
+                
         var incrementingTokens = [Int: Token]()
         var depth = 0
         for token in matches {

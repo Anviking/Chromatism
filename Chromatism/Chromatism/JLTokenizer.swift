@@ -11,33 +11,23 @@ import UIKit
 public class JLTokenizer: NSObject {
     
     let documentScope: JLScope
-    let lineScope: JLScope
 
     public var theme: JLColorTheme { didSet { documentScope.theme = theme }}
     
-    public init (documentScope: JLScope, lineScope: JLScope, theme: JLColorTheme) {
-        documentScope.theme = theme
+    public init (language: JLLanguage, theme: JLColorTheme) {
         self.theme = theme
-        self.documentScope = documentScope
-        self.lineScope = lineScope
-    }
-    
-    convenience init(language: JLLanguage, theme: JLColorTheme) {
-        self.init(documentScope: language.documentScope, lineScope: language.lineScope, theme: theme)
-    }
-    
-    convenience init(language: JLLanguage, theme: JLColorTheme, textStorage: NSTextStorage) {
-        self.init(documentScope: language.documentScope, lineScope: language.lineScope, theme: theme)
-        textStorage.delegate = self
+        self.documentScope = language.documentScope
+        documentScope.theme = theme
     }
 
     func tokenizeAttributedString(attributedString: NSMutableAttributedString) {
-        tokenizeAttributedString(attributedString, editedLineIndexSet: nil)
+        let range = NSRangeFromString(attributedString.string)
+        let editedLineIndexSet = NSIndexSet(indexesInRange: range)
+        tokenizeAttributedString(attributedString, editedLineIndexSet: editedLineIndexSet)
     }
     
-    func tokenizeAttributedString(attributedString: NSMutableAttributedString, editedLineIndexSet: NSIndexSet?) {
-        lineScope.editedIndexSet = editedLineIndexSet
-        documentScope.perform(attributedString)
+    func tokenizeAttributedString(attributedString: NSMutableAttributedString, editedLineIndexSet: NSIndexSet) {
+        documentScope.perform(attributedString, parentIndexSet: editedLineIndexSet)
     }
 
 }
