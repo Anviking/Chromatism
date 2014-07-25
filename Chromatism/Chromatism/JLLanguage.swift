@@ -13,7 +13,7 @@ public class JLLanguage {
     
     public class C: JLLanguage {
         
-        var blockComments = JLNestedToken(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenTypes: [.All: .Comment])
+        var blockComments = JLNestedToken(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .Comment, hollow: false)
         var lineComments = JLToken(pattern: "//(.*)", tokenTypes: .Comment)
         var preprocessor = JLToken(pattern: "^#.*+$", tokenTypes: .Preprocessor)
         var strings = JLToken(pattern: "(\"|@\")[^\"\\n]*(@\"|\")", tokenTypes: .String)
@@ -43,13 +43,28 @@ public class JLLanguage {
         
         // http://www.learn-cocos2d.com/2011/10/complete-list-objectivec-20-compiler-directives/
         var objcKeywords = JLToken(pattern: "@(class|defs|protocol|required|optional|interface|public|package|protected|private|property|end|implementation|synthesize|dynamic|end|throw|try|catch|finally|synchronized|autoreleasepool|selector|encode|compatibility_alias)\\b", tokenTypes: .Keyword )
-        var methodCalls = JLNestedToken(incrementingPattern: "(?<!\\@)\\[", decrementingPattern: "[\\s:|\\]]([\\d\\w]+)\\]", tokenTypes: [.Decrementing(1): .OtherMethodNames])
+        var squareBrackets: JLNestedToken
+/*        var methods = JLNestedToken.Token(incrementingPattern: "(?<!\\@)\\[", decrementingPattern: "[\\s:|\\]]([\\d\\w]+)\\]", tokenTypes: [.Decrementing(1): .OtherMethodNames])
+        var arrayLiteral = JLNestedToken.Token(incrementingPattern: "\\@\\[", decrementingPattern: "\\]", tokenTypes: [.Decrementing(0): .OtherMethodNames, .Incrementing(0): .OtherMethodNames])
+        var dictionaryLiteral = JLNestedToken(incrementingPattern: "\\@\\{", decrementingPattern: "\\}", tokenTypes: [.Decrementing(0): .OtherMethodNames, .Incrementing(0): .OtherMethodNames])
+*/
         
         public init() {
+            
+            let openBracket = JLNestedToken.Token(pattern: "\\[", delta: 1)
+            let closeBracket = JLNestedToken.Token(pattern: "\\]", delta: -1)
+            let arrayOpen = JLNestedToken.Token(pattern: "\\@\\[", delta: 1)
+            
+            let method = JLNestedToken.Descriptor(incrementingToken: openBracket, decrementingToken: closeBracket, tokenType: .Comment, hollow: true)
+            let arrayLiteral = JLNestedToken.Descriptor(incrementingToken: arrayOpen, decrementingToken: closeBracket, tokenType: .Keyword, hollow: true)
+            squareBrackets = JLNestedToken(tokens: [openBracket, closeBracket, arrayOpen])
+            squareBrackets.descriptors = [arrayLiteral, method]
             super.init()
+            
+            
             documentScope[
                 blockComments,
-                methodCalls,
+                squareBrackets,
                 lineComments,
                 preprocessor[strings, angularImports],
                 strings,

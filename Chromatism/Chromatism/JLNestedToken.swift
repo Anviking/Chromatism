@@ -8,30 +8,64 @@
 
 import UIKit
 
-// This class shows that there is a fundamental problem with JLScope. It two tokens matches next to each other the indexSet will merge them to one. Concidering relying on the attributedString instead.
 public class JLNestedToken: JLScope {
     
-    var incrementingExpression: NSRegularExpression
-    var decrementingExpression: NSRegularExpression
+    public class Token: Equatable {
+        var delta: Int // Set to +1 to increment by one level, or -1 to decrement
+        var expression: NSRegularExpression
+        
+        init(pattern: String, delta: Int) {
+            self.delta = delta
+            self.expression = NSRegularExpression(pattern: pattern, options: nil, error: nil)
+        }
+    }
     
-    var tokenTypes: [Scope: JLTokenType]
+    public class Descriptor {
+        var incrementingToken: Token
+        var decrementingToken: Token
+        
+        var tokenTypes = [Scope: JLTokenType]()
+        
+        init(incrementingToken: Token, decrementingToken: Token, tokenType: JLTokenType, hollow: Bool) {
+            self.incrementingToken = incrementingToken
+            self.decrementingToken = decrementingToken
+            if hollow {
+                tokenTypes[.Incrementing(0)] = tokenType
+                tokenTypes[.Decrementing(0)] = tokenType
+            } else {
+                tokenTypes[.All] = tokenType
+            }
+        }
+        
+        
+    }
     
-    public init(incrementingPattern: String, decrementingPattern: String, tokenTypes: [Scope: JLTokenType]) {
-        self.incrementingExpression = NSRegularExpression(pattern: incrementingPattern, options: nil, error: nil)
-        self.decrementingExpression = NSRegularExpression(pattern: decrementingPattern, options: nil, error: nil)
-        self.tokenTypes = tokenTypes
+    var descriptors: [Descriptor] = []
+    let tokens: [Token]
+    
+    public init(tokens: [Token]) {
+        self.tokens = tokens
         super.init()
         
         multiline = true
     }
     
-    var matches: [Token] = []
+    public convenience init(incrementingPattern: String, decrementingPattern: String, tokenType: JLTokenType, hollow: Bool) {
+        let a = Token(pattern: incrementingPattern, delta: 1)
+        let b = Token(pattern: decrementingPattern, delta: -1)
+        let descriptor = Descriptor(incrementingToken: a, decrementingToken: b, tokenType: tokenType, hollow: hollow)
+        self.init(tokens: [a, b])
+        self.descriptors += descriptor
+    }
+
+    
+    var matches: [TokenResult] = []
     
     override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
-        func tokensClosestToRange(range: NSRange) -> (previous: Token?, next: Token?) {
+        func tokensClosestToRange(range: NSRange) -> (previous: TokenResult?, next: TokenResult?) {
             if self.matches.count == 0 { return (nil, nil) }
-            var previousToken: Token? = self.matches[self.matches.startIndex]
-            var nextToken: Token?
+            var previousToken: TokenResult? = self.matches[self.matches.startIndex]
+            var nextToken: TokenResult?
             
             for token in self.matches {
                 if token.range.location < range.location {
@@ -45,11 +79,11 @@ public class JLNestedToken: JLScope {
             return (previousToken, nextToken)
         }
         
-        func surroundingTokenPair(range: NSRange) -> (incrementingToken: Token, decrementingToken: Token)? {
+        func surroundingTokenPair(range: NSRange) -> (incrementingToken: TokenResult, decrementingToken: TokenResult)? {
             let tokens = tokensClosestToRange(range)
             if let previousToken = tokens.previous {
                 if let nextToken = tokens.next {
-                    if previousToken.delta > 0 && nextToken.delta < 0 {
+                    if previousToken.token.delta > 0 && nextToken.token.delta < 0 {
                         return (previousToken, nextToken)
                     }
                 }
@@ -61,46 +95,53 @@ public class JLNestedToken: JLScope {
         
         // Find Matches
         parentIndexSet.enumerateRangesUsingBlock { (range, _) in
-            var array: [Token] = []
-            self.incrementingExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
-                array += Token(delta: 1, result: result)
-                })
-            self.decrementingExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
-                array += Token(delta: -1, result: result)
-                })
-            self.matches += array
-            if let (start, end) = surroundingTokenPair(range) {
-                self.process(start, decrementingToken: end, attributedString: attributedString)
+            
+            for token in self.tokens {
+                var array: [TokenResult] = []
+                token.expression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
+                    array += TokenResult(result: result, token: token)
+                    })
+                
+                self.matches += array
+                if let (start, end) = surroundingTokenPair(range) {
+                    self.process(start, decrementingToken: end, attributedString: attributedString)
+                }
             }
         }
         
         matches.sort { $0.range.location < $1.range.location }
         
-        var incrementingTokens = [Int: Token]()
+        var incrementingTokens = [Int: TokenResult]()
+        
         var depth = 0
-        for token in matches {
-            if token.delta > 0 {
-                incrementingTokens[depth] = token
-            } else if let start = incrementingTokens[depth + token.delta] {
-                process(start, decrementingToken: token, attributedString: attributedString)
+        for result in matches {
+            if result.token.delta > 0 {
+                incrementingTokens[depth] = result
+            } else if let start = incrementingTokens[depth + result.token.delta] {
+                process(start, decrementingToken: result, attributedString: attributedString)
             }
-            depth += token.delta
+            depth += result.token.delta
         }
     }
     
-    private func process(incrementingToken: Token, decrementingToken: Token, attributedString: NSMutableAttributedString) {
-        for (scope, type) in self.tokenTypes {
-            let range = rangeForScope(scope, incrementingToken: incrementingToken, decrementingToken: decrementingToken)
-            if let color = self.theme?[type] {
-                if range.location > 0 && range.length < attributedString.length {
-                    attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
-                    indexSet.addIndexesInRange(range)
+    private func process(incrementingToken: TokenResult, decrementingToken: TokenResult, attributedString: NSMutableAttributedString) {
+        
+        for descriptor in descriptors {
+            if incrementingToken.token === descriptor.incrementingToken && decrementingToken.token === descriptor.decrementingToken {
+                for (scope, type) in descriptor.tokenTypes {
+                    let range = rangeForScope(scope, incrementingToken: incrementingToken, decrementingToken: decrementingToken)
+                    if let color = self.theme?[type] {
+                        if range.location > 0 && range.end < attributedString.length {
+                            attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+                            indexSet.addIndexesInRange(range)
+                        }
+                    }
                 }
             }
         }
     }
     
-    private func rangeForScope(scope: Scope, incrementingToken: Token, decrementingToken: Token) -> NSRange {
+    private func rangeForScope(scope: Scope, incrementingToken: TokenResult, decrementingToken: TokenResult) -> NSRange {
         let start = incrementingToken.range
         let end = decrementingToken.range
         
@@ -127,14 +168,14 @@ public class JLNestedToken: JLScope {
     }
     
     
-    class Token: Printable {
+    class TokenResult: Printable {
         var range: NSRange { return ranges[0] }
         var ranges: [NSRange]
-        var delta: Int // Set to +1 to increment by one level, or -1 to decrement
+        var token: Token
         
-        init(delta:Int, result: NSTextCheckingResult) {
-            self.delta = delta
+        init(result: NSTextCheckingResult, token: Token) {
             self.ranges = []
+            self.token = token
             var i = 0
             while i < result.numberOfRanges {
                 ranges += result.rangeAtIndex(i)
@@ -146,7 +187,7 @@ public class JLNestedToken: JLScope {
             ranges = ranges.map { return NSMakeRange($0.location + delta, $0.length)}
         }
         
-        var description: String { return "∆\(delta) \(range)"}
+        var description: String { return "∆\(token.delta) \(range)"}
     }
     
     override func clearAttributesInIndexSet(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
@@ -189,4 +230,8 @@ extension NSRange {
 
 public func ==(lhs: JLNestedToken.Scope, rhs: JLNestedToken.Scope) -> Bool {
     return (lhs.hashValue == rhs.hashValue)
+}
+
+public func ==(lhs: JLNestedToken.Token, rhs: JLNestedToken.Token) -> Bool {
+    return (lhs.expression.pattern == rhs.expression.pattern && lhs.delta == rhs.delta)
 }
