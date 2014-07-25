@@ -75,7 +75,7 @@ public class JLNestedToken: JLScope {
         }
         
         matches.sort { $0.range.location < $1.range.location }
-                
+        
         var incrementingTokens = [Int: Token]()
         var depth = 0
         for token in matches {
@@ -92,8 +92,10 @@ public class JLNestedToken: JLScope {
         for (scope, type) in self.tokenTypes {
             let range = rangeForScope(scope, incrementingToken: incrementingToken, decrementingToken: decrementingToken)
             if let color = self.theme?[type] {
-                attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
-                indexSet.addIndexesInRange(range)
+                if range.location > 0 && range.length < attributedString.length {
+                    attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+                    indexSet.addIndexesInRange(range)
+                }
             }
         }
     }
@@ -162,9 +164,9 @@ public class JLNestedToken: JLScope {
             case All:
                 return 1
             case Incrementing(let captureGroup):
-                return captureGroup << (1 * bitsPerComponent)
+                return captureGroup + 1 << (1 * bitsPerComponent)
             case Decrementing(let captureGroup):
-                return captureGroup << (2 * bitsPerComponent)
+                return captureGroup + 1 << (2 * bitsPerComponent)
             case Between:
                 return 1 << (3 * bitsPerComponent)
             default:
