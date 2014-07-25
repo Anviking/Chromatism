@@ -57,7 +57,7 @@ public class JLLanguage {
             
             let method = JLNestedToken.Descriptor(incrementingToken: openBracket, decrementingToken: closeBracket, tokenType: .Comment, hollow: true)
             let arrayLiteral = JLNestedToken.Descriptor(incrementingToken: arrayOpen, decrementingToken: closeBracket, tokenType: .Keyword, hollow: true)
-            squareBrackets = JLNestedToken(tokens: [openBracket, closeBracket, arrayOpen])
+            squareBrackets = JLNestedToken(tokens: [arrayOpen, openBracket, closeBracket])
             squareBrackets.descriptors = [arrayLiteral, method]
             super.init()
             

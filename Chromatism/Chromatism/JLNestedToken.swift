@@ -57,7 +57,7 @@ public class JLNestedToken: JLScope {
         self.init(tokens: [a, b])
         self.descriptors += descriptor
     }
-
+    
     
     var matches: [TokenResult] = []
     
@@ -94,12 +94,15 @@ public class JLNestedToken: JLScope {
         
         
         // Find Matches
+        var foundTokenIndexes = NSMutableIndexSet()
         parentIndexSet.enumerateRangesUsingBlock { (range, _) in
-            
             for token in self.tokens {
                 var array: [TokenResult] = []
                 token.expression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
-                    array += TokenResult(result: result, token: token)
+                    if !foundTokenIndexes.containsAnyIndexesInRange(result.range) {
+                        array += TokenResult(result: result, token: token)
+                        foundTokenIndexes.addIndexesInRange(result.range)
+                    }
                     })
                 
                 self.matches += array
@@ -110,6 +113,7 @@ public class JLNestedToken: JLScope {
         }
         
         matches.sort { $0.range.location < $1.range.location }
+        println(matches)
         
         var incrementingTokens = [Int: TokenResult]()
         
@@ -160,6 +164,7 @@ public class JLNestedToken: JLScope {
     }
     
     override func attributedStringDidChange(range: NSRange, delta: Int)  {
+        matches = matches.filter { NSIntersectionRange($0.range, range).location == NSNotFound   }
         for (index, token) in enumerate(matches.reverse()) {
             if token.range.location < range.end { break }
             token.shiftRanges(delta)
@@ -193,6 +198,7 @@ public class JLNestedToken: JLScope {
     override func clearAttributesInIndexSet(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
         self.indexSet -= indexSet
         matches = matches.filter { !(indexSet.containsIndexesInRange($0.range)) }
+        println("Matches: \(matches)")
         super.clearAttributesInIndexSet(indexSet, attributedString: attributedString)
     }
     
@@ -234,4 +240,15 @@ public func ==(lhs: JLNestedToken.Scope, rhs: JLNestedToken.Scope) -> Bool {
 
 public func ==(lhs: JLNestedToken.Token, rhs: JLNestedToken.Token) -> Bool {
     return (lhs.expression.pattern == rhs.expression.pattern && lhs.delta == rhs.delta)
+}
+
+extension NSIndexSet {
+    func containsAnyIndexesInRange(range: NSRange) -> Bool {
+        for index in range.start ..< range.end {
+            if self.containsIndex(index) {
+                return true
+            }
+        }
+        return false
+    }
 }
