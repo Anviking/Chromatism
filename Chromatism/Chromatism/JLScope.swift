@@ -83,15 +83,6 @@ public class JLScope: NSObject, Printable, Equatable {
         for scope in subscopes { scope.clearAttributesInIndexSet(indexSet, attributedString: attributedString) }
     }
     
-    var containsSubscopeWithEditedIndexSet: Bool {
-    for scope in subscopes {
-        if scope.editedIndexSet {
-            return true
-        }
-        }
-        return false
-    }
-    
     func cascade(block: (scope: JLScope) -> Void) {
         block(scope: self)
         for scope in subscopes {

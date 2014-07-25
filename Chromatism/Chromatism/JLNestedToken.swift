@@ -50,6 +50,26 @@ public class JLNestedToken: JLScope {
         multiline = true
     }
     
+    subscript(descriptors: Descriptor...) -> JLNestedToken {
+        self.descriptors = descriptors
+        return self
+    }
+
+    public convenience  init(incrementing: [String], decrementing:[String]) {
+        var tokens = [Token]()
+        for string in incrementing {
+            tokens += Token(pattern: string, delta: 1)
+        }
+        
+        for string in decrementing {
+            tokens += Token(pattern: string, delta: -1)
+        }
+        
+        self.init(tokens: tokens)
+        
+        multiline = true
+    }
+
     public convenience init(incrementingPattern: String, decrementingPattern: String, tokenType: JLTokenType, hollow: Bool) {
         let a = Token(pattern: incrementingPattern, delta: 1)
         let b = Token(pattern: decrementingPattern, delta: -1)
