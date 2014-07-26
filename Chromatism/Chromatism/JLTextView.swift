@@ -10,24 +10,28 @@ import UIKit
 
 public class JLTextView: UITextView {
     
-    var syntaxTokenizer: JLTokenizer { didSet{ self.textStorage.delegate = syntaxTokenizer }}
-    
-    public var language: JLLanguage { didSet{ syntaxTokenizer = JLTokenizer(language: language, theme: theme) }}
+    public var language: JLLanguage
     public var theme: JLColorTheme {
     didSet {
         backgroundColor = theme[.Background]
-        syntaxTokenizer.theme = theme
+        _textStorage.theme = theme
     }}
+    
+    private var _textStorage: JLTextStorage
     
     public init(language: JLLanguage, theme: JLColorTheme) {
         self.language = language
         self.theme = theme
-        syntaxTokenizer = JLTokenizer(language: language, theme: theme)
-        
+
         let frame = CGRect.zeroRect
-        super.init(frame: frame, textContainer: nil)
+        _textStorage = JLTextStorage(documentScope: language.documentScope, theme: theme)
+        let layoutManager = NSLayoutManager()
+        let textContainer = NSTextContainer()
+        textContainer.widthTracksTextView = true
+        layoutManager.addTextContainer(textContainer)
+        _textStorage.addLayoutManager(layoutManager)
+        super.init(frame: frame, textContainer: textContainer)
         
-        textStorage.delegate = syntaxTokenizer
         backgroundColor = theme[JLTokenType.Background]
         font = UIFont(name: "Menlo-Regular", size: 15)
         layoutManager.allowsNonContiguousLayout = true
@@ -35,14 +39,14 @@ public class JLTextView: UITextView {
     
     override public var attributedText: NSAttributedString! {
     didSet {
-        self.syntaxTokenizer.tokenizeAttributedString(textStorage)
+
     }
     }
     
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––
     
     func updateTypingAttributes() {
-        let color = syntaxTokenizer.theme[JLTokenType.Text]!
+        let color = theme[JLTokenType.Text]!
         typingAttributes = [NSForegroundColorAttributeName: color, NSFontAttributeName: font]
     }
     
