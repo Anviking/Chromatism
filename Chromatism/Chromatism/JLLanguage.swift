@@ -43,22 +43,24 @@ public class JLLanguage {
         // http://www.learn-cocos2d.com/2011/10/complete-list-objectivec-20-compiler-directives/
         var objcKeywords = JLToken(pattern: "@(class|defs|protocol|required|optional|interface|public|package|protected|private|property|end|implementation|synthesize|dynamic|end|throw|try|catch|finally|synchronized|autoreleasepool|selector|encode|compatibility_alias)\\b", tokenTypes: .Keyword )
         var squareBrackets: JLNestedToken
+        var dictionaryLiteral = JLNestedToken(incrementingPattern: "\\@\\{", decrementingPattern: "\\}", tokenType: .OtherMethodNames, hollow: true)
         
         public init() {
             let openBracket = JLNestedToken.Token(pattern: "\\[", delta: 1)
             let closeBracket = JLNestedToken.Token(pattern: "\\]", delta: -1)
             let arrayOpen = JLNestedToken.Token(pattern: "\\@\\[", delta: 1)
+            
             let method = JLNestedToken.Descriptor(incrementingToken: openBracket, decrementingToken: closeBracket, tokenType: .None, hollow: true)
             let arrayLiteral = JLNestedToken.Descriptor(incrementingToken: arrayOpen, decrementingToken: closeBracket, tokenType: .OtherMethodNames, hollow: true)
-            
             squareBrackets = JLNestedToken(tokens: [arrayOpen, openBracket, closeBracket])
-            squareBrackets.descriptors = [arrayLiteral, method]
+            
             super.init()
             
             
             documentScope[
                 blockComments,
                 squareBrackets[arrayLiteral, method],
+                dictionaryLiteral,
                 lineComments,
                 preprocessor[strings, angularImports],
                 strings,

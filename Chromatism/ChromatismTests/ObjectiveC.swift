@@ -25,7 +25,6 @@ class ObjectiveC: XCTestCase {
     }
     
     func testEverything() {
-        println()
         measureBlock {
             self.language.documentScope.perform(self.attributedString)
         }
