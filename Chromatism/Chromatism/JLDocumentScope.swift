@@ -14,5 +14,17 @@ public class JLDocumentScope: JLScope {
         super.init()
         clearWithTextColorBeforePerform = true
     }
+    
+    override func invalidateAttributesInIndexes(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
+        cascade { $0.invalidateAttributesInIndexes(indexSet, attributedString: attributedString) }
+    }
+}
 
+private extension JLScope {
+    func cascade(block: (scope: JLScope) -> Void) {
+        block(scope: self)
+        for scope in subscopes {
+            scope.cascade(block)
+        }
+    }
 }

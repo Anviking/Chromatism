@@ -83,13 +83,6 @@ public class JLScope: NSObject, Printable, Equatable {
         for scope in subscopes { scope.invalidateAttributesInIndexes(indexSet, attributedString: attributedString) }
     }
     
-    func cascade(block: (scope: JLScope) -> Void) {
-        block(scope: self)
-        for scope in subscopes {
-            scope.cascade(block)
-        }
-    }
-    
     // Printable
     override public var description: String {
         return "JLScope"
