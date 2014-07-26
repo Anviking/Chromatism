@@ -52,7 +52,7 @@ public class JLScope: NSObject, Printable, Equatable {
                 }
                 })
             
-            clearAttributesInIndexSet(parentIndexSet, attributedString: attributedString)
+            invalidateAttributesInIndexes(parentIndexSet, attributedString: attributedString)
         }
         // Create a copy of the indexSet and call perform to subscopes
         // The results of the subscope is removed from the indexSet copy before the next subscope is performed
@@ -79,8 +79,8 @@ public class JLScope: NSObject, Printable, Equatable {
         }
     }
     
-    func clearAttributesInIndexSet(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
-        for scope in subscopes { scope.clearAttributesInIndexSet(indexSet, attributedString: attributedString) }
+    func invalidateAttributesInIndexes(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
+        for scope in subscopes { scope.invalidateAttributesInIndexes(indexSet, attributedString: attributedString) }
     }
     
     func cascade(block: (scope: JLScope) -> Void) {

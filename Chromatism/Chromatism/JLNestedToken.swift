@@ -218,10 +218,10 @@ public class JLNestedToken: JLScope {
         var description: String { return "∆\(token.delta) \(range)"}
     }
     
-    override func clearAttributesInIndexSet(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
+    override func invalidateAttributesInIndexes(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
         self.indexSet -= indexSet
         matches = matches.filter { !(indexSet.containsIndexesInRange($0.range)) }
-        super.clearAttributesInIndexSet(indexSet, attributedString: attributedString)
+        super.invalidateAttributesInIndexes(indexSet, attributedString: attributedString)
     }
     
     public enum Scope: Hashable, Equatable {
