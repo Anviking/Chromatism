@@ -126,14 +126,16 @@ public class JLNestedToken: JLScope {
                     })
                 
                 self.matches += array
+
                 if let (start, end) = surroundingTokenPair(range) {
                     self.process(start, decrementingToken: end, attributedString: attributedString)
                 }
             }
         }
         
-        matches.sort { $0.range.location < $1.range.location }
         
+        matches.sort { $0.range.location < $1.range.location }
+        println("matches: \(matches)")
         var incrementingTokens = [Int: TokenResult]()
         
         var depth = 0
@@ -183,7 +185,9 @@ public class JLNestedToken: JLScope {
     }
     
     override func attributedStringDidChange(range: NSRange, delta: Int)  {
-        matches = matches.filter { NSIntersectionRange($0.range, range).location == NSNotFound   }
+        if range.length > 0 {
+            matches = matches.filter { NSIntersectionRange($0.range, range).location == NSNotFound   }
+        }
         for (index, token) in enumerate(matches.reverse()) {
             if token.range.location < range.end { break }
             token.shiftRanges(delta)

@@ -34,14 +34,18 @@ public class JLTokenizer: NSObject {
 
 extension JLTokenizer: NSTextStorageDelegate {
     public func textStorage(textStorage: NSTextStorage!, willProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
-    }
-  public   
-    func textStorage(textStorage: NSTextStorage!, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
-
         if editedMask & NSTextStorageEditActions.EditedCharacters {
-            documentScope.cascade { $0.attributedStringDidChange(editedRange, delta: delta) }
+            println("Will: \(editedRange)")
             let editedLineRange = textStorage.string.bridgeToObjectiveC().lineRangeForRange(editedRange)
             tokenizeAttributedString(textStorage, editedLineIndexSet: NSIndexSet(indexesInRange: editedLineRange))
+        }
+    }
+  public
+    func textStorage(textStorage: NSTextStorage!, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
+        if editedMask & NSTextStorageEditActions.EditedCharacters {
+            println("Did: \(editedRange)")
+            documentScope.cascade { $0.attributedStringDidChange(editedRange, delta: delta) }
+            tokenizeAttributedString(textStorage, editedLineIndexSet: NSIndexSet(indexesInRange: editedRange))
         }
     }
 }
