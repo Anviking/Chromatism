@@ -12,7 +12,15 @@ public class JLDocumentScope: JLScope {
     
     init() {
         super.init()
-        clearWithTextColorBeforePerform = true
+    }
+    
+    override func perform()  {
+        indexSet.enumerateRangesUsingBlock({(range, stop) in
+            if let color = self.theme?[.Text] {
+                self.attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+            }
+            })
+        super.perform()
     }
     
     func cascadeAttributedString(attributedString: NSMutableAttributedString) {

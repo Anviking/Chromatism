@@ -21,11 +21,7 @@ public class JLScope: NSObject, Printable, Equatable {
     var attributedString: NSMutableAttributedString!
     var multiline = false
     var theme: JLColorTheme?
-    var editedIndexSet: NSIndexSet?
-    
-    // Will set the color to .Text in this scope's parentIndexSet before performing.
-    var clearWithTextColorBeforePerform = false
-    
+
     var indexSet = NSMutableIndexSet()
     var subscopes = [JLScope]()
     
@@ -38,22 +34,11 @@ public class JLScope: NSObject, Printable, Equatable {
     }
     
     func perform(indexSet: NSIndexSet) {
-        
-        if clearWithTextColorBeforePerform {
-            
-            indexSet.enumerateRangesUsingBlock({(range, stop) in
-                if let color = self.theme?[.Text] {
-                    self.attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
-                }
-                })
-            
-            invalidateAttributesInIndexes(indexSet)
-        }
+
         // Create a copy of the indexSet and call perform to subscopes
         // The results of the subscope is removed from the indexSet copy before the next subscope is performed
         let indexSetCopy = indexSet.mutableCopy() as NSMutableIndexSet
         performSubscopes(attributedString, indexSet: indexSetCopy)
-        
         self.indexSet = indexSet.mutableCopy() as NSMutableIndexSet
     }
     
