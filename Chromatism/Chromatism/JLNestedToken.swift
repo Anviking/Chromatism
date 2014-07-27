@@ -157,7 +157,7 @@ public class JLNestedToken: JLScope {
                 for (scope, type) in descriptor.tokenTypes {
                     let range = rangeForScope(scope, incrementingToken: incrementingToken, decrementingToken: decrementingToken)
                     if let color = self.theme?[type] {
-                        if range.location > 0 && range.end < attributedString.length {
+                        if range.location >= 0 && range.end <= attributedString.length {
                             attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                             indexSet += range
                         }
