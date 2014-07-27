@@ -136,6 +136,7 @@ public class JLNestedToken: JLScope {
         
         matches.sort { $0.range.location < $1.range.location }
         println("matches: \(matches)")
+        println("indexSet:\(self.indexSet)")
         var incrementingTokens = [Int: TokenResult]()
         
         var depth = 0
@@ -196,7 +197,7 @@ public class JLNestedToken: JLScope {
     
     override func invalidateAttributesInIndexes(indexSet: NSIndexSet) {
         self.indexSet -= indexSet
-        matches = matches.filter { !(indexSet.containsAnyIndexesInRange($0.range)) }
+        matches = matches.filter { !(indexSet.containsIndexesInRange($0.range)) }
     }
     
     class TokenResult: Printable {

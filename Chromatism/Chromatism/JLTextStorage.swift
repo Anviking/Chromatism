@@ -45,11 +45,11 @@ public class JLTextStorage: NSTextStorage {
     public override func replaceCharactersInRange(range: NSRange, withString str: String!) {
         let actions = NSTextStorageEditActions.EditedCharacters | NSTextStorageEditActions.EditedAttributes
         let delta = str.bridgeToObjectiveC().length - range.length
-        backingStore.replaceCharactersInRange(range, withString: str)
         edited(actions, range: range, changeInLength: delta)
+        backingStore.replaceCharactersInRange(range, withString: str)
         editedLineRange = string.bridgeToObjectiveC().lineRangeForRange(editedRange)
         documentScope.invalidateAttributesInIndexes(NSIndexSet(indexesInRange: range))
-        documentScope.shiftIndexesAtLoaction(range.location, by: delta)
+        documentScope.shiftIndexesAtLoaction(range.end, by: delta)
     }
     
     public override func setAttributes(attrs: [NSObject : AnyObject]!, range: NSRange) {
