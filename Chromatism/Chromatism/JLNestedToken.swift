@@ -81,7 +81,7 @@ public class JLNestedToken: JLScope {
     
     var matches: [TokenResult] = []
     
-    override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
+    override func perform(indexSet: NSIndexSet) {
         func tokensClosestToRange(range: NSRange) -> (previous: TokenResult?, next: TokenResult?) {
             if self.matches.count == 0 { return (nil, nil) }
             var previousToken: TokenResult? = self.matches[self.matches.startIndex]
@@ -111,14 +111,14 @@ public class JLNestedToken: JLScope {
             return nil
         }
         
-        
+        self.indexSet = NSMutableIndexSet()
         
         // Find Matches
         var foundTokenIndexes = NSMutableIndexSet()
-        parentIndexSet.enumerateRangesUsingBlock { (range, _) in
+        indexSet.enumerateRangesUsingBlock { (range, _) in
             for token in self.tokens {
                 var array: [TokenResult] = []
-                token.expression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
+                token.expression.enumerateMatchesInString(self.attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
                     if !foundTokenIndexes.containsAnyIndexesInRange(result.range) {
                         array += TokenResult(result: result, token: token)
                         foundTokenIndexes.addIndexesInRange(result.range)
@@ -126,9 +126,9 @@ public class JLNestedToken: JLScope {
                     })
                 
                 self.matches += array
-
+                self.matches.sort { $0.range.location < $1.range.location }
                 if let (start, end) = surroundingTokenPair(range) {
-                    self.process(start, decrementingToken: end, attributedString: attributedString)
+                    self.process(start, decrementingToken: end, attributedString: self.attributedString)
                 }
             }
         }
@@ -158,7 +158,7 @@ public class JLNestedToken: JLScope {
                     if let color = self.theme?[type] {
                         if range.location > 0 && range.end < attributedString.length {
                             attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
-                            indexSet.addIndexesInRange(range)
+                            indexSet += range
                         }
                     }
                 }
@@ -184,17 +184,20 @@ public class JLNestedToken: JLScope {
         }
     }
     
-    override func attributedStringDidChange(range: NSRange, delta: Int)  {
-        if range.length > 0 {
-            matches = matches.filter { NSIntersectionRange($0.range, range).location == NSNotFound   }
-        }
+    override func shiftIndexesAtLoaction(location: Int, by delta: Int) {
+        
         for (index, token) in enumerate(matches.reverse()) {
-            if token.range.location < range.end { break }
+            if token.range.location < location { break }
             token.shiftRanges(delta)
         }
-        super.attributedStringDidChange(range, delta: delta)
+        
+        super.shiftIndexesAtLoaction(location, by: delta)
     }
     
+    override func invalidateAttributesInIndexes(indexSet: NSIndexSet) {
+        self.indexSet -= indexSet
+        matches = matches.filter { !(indexSet.containsAnyIndexesInRange($0.range)) }
+    }
     
     class TokenResult: Printable {
         var range: NSRange { return ranges[0] }
@@ -216,12 +219,6 @@ public class JLNestedToken: JLScope {
         }
         
         var description: String { return "∆\(token.delta) \(range)"}
-    }
-    
-    override func invalidateAttributesInIndexes(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
-        self.indexSet -= indexSet
-        matches = matches.filter { !(indexSet.containsIndexesInRange($0.range)) }
-        super.invalidateAttributesInIndexes(indexSet, attributedString: attributedString)
     }
     
     public enum Scope: Hashable, Equatable {

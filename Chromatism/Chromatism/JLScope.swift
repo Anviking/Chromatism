@@ -9,14 +9,8 @@
 import UIKit
 
 public class JLScope: NSObject, Printable, Equatable {
-    
     init() {
         super.init()
-    }
-    
-    init(scope: JLScope) {
-        super.init()
-        scope.addSubscope(self)
     }
     
     subscript(scopes: JLScope...) -> JLScope {
@@ -24,6 +18,7 @@ public class JLScope: NSObject, Printable, Equatable {
             return self
     }
     
+    var attributedString: NSMutableAttributedString!
     var multiline = false
     var theme: JLColorTheme?
     var editedIndexSet: NSIndexSet?
@@ -38,28 +33,28 @@ public class JLScope: NSObject, Printable, Equatable {
         self.subscopes += subscope
     }
     
-    func perform(attributedString: NSMutableAttributedString) {
-        perform(attributedString, parentIndexSet: NSIndexSet(indexesInRange: NSMakeRange(0, attributedString.length)))
+    func perform() {
+        perform(NSIndexSet(indexesInRange: NSMakeRange(0, attributedString.length)))
     }
     
-    func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
+    func perform(indexSet: NSIndexSet) {
         
         if clearWithTextColorBeforePerform {
             
-            parentIndexSet.enumerateRangesUsingBlock({(range, stop) in
+            indexSet.enumerateRangesUsingBlock({(range, stop) in
                 if let color = self.theme?[.Text] {
-                    attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+                    self.attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                 }
                 })
             
-            invalidateAttributesInIndexes(parentIndexSet, attributedString: attributedString)
+            invalidateAttributesInIndexes(indexSet)
         }
         // Create a copy of the indexSet and call perform to subscopes
         // The results of the subscope is removed from the indexSet copy before the next subscope is performed
-        let indexSetCopy = parentIndexSet.mutableCopy() as NSMutableIndexSet
+        let indexSetCopy = indexSet.mutableCopy() as NSMutableIndexSet
         performSubscopes(attributedString, indexSet: indexSetCopy)
         
-        self.indexSet = parentIndexSet.mutableCopy() as NSMutableIndexSet
+        self.indexSet = indexSet.mutableCopy() as NSMutableIndexSet
     }
     
     // Will change indexSet
@@ -69,7 +64,8 @@ public class JLScope: NSObject, Printable, Equatable {
             scope.theme = theme
             
             var oldSet = scope.indexSet
-            scope.perform(attributedString, parentIndexSet: indexSet)
+            scope.invalidateAttributesInIndexes(indexSet)
+            scope.perform(indexSet)
             var newSet = scope.indexSet
             
             indexSet -= newSet
@@ -79,18 +75,19 @@ public class JLScope: NSObject, Printable, Equatable {
         }
     }
     
-    func invalidateAttributesInIndexes(indexSet: NSIndexSet, attributedString: NSMutableAttributedString) {
-        for scope in subscopes { scope.invalidateAttributesInIndexes(indexSet, attributedString: attributedString) }
+    // MARK:
+    
+    func invalidateAttributesInIndexes(indexSet: NSIndexSet) {
+
     }
     
-    // Printable
+    func shiftIndexesAtLoaction(location: Int, by delta: Int) {
+        indexSet.shiftIndexesStartingAtIndex(location, by: delta)
+    }
+    
+    // MARK: Printable
     override public var description: String {
-        return "JLScope"
-    }
-    
-    func attributedStringDidChange(range: NSRange, delta: Int) {
-        self.indexSet.removeIndexesInRange(range)
-        self.indexSet.shiftIndexesStartingAtIndex(range.location, by: delta)
+    return "JLScope"
     }
     
 }

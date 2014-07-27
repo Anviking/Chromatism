@@ -18,6 +18,7 @@ public class JLTextStorage: NSTextStorage {
         self.documentScope = documentScope
         self.theme = theme
         super.init()
+        self.documentScope.cascadeAttributedString(self)
     }
     
     // MARK: Syntax Highlighting
@@ -25,7 +26,7 @@ public class JLTextStorage: NSTextStorage {
     public override func processEditing() {
         if let range = editedLineRange {
             let editedLineIndexSet = NSIndexSet(indexesInRange: range)
-            documentScope.perform(backingStore, parentIndexSet: editedLineIndexSet)
+            documentScope.perform(editedLineIndexSet)
         }
         super.processEditing()
     }
@@ -47,6 +48,8 @@ public class JLTextStorage: NSTextStorage {
         backingStore.replaceCharactersInRange(range, withString: str)
         edited(actions, range: range, changeInLength: delta)
         editedLineRange = string.bridgeToObjectiveC().lineRangeForRange(editedRange)
+        documentScope.invalidateAttributesInIndexes(NSIndexSet(indexesInRange: range))
+        documentScope.shiftIndexesAtLoaction(range.location, by: delta)
     }
     
     public override func setAttributes(attrs: [NSObject : AnyObject]!, range: NSRange) {

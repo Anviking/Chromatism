@@ -38,11 +38,10 @@ public class JLToken: JLScope {
         self.init(pattern: pattern, options: nil,tokenTypes: tokenTypes)
     }
     
-    override func perform(attributedString: NSMutableAttributedString, parentIndexSet: NSIndexSet) {
-        indexSet = self.indexSet - parentIndexSet
+    override func perform(parentIndexSet: NSIndexSet) {
         parentIndexSet.enumerateRangesUsingBlock({ (range, stop) in
-            self.regularExpression.enumerateMatchesInString(attributedString.string, options: nil, range: range, usingBlock: {(result, flags, stop) in
-                    self.process(result, attributedString: attributedString)
+            self.regularExpression.enumerateMatchesInString(self.attributedString.string, options: nil, range: range, usingBlock: {(result, flags, stop) in
+                    self.process(result, attributedString: self.attributedString)
                 })
             })
         

@@ -12,7 +12,6 @@ public class JLLanguage {
     let documentScope = JLDocumentScope()
     
     public class C: JLLanguage {
-        
         var blockComments = JLNestedToken(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .Comment, hollow: false)
         var lineComments = JLToken(pattern: "//(.*)", tokenTypes: .Comment)
         var preprocessor = JLToken(pattern: "^#.*+$", tokenTypes: .Preprocessor)
