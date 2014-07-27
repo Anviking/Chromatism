@@ -14,13 +14,13 @@ public class JLDocumentScope: JLScope {
         super.init()
     }
     
-    override func perform()  {
+    override func perform(indexSet: NSIndexSet)  {
         indexSet.enumerateRangesUsingBlock({(range, stop) in
             if let color = self.theme?[.Text] {
                 self.attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
             }
             })
-        super.perform()
+        super.perform(indexSet)
     }
     
     func cascadeAttributedString(attributedString: NSMutableAttributedString) {
