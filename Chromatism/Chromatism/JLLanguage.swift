@@ -58,11 +58,11 @@ public class JLLanguage {
             
             documentScope[
                 blockComments,
-                squareBrackets[arrayLiteral, method],
                 dictionaryLiteral,
                 lineComments,
                 preprocessor[strings, angularImports],
                 strings,
+                squareBrackets[arrayLiteral, method],
                 numbers,
                 functions,
                 keywords,
