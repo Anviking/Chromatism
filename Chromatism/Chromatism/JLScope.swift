@@ -45,6 +45,7 @@ public class JLScope: NSObject, Printable, Equatable {
     // Will change indexSet
     func performSubscopes(attributedString: NSMutableAttributedString, indexSet: NSMutableIndexSet) {
         
+        var deletions = NSMutableIndexSet()
         for (index, scope) in enumerate(subscopes) {
             scope.theme = theme
             
@@ -55,8 +56,11 @@ public class JLScope: NSObject, Printable, Equatable {
             
             indexSet -= newSet
             if scope.multiline {
-                indexSet += NSIndexSetDelta(oldSet, newSet).deletions
+                deletions += NSIndexSetDelta(oldSet, newSet).deletions
             }
+        }
+        if deletions.count > 0 {
+            perform(deletions + indexSet)
         }
     }
     
