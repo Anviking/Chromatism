@@ -12,7 +12,7 @@ public class JLLanguage {
     let documentScope = JLDocumentScope()
     
     public class C: JLLanguage {
-        var blockComments = JLTokenizer(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .Comment, hollow: false)
+        var blockComments = JLTokenizingScope(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .Comment, hollow: false)
         var lineComments = JLToken(pattern: "//(.*)", tokenTypes: .Comment)
         var preprocessor = JLToken(pattern: "^#.*+$", tokenTypes: .Preprocessor)
         var strings = JLToken(pattern: "(\"|@\")[^\"\\n]*(@\"|\")", tokenTypes: .String)
@@ -41,17 +41,17 @@ public class JLLanguage {
         var otherClassNames = JLToken(pattern: "\\b[A-Z]{3}[a-zA-Z]*\\b", tokenTypes: .OtherClassNames)
         // http://www.learn-cocos2d.com/2011/10/complete-list-objectivec-20-compiler-directives/
         var objcKeywords = JLToken(pattern: "@(class|defs|protocol|required|optional|interface|public|package|protected|private|property|end|implementation|synthesize|dynamic|end|throw|try|catch|finally|synchronized|autoreleasepool|selector|encode|compatibility_alias)\\b", tokenTypes: .Keyword )
-        var squareBrackets: JLTokenizer
-        var dictionaryLiteral = JLTokenizer(incrementingPattern: "\\@\\{", decrementingPattern: "\\}", tokenType: .OtherMethodNames, hollow: true)
+        var squareBrackets: JLTokenizingScope
+        var dictionaryLiteral = JLTokenizingScope(incrementingPattern: "\\@\\{", decrementingPattern: "\\}", tokenType: .OtherMethodNames, hollow: true)
         
         public init() {
-            let openBracket = JLTokenizer.Token(pattern: "\\[", delta: 1)
-            let closeBracket = JLTokenizer.Token(pattern: "\\]", delta: -1)
-            let arrayOpen = JLTokenizer.Token(pattern: "\\@\\[", delta: 1)
+            let openBracket = JLTokenizingScope.Token(pattern: "\\[", delta: 1)
+            let closeBracket = JLTokenizingScope.Token(pattern: "\\]", delta: -1)
+            let arrayOpen = JLTokenizingScope.Token(pattern: "\\@\\[", delta: 1)
             
             let method = JLNestedScope(incrementingToken: openBracket, decrementingToken: closeBracket, tokenType: .None, hollow: true)
             let arrayLiteral = JLNestedScope(incrementingToken: arrayOpen, decrementingToken: closeBracket, tokenType: .OtherMethodNames, hollow: true)
-            squareBrackets = JLTokenizer(tokens: [arrayOpen, openBracket, closeBracket])
+            squareBrackets = JLTokenizingScope(tokens: [arrayOpen, openBracket, closeBracket])
             
             super.init()
             

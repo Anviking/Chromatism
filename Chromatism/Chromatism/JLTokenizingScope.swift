@@ -1,5 +1,5 @@
 //
-//  JLTokenizer.swift
+//  JLTokenizingScope.swift
 //  Chromatism
 //
 //  Created by Johannes Lund on 2014-07-28.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class JLTokenizer: JLScope {
+public class JLTokenizingScope: JLScope {
     
     public class Token: Equatable {
         var delta: Int // Set to +1 to increment by one level, or -1 to decrement

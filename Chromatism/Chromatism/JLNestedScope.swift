@@ -9,13 +9,13 @@
 import UIKit
 
 public class JLNestedScope: JLScope {
-    var incrementingToken: JLTokenizer.Token
-    var decrementingToken: JLTokenizer.Token
+    var incrementingToken: JLTokenizingScope.Token
+    var decrementingToken: JLTokenizingScope.Token
     
     var tokenType: JLTokenType
     var hollow: Bool
     
-    init(incrementingToken: JLTokenizer.Token, decrementingToken: JLTokenizer.Token, tokenType: JLTokenType, hollow: Bool) {
+    init(incrementingToken: JLTokenizingScope.Token, decrementingToken: JLTokenizingScope.Token, tokenType: JLTokenType, hollow: Bool) {
         self.incrementingToken = incrementingToken
         self.decrementingToken = decrementingToken
         self.hollow = hollow
@@ -24,12 +24,12 @@ public class JLNestedScope: JLScope {
         multiline = true
     }
     
-    func perform(indexSet: NSIndexSet, tokens: [JLTokenizer.TokenResult]) {
+    func perform(indexSet: NSIndexSet, tokens: [JLTokenizingScope.TokenResult]) {
         self.indexSet = NSMutableIndexSet()
-        func tokensClosestToRange(range: NSRange) -> (previous: JLTokenizer.TokenResult?, next: JLTokenizer.TokenResult?) {
+        func tokensClosestToRange(range: NSRange) -> (previous: JLTokenizingScope.TokenResult?, next: JLTokenizingScope.TokenResult?) {
             if tokens.count == 0 { return (nil, nil) }
-            var previousToken: JLTokenizer.TokenResult? = tokens[tokens.startIndex]
-            var nextToken: JLTokenizer.TokenResult?
+            var previousToken: JLTokenizingScope.TokenResult? = tokens[tokens.startIndex]
+            var nextToken: JLTokenizingScope.TokenResult?
             
             for token in tokens {
                 if token.range.location < range.location {
@@ -42,7 +42,7 @@ public class JLNestedScope: JLScope {
             
             return (previousToken, nextToken)
         }
-        func surroundingTokenPair(range: NSRange) -> (incrementingToken: JLTokenizer.TokenResult, decrementingToken: JLTokenizer.TokenResult)? {
+        func surroundingTokenPair(range: NSRange) -> (incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult)? {
             let tokens = tokensClosestToRange(range)
             if let previousToken = tokens.previous {
                 if let nextToken = tokens.next {
@@ -60,7 +60,7 @@ public class JLNestedScope: JLScope {
             }
         }
         
-        var incrementingTokens = Dictionary<Int, JLTokenizer.TokenResult>()
+        var incrementingTokens = Dictionary<Int, JLTokenizingScope.TokenResult>()
         var depth = 0
         for result in tokens {
             if result.token.delta > 0 {
@@ -72,7 +72,7 @@ public class JLNestedScope: JLScope {
         }
     }
     
-    private func process(incrementingToken: JLTokenizer.TokenResult, decrementingToken: JLTokenizer.TokenResult, attributedString: NSMutableAttributedString) {
+    private func process(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult, attributedString: NSMutableAttributedString) {
         
         if incrementingToken.token === self.incrementingToken && decrementingToken.token === self.decrementingToken {
             let range = rangeForTokens(incrementingToken, decrementingToken: decrementingToken)
@@ -89,7 +89,7 @@ public class JLNestedScope: JLScope {
         self.indexSet -= indexSet
     }
     
-    func rangeForTokens(incrementingToken: JLTokenizer.TokenResult, decrementingToken: JLTokenizer.TokenResult) -> NSRange {
+    func rangeForTokens(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult) -> NSRange {
         if self.hollow {
             return NSRange(incrementingToken.range.end ..< decrementingToken.range.start)
         } else {
@@ -108,7 +108,7 @@ extension NSRange {
     }
 }
 
-public func ==(lhs: JLTokenizer.Token, rhs: JLTokenizer.Token) -> Bool {
+public func ==(lhs: JLTokenizingScope.Token, rhs: JLTokenizingScope.Token) -> Bool {
     return (lhs.expression.pattern == rhs.expression.pattern && lhs.delta == rhs.delta)
 }
 
