@@ -20,9 +20,12 @@ public class JLNestedScope: JLScope {
         self.decrementingToken = decrementingToken
         self.hollow = hollow
         self.tokenType = tokenType
+        super.init()
+        multiline = true
     }
     
     func perform(indexSet: NSIndexSet, tokens: [JLTokenizer.TokenResult]) {
+        self.indexSet = NSMutableIndexSet()
         func tokensClosestToRange(range: NSRange) -> (previous: JLTokenizer.TokenResult?, next: JLTokenizer.TokenResult?) {
             if tokens.count == 0 { return (nil, nil) }
             var previousToken: JLTokenizer.TokenResult? = tokens[tokens.startIndex]
@@ -80,6 +83,10 @@ public class JLNestedScope: JLScope {
                 }
             }
         }
+    }
+    
+    override func invalidateAttributesInIndexes(indexSet: NSIndexSet) {
+        self.indexSet -= indexSet
     }
     
     func rangeForTokens(incrementingToken: JLTokenizer.TokenResult, decrementingToken: JLTokenizer.TokenResult) -> NSRange {
