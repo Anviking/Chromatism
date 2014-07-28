@@ -34,7 +34,7 @@ public class JLTextView: UITextView {
         
         backgroundColor = theme[JLTokenType.Background]
         font = UIFont(name: "Menlo-Regular", size: 15)
-        layoutManager.allowsNonContiguousLayout = true
+//        layoutManager.allowsNonContiguousLayout = true
     }
     
     override public var attributedText: NSAttributedString! {
