@@ -47,7 +47,6 @@ public class JLNestedScope: JLScope {
         let intersection = indexSet.intersectionWithSet(newIndexSet)
         setAttributesInIndexSet(intersection)
         
-        println("additions: \(additions), deletions: \(deletions)")
         self.indexSet = newIndexSet
     }
     
@@ -69,9 +68,9 @@ public class JLNestedScope: JLScope {
     
     private func process(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult, indexSet: NSMutableIndexSet) {
         if incrementingTokenIsValid(incrementingToken) && decrementingTokenIsValid(decrementingToken) {
-            let range = rangeForTokens(incrementingToken, decrementingToken: decrementingToken)
-            if range.location >= 0 && range.end <= attributedString.length {
-                indexSet += range
+            let indexes = indexesForTokens(incrementingToken, decrementingToken: decrementingToken)
+            if indexes.lastIndex < attributedString.length {
+                indexSet += indexes
             }
         }
     }
@@ -81,12 +80,15 @@ public class JLNestedScope: JLScope {
     }
     
     
-    func rangeForTokens(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult) -> NSRange {
+    func indexesForTokens(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult) -> NSIndexSet {
+        var indexSet = NSMutableIndexSet()
         if self.hollow {
-            return NSRange(incrementingToken.range.end ..< decrementingToken.range.start)
+            indexSet += incrementingToken.range
+            indexSet += decrementingToken.range
         } else {
-            return NSRange(incrementingToken.range.start ..< decrementingToken.range.end)
+            indexSet += NSRange(incrementingToken.range.start ..< decrementingToken.range.end)
         }
+        return indexSet
     }
 }
 
