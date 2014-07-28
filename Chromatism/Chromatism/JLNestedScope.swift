@@ -25,40 +25,8 @@ public class JLNestedScope: JLScope {
     }
     
     func perform(indexSet: NSIndexSet, tokens: [JLTokenizingScope.TokenResult]) {
-        self.indexSet = NSMutableIndexSet()
-        func tokensClosestToRange(range: NSRange) -> (previous: JLTokenizingScope.TokenResult?, next: JLTokenizingScope.TokenResult?) {
-            if tokens.count == 0 { return (nil, nil) }
-            var previousToken: JLTokenizingScope.TokenResult? = tokens[tokens.startIndex]
-            var nextToken: JLTokenizingScope.TokenResult?
-            
-            for token in tokens {
-                if token.range.location < range.location {
-                    previousToken = token
-                } else if token.range.end > range.end {
-                    nextToken = token
-                    break
-                }
-            }
-            
-            return (previousToken, nextToken)
-        }
-        func surroundingTokenPair(range: NSRange) -> (incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult)? {
-            let tokens = tokensClosestToRange(range)
-            if let previousToken = tokens.previous {
-                if let nextToken = tokens.next {
-                    if previousToken.token.delta > 0 && nextToken.token.delta < 0 {
-                        return (previousToken, nextToken)
-                    }
-                }
-            }
-            return nil
-        }
-        
-        indexSet.enumerateRangesUsingBlock { (range, _) in
-            if let (start, end) = surroundingTokenPair(range) {
-                self.process(start, decrementingToken: end, attributedString: self.attributedString)
-            }
-        }
+        let oldIndexSet = self.indexSet
+        var newIndexSet = NSMutableIndexSet()
         
         var incrementingTokens = Dictionary<Int, JLTokenizingScope.TokenResult>()
         var depth = 0
@@ -66,21 +34,44 @@ public class JLNestedScope: JLScope {
             if result.token.delta > 0 {
                 incrementingTokens[depth] = result
             } else if let start = incrementingTokens[depth + result.token.delta] {
-                process(start, decrementingToken: result, attributedString: attributedString)
+                process(start, decrementingToken: result, indexSet: newIndexSet)
             }
             depth += result.token.delta
         }
+        
+        // We only need update attributes in indexes that just was added
+        var (additions, deletions) = NSIndexSetDelta(oldIndexSet, newIndexSet)
+        setAttributesInIndexSet(additions)
+        
+        // And in indexes that has been reset by the document scope
+        let intersection = indexSet.intersectionWithSet(newIndexSet)
+        setAttributesInIndexSet(intersection)
+        
+        println("additions: \(additions), deletions: \(deletions)")
+        self.indexSet = newIndexSet
     }
     
-    private func process(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult, attributedString: NSMutableAttributedString) {
-        
-        if incrementingToken.token === self.incrementingToken && decrementingToken.token === self.decrementingToken {
+    func incrementingTokenIsValid(token: JLTokenizingScope.TokenResult) -> Bool {
+        return token.token === self.incrementingToken
+    }
+    
+    func decrementingTokenIsValid(token: JLTokenizingScope.TokenResult) -> Bool {
+        return token.token === self.decrementingToken
+    }
+    
+    private func setAttributesInIndexSet(indexSet: NSIndexSet) {
+        indexSet.enumerateRangesUsingBlock { (range, stop) in
+            if let color = self.theme?[self.tokenType] {
+                self.attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+            }
+        }
+    }
+    
+    private func process(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult, indexSet: NSMutableIndexSet) {
+        if incrementingTokenIsValid(incrementingToken) && decrementingTokenIsValid(decrementingToken) {
             let range = rangeForTokens(incrementingToken, decrementingToken: decrementingToken)
-            if let color = self.theme?[tokenType] {
-                if range.location >= 0 && range.end <= attributedString.length {
-                    attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
-                    indexSet += range
-                }
+            if range.location >= 0 && range.end <= attributedString.length {
+                indexSet += range
             }
         }
     }
@@ -88,6 +79,7 @@ public class JLNestedScope: JLScope {
     override func invalidateAttributesInIndexes(indexSet: NSIndexSet) {
         self.indexSet -= indexSet
     }
+    
     
     func rangeForTokens(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult) -> NSRange {
         if self.hollow {
