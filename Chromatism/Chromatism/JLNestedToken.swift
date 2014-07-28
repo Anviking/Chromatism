@@ -135,8 +135,6 @@ public class JLNestedToken: JLScope {
         
         
         matches.sort { $0.range.location < $1.range.location }
-        println("matches: \(matches)")
-        println("indexSet:\(self.indexSet)")
         var incrementingTokens = [Int: TokenResult]()
         
         var depth = 0
