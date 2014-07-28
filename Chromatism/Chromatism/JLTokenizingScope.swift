@@ -8,10 +8,20 @@
 
 import UIKit
 
+/**
+    This class keeps track of "tokens" in the attributed string. This enables subscopes of type JLNestedScope to efficiently match tokens in to pairs.
+*/
 public class JLTokenizingScope: JLScope {
     
+    /**
+        Simple class to be used with JLTokenizingScope. It represents a type of symbol in the attributed string that can be nested to form scopes.
+        
+        Two tokens that represent open- and close-paranthesis could be created with
+    
+        :code: Token("\\(", delta: 1), Token("\\)", delta: -1) :endcode:
+    */
     public class Token: Equatable {
-        var delta: Int // Set to +1 to increment by one level, or -1 to decrement
+        var delta: Int /// Set to +1 to increment by one level, or -1 to decrement
         var expression: NSRegularExpression
         
         init(pattern: String, delta: Int) {
@@ -44,6 +54,9 @@ public class JLTokenizingScope: JLScope {
         multiline = true
     }
     
+    /**
+        Returns an instance with one fully set-up JLNestedScope as subscope.
+    */
     public convenience init(incrementingPattern: String, decrementingPattern: String, tokenType: JLTokenType, hollow: Bool) {
         let a = Token(pattern: incrementingPattern, delta: 1)
         let b = Token(pattern: decrementingPattern, delta: -1)
@@ -118,5 +131,20 @@ public class JLTokenizingScope: JLScope {
         }
         
         var description: String { return "∆\(token.delta) \(range)"}
+    }
+}
+
+public func ==(lhs: JLTokenizingScope.Token, rhs: JLTokenizingScope.Token) -> Bool {
+    return (lhs.expression.pattern == rhs.expression.pattern && lhs.delta == rhs.delta)
+}
+
+private extension NSIndexSet {
+    func containsAnyIndexesInRange(range: NSRange) -> Bool {
+        for index in range.start ..< range.end {
+            if self.containsIndex(index) {
+                return true
+            }
+        }
+        return false
     }
 }

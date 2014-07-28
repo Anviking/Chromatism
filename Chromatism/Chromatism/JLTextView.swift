@@ -14,17 +14,18 @@ public class JLTextView: UITextView {
     public var theme: JLColorTheme {
     didSet {
         backgroundColor = theme[.Background]
-        _textStorage.theme = theme
+        language.documentScope.theme = theme
     }}
     
     private var _textStorage: JLTextStorage
     
-    public init(language: JLLanguage, theme: JLColorTheme) {
-        self.language = language
+    public init(language: JLLanguageType, theme: JLColorTheme) {
+        self.language = language.language()
         self.theme = theme
 
         let frame = CGRect.zeroRect
-        _textStorage = JLTextStorage(documentScope: language.documentScope, theme: theme)
+        _textStorage = JLTextStorage(documentScope: self.language.documentScope)
+        self.language.documentScope.theme = theme
         let layoutManager = NSLayoutManager()
         let textContainer = NSTextContainer()
         textContainer.widthTracksTextView = true
@@ -43,7 +44,7 @@ public class JLTextView: UITextView {
     }
     }
     
-// –––––––––––––––––––––––––––––––––––––––––––––––––––––––
+    // MARK: Override UITextView
     
     func updateTypingAttributes() {
         let color = theme[JLTokenType.Text]!

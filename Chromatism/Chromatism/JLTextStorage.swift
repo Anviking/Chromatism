@@ -11,12 +11,9 @@ import UIKit
 public class JLTextStorage: NSTextStorage {
     
     public var documentScope: JLDocumentScope
-    public var theme: JLColorTheme { didSet { documentScope.theme = theme }}
     
-    init(documentScope: JLDocumentScope, theme: JLColorTheme) {
-        documentScope.theme = theme
+    init(documentScope: JLDocumentScope) {
         self.documentScope = documentScope
-        self.theme = theme
         super.init()
         self.documentScope.cascadeAttributedString(self)
     }

@@ -92,28 +92,3 @@ public class JLNestedScope: JLScope {
     }
 }
 
-extension NSRange {
-    var end: Int {
-    return location + length
-    }
-    
-    var start: Int {
-    return location
-    }
-}
-
-public func ==(lhs: JLTokenizingScope.Token, rhs: JLTokenizingScope.Token) -> Bool {
-    return (lhs.expression.pattern == rhs.expression.pattern && lhs.delta == rhs.delta)
-}
-
-
-extension NSIndexSet {
-    func containsAnyIndexesInRange(range: NSRange) -> Bool {
-        for index in range.start ..< range.end {
-            if self.containsIndex(index) {
-                return true
-            }
-        }
-        return false
-    }
-}

@@ -12,7 +12,7 @@ public class JLTextViewController: UIViewController {
     
     public var textView: JLTextView
     
-    public init(text: String, language: JLLanguage, theme: JLColorTheme) {
+    public init(text: String, language: JLLanguageType, theme: JLColorTheme) {
         textView = JLTextView(language: language, theme: theme)
         textView.text = text
         super.init(nibName: nil, bundle: nil)

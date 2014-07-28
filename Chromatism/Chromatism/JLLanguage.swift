@@ -8,8 +8,42 @@
 
 import UIKit
 
+public enum JLLanguageType {
+    case C, ObjectiveC, Other(JLLanguage)
+    
+    
+    /**
+        Warning: Will probably be changed in the future to take arguments
+    
+        :returns: A functional JLLanguage object.
+    */
+    func language() -> JLLanguage {
+        switch self {
+        case C:                     return JLLanguage.C()
+        case ObjectiveC:            return JLLanguage.ObjectiveC()
+        case Other(let language):   return language
+        default:                    return JLLanguage()
+        }
+    }
+    
+    /* Does not appear to be working yet
+    var languageClass: JLLanguage.Type {
+    switch self {
+    case C:                     return JLLanguage.C.self
+    case ObjectiveC:            return JLLanguage.ObjectiveC.self
+    case Other(let language):   return language
+    default:                    return JLLanguage.self
+        }
+    }
+    */
+}
+
 public class JLLanguage {
     let documentScope = JLDocumentScope()
+    
+    public required init() {
+        
+    }
     
     public class C: JLLanguage {
         var blockComments = JLTokenizingScope(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .Comment, hollow: false)
