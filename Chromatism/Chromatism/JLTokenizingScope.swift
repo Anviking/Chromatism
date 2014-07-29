@@ -9,16 +9,16 @@
 import UIKit
 
 /**
-    This class keeps track of "tokens" in the attributed string. This enables subscopes of type JLNestedScope to efficiently match tokens in to pairs.
+This class keeps track of "tokens" in the attributed string. This enables subscopes of type JLNestedScope to efficiently match tokens in to pairs.
 */
 public class JLTokenizingScope: JLScope {
     
     /**
-        Simple class to be used with JLTokenizingScope. It represents a type of symbol in the attributed string that can be nested to form scopes.
-        
-        Two tokens that represent open- and close-paranthesis could be created with
+    Simple class to be used with JLTokenizingScope. It represents a type of symbol in the attributed string that can be nested to form scopes.
     
-        :code: Token("\\(", delta: 1), Token("\\)", delta: -1) :endcode:
+    Two tokens that represent open- and close-paranthesis could be created with
+    
+    :code: Token("\\(", delta: 1), Token("\\)", delta: -1) :endcode:
     */
     public class Token: Equatable {
         var delta: Int /// Set to +1 to increment by one level, or -1 to decrement
@@ -55,7 +55,7 @@ public class JLTokenizingScope: JLScope {
     }
     
     /**
-        Returns an instance with one fully set-up JLNestedScope as subscope.
+    Returns an instance with one fully set-up JLNestedScope as subscope.
     */
     public convenience init(incrementingPattern: String, decrementingPattern: String, tokenType: JLTokenType, hollow: Bool) {
         let a = Token(pattern: incrementingPattern, delta: 1)
@@ -66,18 +66,20 @@ public class JLTokenizingScope: JLScope {
     }
     
     
-    var matches: [TokenResult] = []
+    var matches = [TokenResult]()
+    private var deletions = [TokenResult]()
     
     override func perform(indexSet: NSIndexSet) {
         self.indexSet = NSMutableIndexSet()
         
         // Find Matches
+        var array = [TokenResult]()
         var foundTokenIndexes = NSMutableIndexSet()
         indexSet.enumerateRangesUsingBlock { (range, _) in
             for token in self.tokens {
                 token.expression.enumerateMatchesInString(self.attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
                     if !foundTokenIndexes.containsAnyIndexesInRange(result.range) {
-                        self.matches += TokenResult(result: result, token: token)
+                        array += TokenResult(result: result, token: token)
                         foundTokenIndexes.addIndexesInRange(result.range)
                     }
                     })
@@ -85,7 +87,11 @@ public class JLTokenizingScope: JLScope {
         }
         
         
+        matches += array
         matches.sort { $0.range.location < $1.range.location }
+        
+//        oldLineIndexes =
+        
         for scope in subscopes {
             if let scope = scope as? JLNestedScope {
                 scope.theme = theme
@@ -148,3 +154,5 @@ private extension NSIndexSet {
         return false
     }
 }
+
+

@@ -76,9 +76,26 @@ public class JLTextView: UITextView, JLNestedScopeDelegate {
 
 extension JLTextView: JLNestedScopeDelegate {
     func nestedScopeDidPerform(scope: JLNestedScope, additions: NSIndexSet) {
-        let start = additions.lastIndex - 1
-        let end = additions.lastIndex - 1
-
+        dispatch_async(dispatch_get_main_queue(), {
+            additions.enumerateRangesUsingBlock { (range, stop) in
+                
+                let range = self.textRange(range.start ..< range.end)
+                let array = self.selectionRectsForRange(range) as [UITextSelectionRect]
+                for value in array {
+                    self.flash(value.rect, color: UIColor(white: 0.0, alpha: 0.1))
+                }
+            }
+            })
+    }
+    
+    func flash(rect: CGRect, color: UIColor) {
+        let view = UIView(frame: rect)
+        view.backgroundColor = color
+        self.addSubview(view)
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC)))
+        dispatch_after(time, dispatch_get_main_queue(), {
+            view.removeFromSuperview()
+            })
     }
 }
 

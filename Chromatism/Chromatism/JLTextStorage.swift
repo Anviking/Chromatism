@@ -26,6 +26,7 @@ public class JLTextStorage: NSTextStorage {
             println("Non Contigigous Layout: \(layoutManager.hasNonContiguousLayout)")
             let editedLineIndexSet = NSIndexSet(indexesInRange: range)
             documentScope.perform(editedLineIndexSet)
+            editedLineRange = nil
         }
         super.processEditing()
     }
