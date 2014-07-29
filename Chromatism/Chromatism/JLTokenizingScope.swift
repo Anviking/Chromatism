@@ -111,7 +111,7 @@ public class JLTokenizingScope: JLScope {
         matches = matches.filter { !(indexSet.containsIndexesInRange($0.range)) }
     }
     
-    class TokenResult: Printable {
+    public class TokenResult: Printable {
         var range: NSRange { return ranges[0] }
         var ranges: [NSRange]
         var token: Token
@@ -130,7 +130,7 @@ public class JLTokenizingScope: JLScope {
             ranges = ranges.map { return NSMakeRange($0.location + delta, $0.length)}
         }
         
-        var description: String { return "∆\(token.delta) \(range)"}
+        public var description: String { return "∆\(token.delta) \(range)"}
     }
 }
 

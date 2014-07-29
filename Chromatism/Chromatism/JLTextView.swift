@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class JLTextView: UITextView {
+public class JLTextView: UITextView, JLNestedScopeDelegate {
     
     public var language: JLLanguage
     public var theme: JLColorTheme {
@@ -33,18 +33,19 @@ public class JLTextView: UITextView {
         _textStorage.addLayoutManager(layoutManager)
         super.init(frame: frame, textContainer: textContainer)
         
+        self.language.documentScope.cascade { $0.delegate = self }
         backgroundColor = theme[JLTokenType.Background]
         font = UIFont(name: "Menlo-Regular", size: 15)
         layoutManager.allowsNonContiguousLayout = true
     }
     
+    // MARK: Override UITextView
+
     override public var attributedText: NSAttributedString! {
     didSet {
 
     }
     }
-    
-    // MARK: Override UITextView
     
     func updateTypingAttributes() {
         let color = theme[JLTokenType.Text]!
@@ -68,5 +69,24 @@ public class JLTextView: UITextView {
     didSet {
         updateTypingAttributes()
     }
+    }
+}
+
+// MARK: JLScopeDelegate
+
+extension JLTextView: JLNestedScopeDelegate {
+    func nestedScopeDidPerform(scope: JLNestedScope, additions: NSIndexSet) {
+        let start = additions.lastIndex - 1
+        let end = additions.lastIndex - 1
+
+    }
+}
+
+private extension UITextView {
+    func textRange(range: Range<Int>) -> UITextRange {
+        let beginning = beginningOfDocument
+        let start = positionFromPosition(beginning, offset: range.startIndex)
+        let end = positionFromPosition(beginning, offset: range.endIndex)
+        return textRangeFromPosition(start, toPosition: end)
     }
 }

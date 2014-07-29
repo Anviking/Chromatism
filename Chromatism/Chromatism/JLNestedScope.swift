@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol JLNestedScopeDelegate {
+    func nestedScopeDidPerform(scope: JLNestedScope, additions: NSIndexSet)
+}
+
 public class JLNestedScope: JLScope {
     var incrementingToken: JLTokenizingScope.Token
     var decrementingToken: JLTokenizingScope.Token
@@ -25,6 +29,7 @@ public class JLNestedScope: JLScope {
     }
     
     private var subscopeIndexSet = NSMutableIndexSet()
+    private var oldTokens: [JLTokenizingScope.TokenResult] = []
     
     func perform(indexSet: NSIndexSet, tokens: [JLTokenizingScope.TokenResult]) {
         let oldIndexSet = self.indexSet
@@ -62,6 +67,8 @@ public class JLNestedScope: JLScope {
         var (additions, deletions) = NSIndexSetDelta(oldIndexSet, newIndexSet)
         let intersection = indexSet.intersectionWithSet(newIndexSet)
         setAttributesInIndexSet(intersection + additions)
+        
+        delegate?.nestedScopeDidPerform(self, additions: additions)
         
         if subscopes.count > 0 {
             let additions = NSIndexSetDelta(oldSubscopeIndexSet, newSubscopeIndexSet).additions

@@ -21,6 +21,7 @@ public class JLScope: NSObject, Printable, Equatable {
     var attributedString: NSMutableAttributedString!
     var multiline = false
     var theme: JLColorTheme?
+    var delegate: JLNestedScopeDelegate?
 
     var indexSet = NSMutableIndexSet()
     var subscopes = [JLScope]()

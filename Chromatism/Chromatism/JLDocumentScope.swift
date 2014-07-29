@@ -27,7 +27,7 @@ public class JLDocumentScope: JLScope {
         self.attributedString = attributedString
         cascade { $0.attributedString = attributedString }
     }
-    
+
     override func invalidateAttributesInIndexes(indexSet: NSIndexSet) {
         cascade { $0.invalidateAttributesInIndexes(indexSet) }
     }
@@ -36,7 +36,7 @@ public class JLDocumentScope: JLScope {
         cascade { $0.shiftIndexesAtLoaction(location, by: delta) }
     }
     
-    private func cascade(block: (scope: JLScope) -> Void) {
+    func cascade(block: (scope: JLScope) -> Void) {
         for scope in subscopes {
             cascade(block, scope: scope)
         }
