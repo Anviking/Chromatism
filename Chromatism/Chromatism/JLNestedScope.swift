@@ -24,9 +24,13 @@ public class JLNestedScope: JLScope {
         multiline = true
     }
     
+    private var subscopeIndexSet = NSMutableIndexSet()
+    
     func perform(indexSet: NSIndexSet, tokens: [JLTokenizingScope.TokenResult]) {
         let oldIndexSet = self.indexSet
         var newIndexSet = NSMutableIndexSet()
+        let oldSubscopeIndexSet = self.subscopeIndexSet
+        var newSubscopeIndexSet = NSMutableIndexSet()
         
         var incrementingTokens = Dictionary<Int, JLTokenizingScope.TokenResult>()
         var depth = 0
@@ -34,20 +38,38 @@ public class JLNestedScope: JLScope {
             if result.token.delta > 0 {
                 incrementingTokens[depth] = result
             } else if let start = incrementingTokens[depth + result.token.delta] {
-                process(start, decrementingToken: result, indexSet: newIndexSet)
+                let incrementingToken = start
+                let decrementingToken = result
+                if incrementingTokenIsValid(incrementingToken) && decrementingTokenIsValid(decrementingToken) {
+                    let indexes = indexesForTokens(incrementingToken, decrementingToken: decrementingToken, hollow: hollow)
+                    if indexes.lastIndex < attributedString.length {
+                        newIndexSet += indexes
+                    }
+                    
+                    if subscopes.count > 0 {
+                        let subscopeResult = indexesForTokens(incrementingToken, decrementingToken: decrementingToken, hollow: false)
+                        if subscopeResult.lastIndex < attributedString.length {
+                            newSubscopeIndexSet += subscopeResult
+                        }
+                    }
+                }
             }
             depth += result.token.delta
         }
         
         // We only need update attributes in indexes that just was added
-        var (additions, deletions) = NSIndexSetDelta(oldIndexSet, newIndexSet)
-        setAttributesInIndexSet(additions)
-        
         // And in indexes that has been reset by the document scope
+        var (additions, deletions) = NSIndexSetDelta(oldIndexSet, newIndexSet)
         let intersection = indexSet.intersectionWithSet(newIndexSet)
-        setAttributesInIndexSet(intersection)
+        setAttributesInIndexSet(intersection + additions)
         
-        self.indexSet = newIndexSet
+        if subscopes.count > 0 {
+            let additions = NSIndexSetDelta(oldSubscopeIndexSet, newSubscopeIndexSet).additions
+            subscopeIndexSet = (subscopeIndexSet.intersectionWithSet(indexSet) + additions)
+            println(subscopeIndexSet)
+            performSubscopes(attributedString, indexSet: subscopeIndexSet)
+            self.indexSet = newIndexSet
+        }
     }
     
     func incrementingTokenIsValid(token: JLTokenizingScope.TokenResult) -> Bool {
@@ -66,23 +88,14 @@ public class JLNestedScope: JLScope {
         }
     }
     
-    private func process(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult, indexSet: NSMutableIndexSet) {
-        if incrementingTokenIsValid(incrementingToken) && decrementingTokenIsValid(decrementingToken) {
-            let indexes = indexesForTokens(incrementingToken, decrementingToken: decrementingToken)
-            if indexes.lastIndex < attributedString.length {
-                indexSet += indexes
-            }
-        }
-    }
-    
     override func invalidateAttributesInIndexes(indexSet: NSIndexSet) {
         self.indexSet -= indexSet
     }
     
     
-    func indexesForTokens(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult) -> NSIndexSet {
+    func indexesForTokens(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult, hollow: Bool) -> NSIndexSet {
         var indexSet = NSMutableIndexSet()
-        if self.hollow {
+        if hollow {
             indexSet += incrementingToken.range
             indexSet += decrementingToken.range
         } else {
