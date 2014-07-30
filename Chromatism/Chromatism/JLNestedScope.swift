@@ -68,17 +68,17 @@ public class JLNestedScope: JLScope {
         let intersection = indexSet.intersectionWithSet(newIndexSet)
         setAttributesInIndexSet(intersection + additions)
         
-        println("\(incrementingToken.expression.pattern) - Additions: \(additions)")
+        //println("\(incrementingToken.expression.pattern) - Additions: \(additions)")
         
         let subscopeAdditions = NSIndexSetDelta(oldSubscopeIndexSet, newSubscopeIndexSet).additions
         
         if subscopeAdditions.count > 0 {
-            println("\(incrementingToken.expression.pattern) - Additions: \(subscopeAdditions)")
+            //println("\(incrementingToken.expression.pattern) - Additions: \(subscopeAdditions)")
             delegate?.nestedScopeDidPerform(self, additions: subscopeAdditions)
         }
         
         let subscopeIntersection = subscopeIndexSet.intersectionWithSet(indexSet)
-        println(subscopeIndexSet)
+        //println(subscopeIndexSet)
         performSubscopes(attributedString, indexSet: subscopeIndexSet + subscopeAdditions)
         
         self.indexSet = newIndexSet

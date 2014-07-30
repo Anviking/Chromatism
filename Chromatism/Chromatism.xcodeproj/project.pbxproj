@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8F311E86197C8F040030B553 /* ObjectiveC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F311E85197C8F040030B553 /* ObjectiveC.swift */; };
+		8F5961FF198925D70095A8A9 /* JLTokenizingScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9313B61986A8E900DD3993 /* JLTokenizingScope.swift */; };
+		8F596200198926660095A8A9 /* JLTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9313B11984271F00DD3993 /* JLTextStorage.swift */; };
 		8F5D7ADF197D3B4900D73B8E /* JLLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */; };
 		8F7922CA197D39B900A94724 /* JLNestedScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7922C9197D39B900A94724 /* JLNestedScope.swift */; };
 		8F9313B21984271F00DD3993 /* JLTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9313B11984271F00DD3993 /* JLTextStorage.swift */; };
@@ -300,6 +302,7 @@
 				8FB10D22197EF104001A83B1 /* JLDocumentScope.swift in Sources */,
 				8F9598A2197448B4002EA4AB /* JLTokenTests.swift in Sources */,
 				8FB10D21197EF104001A83B1 /* JLScope.swift in Sources */,
+				8F5961FF198925D70095A8A9 /* JLTokenizingScope.swift in Sources */,
 				8FB10D2C197EF104001A83B1 /* JLLanguage.swift in Sources */,
 				8FB10D28197EF104001A83B1 /* JLTextView.swift in Sources */,
 				8FB10D2B197EF104001A83B1 /* JLColorTheme.swift in Sources */,
@@ -309,6 +312,7 @@
 				8FB10D25197EF104001A83B1 /* JLNestedScope.swift in Sources */,
 				8FB10D24197EF104001A83B1 /* JLToken.swift in Sources */,
 				8FB10D2A197EF104001A83B1 /* JLTokenType.swift in Sources */,
+				8F596200198926660095A8A9 /* JLTextStorage.swift in Sources */,
 				8FB10D26197EF104001A83B1 /* NSIndexSet+Additions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

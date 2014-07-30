@@ -25,26 +25,6 @@ class JLScopeTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
-    func testLaziness() {
-        var attributedString = "[Hello World]".text
-        let documentScope = JLDocumentScope()
-        
-        documentScope[
-            JLToken(pattern: "\\[.*\\]", tokenTypes: .Comment),
-            JLToken(pattern: "World", tokenTypes: .Keyword)
-        ]
-        
-        documentScope.theme = .Default
-        documentScope.perform(attributedString)
-        XCTAssertEqual("[Hello World]".comment, attributedString)
-        
-        attributedString.deleteCharactersInRange(NSMakeRange(attributedString.length - 1, 1))
-        documentScope.perform(attributedString)
-        XCTAssertEqual("[Hello ".text + "World".keyword, attributedString)
-        
-    }
-    
     func testSubscripting() {
 
         let a = JLScope()
