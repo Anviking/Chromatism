@@ -68,6 +68,8 @@ public class JLNestedScope: JLScope {
         let intersection = indexSet.intersectionWithSet(newIndexSet)
         setAttributesInIndexSet(intersection + additions)
         
+        println("\(incrementingToken.expression.pattern) - Additions: \(additions)")
+        
         let subscopeAdditions = NSIndexSetDelta(oldSubscopeIndexSet, newSubscopeIndexSet).additions
         
         if subscopeAdditions.count > 0 {
@@ -75,9 +77,9 @@ public class JLNestedScope: JLScope {
             delegate?.nestedScopeDidPerform(self, additions: subscopeAdditions)
         }
         
-        subscopeIndexSet = (subscopeIndexSet.intersectionWithSet(indexSet) + subscopeAdditions)
+        let subscopeIntersection = subscopeIndexSet.intersectionWithSet(indexSet)
         println(subscopeIndexSet)
-        performSubscopes(attributedString, indexSet: subscopeIndexSet)
+        performSubscopes(attributedString, indexSet: subscopeIndexSet + subscopeAdditions)
         
         self.indexSet = newIndexSet
         self.subscopeIndexSet = newSubscopeIndexSet
@@ -106,7 +108,6 @@ public class JLNestedScope: JLScope {
     }
     
     override func shiftIndexesAtLoaction(location: Int, by delta: Int) {
-        println("Shift at location: \(location) by: \(delta)")
         oldIndexSet.shiftIndexesStartingAtIndex(location, by: delta)
         indexSet.shiftIndexesStartingAtIndex(location, by: delta)
         subscopeIndexSet.shiftIndexesStartingAtIndex(location, by: delta)

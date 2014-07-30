@@ -36,7 +36,7 @@ public class JLTextView: UITextView, JLNestedScopeDelegate {
         self.language.documentScope.cascade { $0.delegate = self }
         backgroundColor = theme[JLTokenType.Background]
         font = UIFont(name: "Menlo-Regular", size: 15)
-        layoutManager.allowsNonContiguousLayout = true
+//        layoutManager.allowsNonContiguousLayout = true
     }
     
     // MARK: Override UITextView
@@ -90,11 +90,33 @@ extension JLTextView: JLNestedScopeDelegate {
     
     func flash(rect: CGRect, color: UIColor) {
         let view = UIView(frame: rect)
-        view.backgroundColor = color
+        view.backgroundColor = UIColor.clearColor()
         self.addSubview(view)
-        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC)))
-        dispatch_after(time, dispatch_get_main_queue(), {
-            view.removeFromSuperview()
+        
+        let duration = 0.2
+
+        
+        let gone = CGAffineTransformMakeScale(0, 0)
+        let visible = CGAffineTransformMakeScale(1, 1)
+        
+        view.transform = gone
+        
+        // Its ok for this to be hacky for now
+        view.animateToColor(color, transform: visible, duration: duration, completion: {
+            view.animateToColor(UIColor.clearColor(), transform: gone, duration: duration, completion: {
+                view.removeFromSuperview()
+                })
+            })
+    }
+}
+
+private extension UIView {
+    func animateToColor(color: UIColor, transform: CGAffineTransform, duration: Double, completion: () -> Void) {
+        UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.3, options: nil, animations: {
+            self.backgroundColor = color
+            self.transform = transform
+            }, completion: { _ in
+                completion()
             })
     }
 }
