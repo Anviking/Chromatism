@@ -9,7 +9,7 @@
 import UIKit
 
 public enum JLLanguageType {
-    case C, ObjectiveC, Other(JLLanguage)
+    case C, ObjectiveC, Swift, Other(JLLanguage)
     
     
     /**
@@ -21,6 +21,7 @@ public enum JLLanguageType {
         switch self {
         case C:                     return JLLanguage.C()
         case ObjectiveC:            return JLLanguage.ObjectiveC()
+        case Swift:                 return JLLanguage.Swift()
         case Other(let language):   return language
         default:                    return JLLanguage()
         }
@@ -89,7 +90,6 @@ public class JLLanguage {
             
             super.init()
             
-            
             documentScope[
                 blockComments,
                 dictionaryLiteral,
@@ -103,6 +103,24 @@ public class JLLanguage {
                 dotNotation,
                 objcKeywords,
                 otherClassNames
+            ]
+        }
+    }
+    
+    public class Swift: JLLanguage {
+        var blockComments = JLTokenizingScope(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .Comment, hollow: false)
+        var lineComments = JLToken(pattern: "//(.*)", tokenTypes: .Comment)
+        var keywords = JLToken(pattern: "\\b(class|protocol|init|required|@optional|public|internal|private)\\b", tokenTypes: .Keyword )
+        var swiftTypes = JLToken(pattern: "\\b(Array|AutoreleasingUnsafePointer|BidirectionalReverseView|Bit|Bool|CFunctionPointer|COpaquePointer|CVaListPointer|Character|CollectionOfOne|ConstUnsafePointer|ContiguousArray|Dictionary|DictionaryGenerator|DictionaryIndex|Double|EmptyCollection|EmptyGenerator|EnumerateGenerator|FilterCollectionView|FilterCollectionViewIndex|FilterGenerator|FilterSequenceView|Float|Float80|FloatingPointClassification|GeneratorOf|GeneratorOfOne|GeneratorSequence|HeapBuffer|HeapBuffer|HeapBufferStorage|HeapBufferStorageBase|ImplicitlyUnwrappedOptional|IndexingGenerator|Int|Int16|Int32|Int64|Int8|IntEncoder|LazyBidirectionalCollection|LazyForwardCollection|LazyRandomAccessCollection|LazySequence|Less|MapCollectionView|MapSequenceGenerator|MapSequenceView|MirrorDisposition|ObjectIdentifier|OnHeap|Optional|PermutationGenerator|QuickLookObject|RandomAccessReverseView|Range|RangeGenerator|RawByte|Repeat|ReverseBidirectionalIndex|ReverseRandomAccessIndex|SequenceOf|SinkOf|Slice|StaticString|StrideThrough|StrideThroughGenerator|StrideTo|StrideToGenerator|String|Index|UTF8View|Index|UnicodeScalarView|IndexType|GeneratorType|UTF16View|UInt|UInt16|UInt32|UInt64|UInt8|UTF16|UTF32|UTF8|UnicodeDecodingResult|UnicodeScalar|Unmanaged|UnsafeArray|UnsafeArrayGenerator|UnsafeMutableArray|UnsafePointer|VaListBuilder|Header|Zip2|ZipGenerator2)\\b", tokenTypes: .OtherMethodNames)
+        
+        public init() {
+
+            super.init()
+            documentScope[
+                blockComments,
+                lineComments,
+                keywords,
+                swiftTypes
             ]
         }
     }

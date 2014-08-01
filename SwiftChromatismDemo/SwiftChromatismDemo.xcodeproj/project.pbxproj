@@ -9,9 +9,10 @@
 /* Begin PBXBuildFile section */
 		8F105F1D194D1C8100BF037F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F105F1C194D1C8100BF037F /* Images.xcassets */; };
 		8F105F29194D1C8100BF037F /* SwiftChromatismDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F105F28194D1C8100BF037F /* SwiftChromatismDemoTests.swift */; };
-		8F26E488195714590055D235 /* demo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8F26E487195714590055D235 /* demo.txt */; };
+		8F26E488195714590055D235 /* objc.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8F26E487195714590055D235 /* objc.txt */; };
+		8F2959EC198C0EE1004B33CB /* swift.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8F2959EB198C0EE1004B33CB /* swift.txt */; };
 		8F729300197DFA920006D903 /* Chromatism.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7292FD197DFA880006D903 /* Chromatism.framework */; };
-		8FB10D34197F0B46001A83B1 /* demo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8F26E487195714590055D235 /* demo.txt */; };
+		8FB10D34197F0B46001A83B1 /* objc.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8F26E487195714590055D235 /* objc.txt */; };
 		8FCDC0031979EE7F00F4B3EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F105F1A194D1C8100BF037F /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -67,7 +68,8 @@
 		8F105F22194D1C8100BF037F /* SwiftChromatismDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftChromatismDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F105F27194D1C8100BF037F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F105F28194D1C8100BF037F /* SwiftChromatismDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftChromatismDemoTests.swift; sourceTree = "<group>"; };
-		8F26E487195714590055D235 /* demo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = demo.txt; sourceTree = "<group>"; };
+		8F26E487195714590055D235 /* objc.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = objc.txt; sourceTree = "<group>"; };
+		8F2959EB198C0EE1004B33CB /* swift.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = swift.txt; sourceTree = "<group>"; };
 		8F7292F7197DFA880006D903 /* Chromatism.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Chromatism.xcodeproj; path = ../../Chromatism/Chromatism.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,7 +123,8 @@
 		8F105F18194D1C8100BF037F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8F26E487195714590055D235 /* demo.txt */,
+				8F26E487195714590055D235 /* objc.txt */,
+				8F2959EB198C0EE1004B33CB /* swift.txt */,
 				8F105F19194D1C8100BF037F /* Info.plist */,
 				8F7292F7197DFA880006D903 /* Chromatism.xcodeproj */,
 			);
@@ -259,7 +262,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F105F1D194D1C8100BF037F /* Images.xcassets in Resources */,
-				8F26E488195714590055D235 /* demo.txt in Resources */,
+				8F26E488195714590055D235 /* objc.txt in Resources */,
+				8F2959EC198C0EE1004B33CB /* swift.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,7 +271,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FB10D34197F0B46001A83B1 /* demo.txt in Resources */,
+				8FB10D34197F0B46001A83B1 /* objc.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
