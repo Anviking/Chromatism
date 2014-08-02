@@ -20,10 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         // Load demo text
-        let url = NSBundle.mainBundle().URLForResource("objc", withExtension: "txt");
+        let url = NSBundle.mainBundle().URLForResource("swift", withExtension: "txt");
         let string = NSString(contentsOfURL: url, encoding: NSUTF8StringEncoding, error: nil)
         
-        let viewController = JLTextViewController(text: string, language: .ObjectiveC, theme: .Default)
+        let viewController = JLTextViewController(text: string, language: .Swift, theme: .Default)
         
         viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Resign", style: .Plain, target: viewController.textView, action:"resignFirstResponder")
         
