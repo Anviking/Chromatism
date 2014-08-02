@@ -28,8 +28,6 @@ public class JLNestedScope: JLScope {
         multiline = true
     }
     
-    private var oldSubscopeIndexSet = NSMutableIndexSet()
-    private var subscopeIndexSet = NSMutableIndexSet()
     private var oldIndexSet = NSMutableIndexSet()
     
     func perform(indexSet: NSIndexSet, tokens: [JLTokenizingScope.TokenResult]) {
@@ -49,11 +47,6 @@ public class JLNestedScope: JLScope {
                     if indexes.lastIndex < attributedString.length {
                         newIndexSet += indexes
                     }
-                    
-                        let subscopeResult = indexesForTokens(incrementingToken, decrementingToken: decrementingToken, hollow: false)
-                        if subscopeResult.lastIndex < attributedString.length {
-                            newSubscopeIndexSet += subscopeResult
-                        }
                 }
             }
             depth += result.token.delta
@@ -61,30 +54,18 @@ public class JLNestedScope: JLScope {
         
         // We only need update attributes in indexes that just was added
         // And in indexes that has been reset by the document scope
-        
-        
-        
         var (additions, deletions) = NSIndexSetDelta(oldIndexSet, newIndexSet)
         let intersection = indexSet.intersectionWithSet(newIndexSet)
         setAttributesInIndexSet(intersection + additions)
         
         //println("\(incrementingToken.expression.pattern) - Additions: \(additions)")
         
-        let subscopeAdditions = NSIndexSetDelta(oldSubscopeIndexSet, newSubscopeIndexSet).additions
-        
-        if subscopeAdditions.count > 0 {
-            //println("\(incrementingToken.expression.pattern) - Additions: \(subscopeAdditions)")
-            delegate?.nestedScopeDidPerform(self, additions: subscopeAdditions)
-        }
-        
-        let subscopeIntersection = subscopeIndexSet.intersectionWithSet(indexSet)
-        //println(subscopeIndexSet)
-        performSubscopes(attributedString, indexSet: subscopeIndexSet + subscopeAdditions)
+        delegate?.nestedScopeDidPerform(self, additions: additions)
+        performSubscopes(attributedString, indexSet: intersection)
+        println("Intersection: \(intersection)")
         
         self.indexSet = newIndexSet
-        self.subscopeIndexSet = newSubscopeIndexSet
         oldIndexSet = newIndexSet.mutableCopy() as NSMutableIndexSet
-        oldSubscopeIndexSet = newSubscopeIndexSet.mutableCopy() as NSMutableIndexSet
     }
     
     func incrementingTokenIsValid(token: JLTokenizingScope.TokenResult) -> Bool {
@@ -110,8 +91,6 @@ public class JLNestedScope: JLScope {
     override func shiftIndexesAtLoaction(location: Int, by delta: Int) {
         oldIndexSet.shiftIndexesStartingAtIndex(location, by: delta)
         indexSet.shiftIndexesStartingAtIndex(location, by: delta)
-        subscopeIndexSet.shiftIndexesStartingAtIndex(location, by: delta)
-        oldSubscopeIndexSet.shiftIndexesStartingAtIndex(location, by: delta)
     }
     
     

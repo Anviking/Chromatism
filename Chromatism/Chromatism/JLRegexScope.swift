@@ -7,6 +7,7 @@
 //
 
 import UIKit
+
 public class JLRegexScope: JLScope {
     
     var regularExpression: NSRegularExpression
@@ -14,23 +15,22 @@ public class JLRegexScope: JLScope {
     /// Allows you to specify specific tokenTypes for different capture groups. Index 0 means the whole match, following indexes represent capture groups.
     public var tokenTypes: [JLTokenType]
     
+    
     init(regularExpression: NSRegularExpression, tokenTypes: [JLTokenType]) {
         self.regularExpression = regularExpression
         self.tokenTypes = tokenTypes
         super.init()
     }
     
-    convenience init(pattern: String, options: NSRegularExpressionOptions, tokenTypes: [JLTokenType]) {
+    convenience init(pattern: String, options: NSRegularExpressionOptions, tokenTypes: JLTokenType...) {
         let expression = NSRegularExpression(pattern: pattern, options: options, error: nil)
         self.init(regularExpression: expression, tokenTypes: tokenTypes)
     }
     
-    convenience init(pattern: String, options: NSRegularExpressionOptions, tokenTypes: JLTokenType...) {
-        self.init(pattern: pattern, options: options, tokenTypes: tokenTypes)
-    }
-    
+    /// Creates a JLRegexScope with .AnchorsMatchLines options
     convenience init(pattern: String, tokenTypes: JLTokenType...) {
-        self.init(pattern: pattern, options: .AnchorsMatchLines, tokenTypes: tokenTypes)
+        let expression = NSRegularExpression(pattern: pattern, options: .AnchorsMatchLines, error: nil)
+        self.init(regularExpression: expression, tokenTypes: tokenTypes)
     }
     
     override func perform(parentIndexSet: NSIndexSet) {

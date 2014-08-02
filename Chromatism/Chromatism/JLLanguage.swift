@@ -78,13 +78,14 @@ public class JLLanguage {
         var objcKeywords = JLKeywordScope(keywords: "class defs protocol required optional interface public package protected private property end implementation synthesize dynamic end throw try catch finally synchronized autoreleasepool selector encode compatibility_alias".componentsSeparatedByString(" "), prefix:"@", suffix:"\\b", tokenType: .Keyword)
         var squareBrackets: JLTokenizingScope
         var dictionaryLiteral = JLTokenizingScope(incrementingPattern: "\\@\\{", decrementingPattern: "\\}", tokenType: .OtherMethodNames, hollow: true)
+        var methodCallArguments = JLRegexScope(pattern: "\\b\\w+(:|(?=\\]))", tokenTypes: .OtherMethodNames)
         
         public init() {
             let openBracket = JLTokenizingScope.Token(pattern: "\\[", delta: 1)
             let closeBracket = JLTokenizingScope.Token(pattern: "\\]", delta: -1)
             let arrayOpen = JLTokenizingScope.Token(pattern: "\\@\\[", delta: 1)
             
-            let method = JLNestedScope(incrementingToken: openBracket, decrementingToken: closeBracket, tokenType: .None, hollow: true)
+            let method = JLNestedScope(incrementingToken: openBracket, decrementingToken: closeBracket, tokenType: .None, hollow: false)
             let arrayLiteral = JLNestedScope(incrementingToken: arrayOpen, decrementingToken: closeBracket, tokenType: .OtherMethodNames, hollow: true)
             squareBrackets = JLTokenizingScope(tokens: [arrayOpen, openBracket, closeBracket])
             
@@ -95,8 +96,11 @@ public class JLLanguage {
                 dictionaryLiteral,
                 lineComments,
                 preprocessor[strings, angularImports],
+                squareBrackets[
+                    arrayLiteral,
+                    method[methodCallArguments, objcKeywords, dotNotation, otherClassNames, strings]
+                ],
                 strings,
-                squareBrackets[arrayLiteral, method],
                 numbers,
                 functions,
                 keywords,
