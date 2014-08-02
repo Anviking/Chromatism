@@ -32,10 +32,12 @@ public enum JLColorTheme {
         .Preprocessor:                 UIColorRGB(120, 72, 48),
         .URL:                          UIColorRGB(21, 67, 244),
         .Other:                        UIColorRGB(113, 65, 163),
-        .OtherMethodNames :            UIColorRGB(112, 64, 166),
-        .OtherClassNames :             UIColorRGB(112, 64, 166),
-        .ProjectClassNames :           UIColorRGB(63, 110, 116),
-        .ProjectMethodNames :          UIColorRGB(38, 71, 75)
+        .OtherMethodNames:             UIColorRGB(46, 13, 110),
+        .OtherConstants:               UIColorRGB(46, 13, 110),
+        .OtherClassNames:              UIColorRGB(92, 38, 153),
+        .ProjectClassNames:            UIColorRGB(63, 110, 116),
+        .ProjectConstants:             UIColorRGB(38, 71, 75),
+        .ProjectMethodNames:           UIColorRGB(38, 71, 75)
     ]
     
     private static let duskTheme: [JLTokenType: UIColor] = [

@@ -25,7 +25,9 @@ public enum JLTokenType {
     case Project
     case Other
     case OtherMethodNames
+    case OtherConstants
     case OtherClassNames
     case ProjectMethodNames
+    case ProjectConstants
     case ProjectClassNames
 }
