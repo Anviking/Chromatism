@@ -10,7 +10,7 @@ import UIKit
 
 class JLKeywordScope: JLRegexScope {
     init(keywords: [String], prefix: String, suffix: String, tokenType: JLTokenType) {
-        let pattern = prefix + Branch(array: keywords).description + suffix
+        let pattern = prefix + Branch(character: "", array: keywords).description + suffix
         println(pattern)
         let expression = NSRegularExpression(pattern: pattern, options: nil, error: nil)
         super.init(regularExpression: expression, tokenTypes: [tokenType])
@@ -20,25 +20,48 @@ class JLKeywordScope: JLRegexScope {
     convenience init (keywords: [String], tokenType: JLTokenType) {
         self.init(keywords: keywords, prefix: "\\b", suffix: "\\b", tokenType: tokenType)
     }
-
+    
     /// Create a JLKeywordScope with a space-separated keyword string
     convenience init(keywords: String, tokenType: JLTokenType) {
         self.init(keywords: keywords.componentsSeparatedByString(" "), tokenType: tokenType)
     }
 }
 
-private protocol Node {
-    var pattern: String {get}
-}
- extension String: Node {
-    var pattern: String {
-        return NSRegularExpression.escapedPatternForString(self) as String
+extension String
+    {
+    func characterAtIndex(index:Int) -> unichar
+    {
+        return self.utf16[index]
+    }
+    
+    // Allows us to use String[index] notation
+    subscript(index:Int) -> unichar
+        {
+        return characterAtIndex(index)
     }
 }
 
+private protocol Node {
+    var pattern: String {get}
+}
+
+private struct Leaf: Node {
+    init() {}
+    var pattern: String { return "" }
+}
+
 private struct Branch: Node, Printable {
-    var children = [String: Node]()
-    init(array: [String]) {
+    var children = [Node]()
+    var character: String
+    
+    func perform(string: NSString, range: Range<Int>) {
+        for i in range {
+            
+        }
+    }
+    
+    init(character: String, array: [String]) {
+        self.character = character
         var dictionary = [String: [String]]()
         for string in array {
             if countElements(string) > 0 {
@@ -51,30 +74,25 @@ private struct Branch: Node, Printable {
                     dictionary[firstCharacter] = [remainingString]
                 }
             } else {
-                children[""] = string
+                // This means end of a match
+                children += Leaf()
             }
         }
         for (key, value) in dictionary {
-            if array.count == 1 {
-                children[key] = value[0]
-            } else {
-                children[key] = Branch(array: value)
-            }
+            children += Branch(character: key, array: value)
         }
         
     }
     
     var pattern: String {
-    var array = [String]()
-        for (key, value) in children {
-            array += "\(key)\(value.pattern)"
-        }
+    var array = children.map { $0.pattern }
+    array.sort { countElements($0) < countElements($1) }
         
-        if children.count == 1 {
-            return join("|", array)
-        }
-        
-        return "(?:" + join("|", array) + ")"
+    switch array.count {
+        case 0: return character + ""
+        case 1: return character + array[0]
+        default: return character + "(?:" + join("|", array) + ")"
+    }
     }
     
     var description: String {
