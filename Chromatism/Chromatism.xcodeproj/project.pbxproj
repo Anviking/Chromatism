@@ -31,6 +31,10 @@
 		8FBFC18219738B0400F75A76 /* ChromatismTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18119738B0400F75A76 /* ChromatismTests.swift */; };
 		8FBFC18E197418E300F75A76 /* NSIndexSet+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18D197418E300F75A76 /* NSIndexSet+Additions.swift */; };
 		8FBFC19219741B6B00F75A76 /* JLScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */; };
+		8FC8F73D198C7B5A00E4ED32 /* JLKeywordScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8F73C198C7B5A00E4ED32 /* JLKeywordScope.swift */; };
+		8FC8F73F198C7D1B00E4ED32 /* Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8F73E198C7D1B00E4ED32 /* Swift.swift */; };
+		8FC8F740198C7D2400E4ED32 /* JLKeywordScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8F73C198C7B5A00E4ED32 /* JLKeywordScope.swift */; };
+		8FC8F742198C7D4800E4ED32 /* JLKeywordScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8F741198C7D4800E4ED32 /* JLKeywordScopeTests.swift */; };
 		8FCDBFF91978834D00F4B3EC /* JLTokenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */; };
 		8FCDBFFB1979615D00F4B3EC /* JLColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */; };
 		8FE1291B197B1D5D0084E506 /* JLScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18B19738B7900F75A76 /* JLScope.swift */; };
@@ -67,6 +71,9 @@
 		8FBFC18B19738B7900F75A76 /* JLScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLScope.swift; sourceTree = "<group>"; };
 		8FBFC18D197418E300F75A76 /* NSIndexSet+Additions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSIndexSet+Additions.swift"; sourceTree = "<group>"; };
 		8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLScopeTests.swift; sourceTree = "<group>"; };
+		8FC8F73C198C7B5A00E4ED32 /* JLKeywordScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLKeywordScope.swift; sourceTree = "<group>"; };
+		8FC8F73E198C7D1B00E4ED32 /* Swift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Swift.swift; sourceTree = "<group>"; };
+		8FC8F741198C7D4800E4ED32 /* JLKeywordScopeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLKeywordScopeTests.swift; sourceTree = "<group>"; };
 		8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLLanguage.swift; sourceTree = "<group>"; };
 		8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTokenType.swift; sourceTree = "<group>"; };
 		8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLColorTheme.swift; sourceTree = "<group>"; };
@@ -127,6 +134,7 @@
 				8FBFC17419738B0400F75A76 /* Chromatism.h */,
 				8FBFC18B19738B7900F75A76 /* JLScope.swift */,
 				8FE12922197B5D780084E506 /* JLDocumentScope.swift */,
+				8FC8F73C198C7B5A00E4ED32 /* JLKeywordScope.swift */,
 				8F95989D197437BF002EA4AB /* JLToken.swift */,
 				8F9313B81986A8FE00DD3993 /* Nested Scopes */,
 				8F9313B11984271F00DD3993 /* JLTextStorage.swift */,
@@ -152,10 +160,12 @@
 		8FBFC17E19738B0400F75A76 /* ChromatismTests */ = {
 			isa = PBXGroup;
 			children = (
+				8FC8F741198C7D4800E4ED32 /* JLKeywordScopeTests.swift */,
 				8FBFC18119738B0400F75A76 /* ChromatismTests.swift */,
 				8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */,
 				8F9598A1197448B4002EA4AB /* JLTokenTests.swift */,
 				8F311E85197C8F040030B553 /* ObjectiveC.swift */,
+				8FC8F73E198C7D1B00E4ED32 /* Swift.swift */,
 				8FB10D2E197F0A10001A83B1 /* demo.txt */,
 				8FBFC17F19738B0400F75A76 /* Supporting Files */,
 			);
@@ -279,6 +289,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FC8F73D198C7B5A00E4ED32 /* JLKeywordScope.swift in Sources */,
 				8FE1291E197B21900084E506 /* JLTextView.swift in Sources */,
 				8F7922CA197D39B900A94724 /* JLNestedScope.swift in Sources */,
 				8FE1291B197B1D5D0084E506 /* JLScope.swift in Sources */,
@@ -308,9 +319,12 @@
 				8FB10D2B197EF104001A83B1 /* JLColorTheme.swift in Sources */,
 				8F311E86197C8F040030B553 /* ObjectiveC.swift in Sources */,
 				8FBFC18219738B0400F75A76 /* ChromatismTests.swift in Sources */,
+				8FC8F73F198C7D1B00E4ED32 /* Swift.swift in Sources */,
 				8FB10D29197EF104001A83B1 /* JLTextViewController.swift in Sources */,
+				8FC8F740198C7D2400E4ED32 /* JLKeywordScope.swift in Sources */,
 				8FB10D25197EF104001A83B1 /* JLNestedScope.swift in Sources */,
 				8FB10D24197EF104001A83B1 /* JLToken.swift in Sources */,
+				8FC8F742198C7D4800E4ED32 /* JLKeywordScopeTests.swift in Sources */,
 				8FB10D2A197EF104001A83B1 /* JLTokenType.swift in Sources */,
 				8F596200198926660095A8A9 /* JLTextStorage.swift in Sources */,
 				8FB10D26197EF104001A83B1 /* NSIndexSet+Additions.swift in Sources */,

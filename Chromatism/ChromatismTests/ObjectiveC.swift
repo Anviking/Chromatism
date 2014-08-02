@@ -9,10 +9,9 @@
 import UIKit
 import XCTest
 
-let url = NSBundle(forClass: ObjectiveC.self).URLForResource("demo", withExtension: "txt")
-let string = NSString(contentsOfURL: url, encoding: NSUTF8StringEncoding, error: nil)
-
 class ObjectiveC: XCTestCase {
+    
+    let string = NSString(contentsOfURL: NSBundle(forClass: ObjectiveC.self).URLForResource("demo", withExtension: "txt"), encoding: NSUTF8StringEncoding, error: nil)
     
     var attributedString: NSMutableAttributedString!
     var language: JLLanguage.ObjectiveC!
