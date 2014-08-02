@@ -13,9 +13,9 @@ public enum JLLanguageType {
     
     
     /**
-        Warning: Will probably be changed in the future to take arguments
+    Warning: Will probably be changed in the future to take arguments
     
-        :returns: A functional JLLanguage object.
+    :returns: A functional JLLanguage object.
     */
     func language() -> JLLanguage {
         switch self {
@@ -34,7 +34,7 @@ public enum JLLanguageType {
     case ObjectiveC:            return JLLanguage.ObjectiveC.self
     case Other(let language):   return language
     default:                    return JLLanguage.self
-        }
+    }
     }
     */
 }
@@ -98,7 +98,15 @@ public class JLLanguage {
                 preprocessor[strings, angularImports],
                 squareBrackets[
                     arrayLiteral,
-                    method[methodCallArguments, objcKeywords, dotNotation, otherClassNames, strings]
+                    method[
+                        strings,
+                        numbers,
+                        functions,
+                        keywords,
+                        dotNotation,
+                        objcKeywords,
+                        otherClassNames
+                    ]
                 ],
                 strings,
                 numbers,
@@ -119,7 +127,7 @@ public class JLLanguage {
         var swiftTypes = JLKeywordScope(keywords: "Array AutoreleasingUnsafePointer BidirectionalReverseView Bit Bool CFunctionPointer COpaquePointer CVaListPointer Character CollectionOfOne ConstUnsafePointer ContiguousArray Dictionary DictionaryGenerator DictionaryIndex Double EmptyCollection EmptyGenerator EnumerateGenerator FilterCollectionView FilterCollectionViewIndex FilterGenerator FilterSequenceView Float Float80 FloatingPointClassification GeneratorOf GeneratorOfOne GeneratorSequence HeapBuffer HeapBuffer HeapBufferStorage HeapBufferStorageBase ImplicitlyUnwrappedOptional IndexingGenerator Int Int16 Int32 Int64 Int8 IntEncoder LazyBidirectionalCollection LazyForwardCollection LazyRandomAccessCollection LazySequence Less MapCollectionView MapSequenceGenerator MapSequenceView MirrorDisposition ObjectIdentifier OnHeap Optional PermutationGenerator QuickLookObject RandomAccessReverseView Range RangeGenerator RawByte Repeat ReverseBidirectionalIndex ReverseRandomAccessIndex SequenceOf SinkOf Slice StaticString StrideThrough StrideThroughGenerator StrideTo StrideToGenerator String Index UTF8View Index UnicodeScalarView IndexType GeneratorType UTF16View UInt UInt16 UInt32 UInt64 UInt8 UTF16 UTF32 UTF8 UnicodeDecodingResult UnicodeScalar Unmanaged UnsafeArray UnsafeArrayGenerator UnsafeMutableArray UnsafePointer VaListBuilder Header Zip2 ZipGenerator2", tokenType: .OtherMethodNames)
         
         public init() {
-
+            
             super.init()
             documentScope[
                 blockComments,
