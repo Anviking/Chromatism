@@ -11,7 +11,6 @@ import UIKit
 class JLKeywordScope: JLRegexScope {
     init(keywords: [String], prefix: String, suffix: String, tokenType: JLTokenType) {
         let pattern = prefix + Branch(character: "", array: keywords).description + suffix
-        println(pattern)
         let expression = NSRegularExpression(pattern: pattern, options: nil, error: nil)
         super.init(regularExpression: expression, tokenTypes: [tokenType])
     }
@@ -21,23 +20,9 @@ class JLKeywordScope: JLRegexScope {
         self.init(keywords: keywords, prefix: "\\b", suffix: "\\b", tokenType: tokenType)
     }
     
-    /// Create a JLKeywordScope with a space-separated keyword string
+    /// Create a JLKeywordScope with a space-separated keyword string, with \\b prefix and suffix
     convenience init(keywords: String, tokenType: JLTokenType) {
         self.init(keywords: keywords.componentsSeparatedByString(" "), tokenType: tokenType)
-    }
-}
-
-extension String
-    {
-    func characterAtIndex(index:Int) -> unichar
-    {
-        return self.utf16[index]
-    }
-    
-    // Allows us to use String[index] notation
-    subscript(index:Int) -> unichar
-        {
-        return characterAtIndex(index)
     }
 }
 
