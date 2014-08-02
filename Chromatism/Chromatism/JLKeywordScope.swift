@@ -9,22 +9,28 @@
 import UIKit
 
 class JLKeywordScope: JLRegexScope {
-    init(keywords: [String], prefix: String, suffix: String, tokenTypes: [JLTokenType]) {
+    init(keywords: [String], prefix: String, suffix: String, tokenType: JLTokenType) {
         let pattern = prefix + Branch(array: keywords).description + suffix
         println(pattern)
         let expression = NSRegularExpression(pattern: pattern, options: nil, error: nil)
-        super.init(regularExpression: expression, tokenTypes: tokenTypes)
+        super.init(regularExpression: expression, tokenTypes: [tokenType])
     }
     
-    convenience init (keywords: [String], tokenTypes: JLTokenType...) {
-        self.init(keywords: keywords, prefix: "\\b", suffix: "\\b", tokenTypes: tokenTypes)
+    /// Create a JLKeywordScope with prefix and suffix of word boundaries (\\b)
+    convenience init (keywords: [String], tokenType: JLTokenType) {
+        self.init(keywords: keywords, prefix: "\\b", suffix: "\\b", tokenType: tokenType)
+    }
+
+    /// Create a JLKeywordScope with a space-separated keyword string
+    convenience init(keywords: String, tokenType: JLTokenType) {
+        self.init(keywords: keywords.componentsSeparatedByString(" "), tokenType: tokenType)
     }
 }
 
 private protocol Node {
     var pattern: String {get}
 }
-extension String: Node {
+ extension String: Node {
     var pattern: String {
         return NSRegularExpression.escapedPatternForString(self) as String
     }
