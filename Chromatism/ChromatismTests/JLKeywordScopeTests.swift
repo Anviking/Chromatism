@@ -35,7 +35,7 @@ class JLKeywordScopeTests: XCTestCase {
     func testOrdinaryPattern() {
         // This is an example of a performance test case.
         let pattern = "\\b(" + join("|", keywords) + ")\\b"
-        let scope = JLToken(pattern: pattern, tokenTypes: .Keyword)
+        let scope = JLRegexScope(pattern: pattern, tokenTypes: .Keyword)
         scope.attributedString = attributedString
         scope.theme = .Default
         self.measureBlock() {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JLKeywordScope: JLToken {
+class JLKeywordScope: JLRegexScope {
     init(keywords: [String], prefix: String, suffix: String, tokenTypes: [JLTokenType]) {
         let pattern = prefix + Branch(array: keywords).description + suffix
         println(pattern)

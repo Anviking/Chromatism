@@ -7,7 +7,7 @@
 //
 
 import UIKit
-public class JLToken: JLScope {
+public class JLRegexScope: JLScope {
     
     var regularExpression: NSRegularExpression
     
