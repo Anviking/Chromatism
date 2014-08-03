@@ -31,11 +31,12 @@ public enum JLColorTheme {
         .Keyword:                      UIColorRGB(188, 49, 156),
         .Preprocessor:                 UIColorRGB(120, 72, 48),
         .URL:                          UIColorRGB(21, 67, 244),
-        .Other:                        UIColorRGB(113, 65, 163),
+        .OtherClassNames:              UIColorRGB(92, 38, 153),
+        .OtherProperties:              UIColorRGB(92, 38, 153),
         .OtherMethodNames:             UIColorRGB(46, 13, 110),
         .OtherConstants:               UIColorRGB(46, 13, 110),
-        .OtherClassNames:              UIColorRGB(92, 38, 153),
         .ProjectClassNames:            UIColorRGB(63, 110, 116),
+        .ProjectProperties:            UIColorRGB(63, 110, 116),
         .ProjectConstants:             UIColorRGB(38, 71, 75),
         .ProjectMethodNames:           UIColorRGB(38, 71, 75)
     ]
@@ -52,11 +53,15 @@ public enum JLColorTheme {
         .Keyword:                      UIColorRGB(195, 55, 149),
         .Preprocessor:                 UIColorRGB(198, 124, 72),
         .URL:                          UIColorRGB(35, 63, 208),
-        .Other:                        UIColorRGB(0, 175, 199),
-        .OtherClassNames :             UIColorRGB(4,175,200),
-        .OtherMethodNames :            UIColorRGB(4,175,200),
-        .ProjectMethodNames :          UIColorRGB(131, 192, 87),
-        .ProjectClassNames :           UIColorRGB(131, 192, 87)
+        .OtherClassNames:              UIColorRGB(4, 175, 200),
+        .OtherMethodNames:             UIColorRGB(4, 175, 200),
+        .OtherConstants:               UIColorRGB(4, 175, 200),
+        .OtherProperties:              UIColorRGB(4, 175, 200),
+        .ProjectMethodNames:           UIColorRGB(131, 192, 87),
+        .ProjectClassNames:            UIColorRGB(131, 192, 87),
+        .ProjectConstants:             UIColorRGB(131, 192, 87),
+        .ProjectProperties:            UIColorRGB(131, 192, 87)
+
     ]
     
     var dictionary: [JLTokenType: UIColor] {

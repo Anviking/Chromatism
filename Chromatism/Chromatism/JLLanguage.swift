@@ -72,8 +72,11 @@ public class JLLanguage {
     }
     
     public class ObjectiveC: C {
-        var dotNotation = JLRegexScope(pattern: "\\.\\w+", tokenTypes: .OtherMethodNames)
-        var otherClassNames = JLRegexScope(pattern: "\\b[A-Z]{3}[a-zA-Z]*\\b", tokenTypes: .OtherClassNames)
+        var dotNotation = JLRegexScope(pattern: "\\.\\w+", tokenTypes: .OtherProperties)
+        
+        // Note about project class names: When symbolication is supported this pattern should be changed to .OtherClassNames
+        var projectClassNames = JLRegexScope(pattern: "\\b[A-Z]{3}[a-zA-Z]*\\b", tokenTypes: .ProjectClassNames)
+        var NSUIClassNames = JLRegexScope(pattern: "\\b(NS|UI)[A-Z][a-zA-Z]+\\b", tokenTypes: .OtherClassNames)
         // http://www.learn-cocos2d.com/2011/10/complete-list-objectivec-20-compiler-directives/
         var objcKeywords = JLKeywordScope(keywords: "class defs protocol required optional interface public package protected private property end implementation synthesize dynamic end throw try catch finally synchronized autoreleasepool selector encode compatibility_alias".componentsSeparatedByString(" "), prefix:"@", suffix:"\\b", tokenType: .Keyword)
         var squareBrackets: JLTokenizingScope
@@ -105,7 +108,8 @@ public class JLLanguage {
                         keywords,
                         dotNotation,
                         objcKeywords,
-                        otherClassNames
+                        NSUIClassNames,
+                        projectClassNames
                     ]
                 ],
                 strings,
@@ -114,7 +118,8 @@ public class JLLanguage {
                 keywords,
                 dotNotation,
                 objcKeywords,
-                otherClassNames
+                NSUIClassNames,
+                projectClassNames
             ]
         }
     }
@@ -124,7 +129,10 @@ public class JLLanguage {
         var lineComments = JLRegexScope(pattern: "//(.*)", tokenTypes: .Comment)
         var keywords = JLKeywordScope(keywords: "class protocol init required public internal import private", tokenType: .Keyword)
         var atKeywords = JLKeywordScope(keywords: ["optional"], prefix: "@", suffix: "\\b", tokenType: .Keyword)
+        var projectClassNames = JLRegexScope(pattern: "\\b[A-Z]{3}[a-zA-Z]+\\b", tokenTypes: .ProjectClassNames)
+        var NSUIClassNames = JLRegexScope(pattern: "\\b(NS|UI)[A-Z][a-zA-Z]+\\b", tokenTypes: .OtherClassNames)
         var swiftTypes = JLKeywordScope(keywords: "Array AutoreleasingUnsafePointer BidirectionalReverseView Bit Bool CFunctionPointer COpaquePointer CVaListPointer Character CollectionOfOne ConstUnsafePointer ContiguousArray Dictionary DictionaryGenerator DictionaryIndex Double EmptyCollection EmptyGenerator EnumerateGenerator FilterCollectionView FilterCollectionViewIndex FilterGenerator FilterSequenceView Float Float80 FloatingPointClassification GeneratorOf GeneratorOfOne GeneratorSequence HeapBuffer HeapBuffer HeapBufferStorage HeapBufferStorageBase ImplicitlyUnwrappedOptional IndexingGenerator Int Int16 Int32 Int64 Int8 IntEncoder LazyBidirectionalCollection LazyForwardCollection LazyRandomAccessCollection LazySequence Less MapCollectionView MapSequenceGenerator MapSequenceView MirrorDisposition ObjectIdentifier OnHeap Optional PermutationGenerator QuickLookObject RandomAccessReverseView Range RangeGenerator RawByte Repeat ReverseBidirectionalIndex ReverseRandomAccessIndex SequenceOf SinkOf Slice StaticString StrideThrough StrideThroughGenerator StrideTo StrideToGenerator String Index UTF8View Index UnicodeScalarView IndexType GeneratorType UTF16View UInt UInt16 UInt32 UInt64 UInt8 UTF16 UTF32 UTF8 UnicodeDecodingResult UnicodeScalar Unmanaged UnsafeArray UnsafeArrayGenerator UnsafeMutableArray UnsafePointer VaListBuilder Header Zip2 ZipGenerator2", tokenType: .OtherClassNames)
+        var dotNotation = JLRegexScope(pattern: "\\.\\w+", tokenTypes: .OtherProperties)
         
         public init() {
             
@@ -134,7 +142,10 @@ public class JLLanguage {
                 lineComments,
                 keywords,
                 atKeywords,
-                swiftTypes
+                swiftTypes,
+                dotNotation,
+                NSUIClassNames,
+                projectClassNames
             ]
         }
     }

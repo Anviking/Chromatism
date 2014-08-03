@@ -23,11 +23,12 @@ public enum JLTokenType {
     case URL
     case Attribute
     case Project
-    case Other
     case OtherMethodNames
+    case OtherProperties
     case OtherConstants
     case OtherClassNames
     case ProjectMethodNames
+    case ProjectProperties
     case ProjectConstants
     case ProjectClassNames
 }
