@@ -32,4 +32,8 @@
 
 @property (nonatomic, strong) JLTokenizer *syntaxTokenizer;
 @property (nonatomic, assign) JLTokenizerTheme theme;
+
+@property (nonatomic, assign) BOOL drawLineNumbers;
+@property (nonatomic, assign) BOOL drawLineCursor;
+
 @end

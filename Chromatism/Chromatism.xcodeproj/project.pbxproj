@@ -41,6 +41,8 @@
 		8FFEB27E183AD6740032C9FB /* JLObjectiveCTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFEB27C183AD6740032C9FB /* JLObjectiveCTokenizer.m */; };
 		8FFEB283183AD8B70032C9FB /* JLTokenizer+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FFEB281183AD8B70032C9FB /* JLTokenizer+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8FFEB284183AD8B70032C9FB /* JLTokenizer+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFEB282183AD8B70032C9FB /* JLTokenizer+Additions.m */; };
+		9E5EC9B719A735F900E12723 /* CYRLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E5EC9B519A735F900E12723 /* CYRLayoutManager.h */; };
+		9E5EC9B819A735F900E12723 /* CYRLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5EC9B619A735F900E12723 /* CYRLayoutManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +93,8 @@
 		8FFEB27C183AD6740032C9FB /* JLObjectiveCTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLObjectiveCTokenizer.m; sourceTree = "<group>"; };
 		8FFEB281183AD8B70032C9FB /* JLTokenizer+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JLTokenizer+Additions.h"; sourceTree = "<group>"; };
 		8FFEB282183AD8B70032C9FB /* JLTokenizer+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JLTokenizer+Additions.m"; sourceTree = "<group>"; };
+		9E5EC9B519A735F900E12723 /* CYRLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYRLayoutManager.h; sourceTree = "<group>"; };
+		9E5EC9B619A735F900E12723 /* CYRLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYRLayoutManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +163,7 @@
 				8F3AB9501781C1250023348A /* JLScope.m */,
 				8F3AB9571781C1250023348A /* JLTokenPattern.h */,
 				8F3AB9581781C1250023348A /* JLTokenPattern.m */,
+				9E5EC9B919A7360700E12723 /* CYRLayoutManager */,
 				8F3AB91E1781C0BA0023348A /* Supporting Files */,
 			);
 			path = Chromatism;
@@ -223,6 +228,15 @@
 			name = General;
 			sourceTree = "<group>";
 		};
+		9E5EC9B919A7360700E12723 /* CYRLayoutManager */ = {
+			isa = PBXGroup;
+			children = (
+				9E5EC9B519A735F900E12723 /* CYRLayoutManager.h */,
+				9E5EC9B619A735F900E12723 /* CYRLayoutManager.m */,
+			);
+			name = CYRLayoutManager;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -235,6 +249,7 @@
 				8FA0CB0F1795F41B00FF8EB1 /* JLTextView.h in Headers */,
 				8F54EF0E1781C776008C1609 /* Chromatism.h in Headers */,
 				8F54EF101781C788008C1609 /* Helpers.h in Headers */,
+				9E5EC9B719A735F900E12723 /* CYRLayoutManager.h in Headers */,
 				8FE2796517C3842900DD933A /* UIColor+Chromatism.h in Headers */,
 				8F54EF111781C788008C1609 /* JLScope.h in Headers */,
 				8FFEB27D183AD6740032C9FB /* JLObjectiveCTokenizer.h in Headers */,
@@ -328,6 +343,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E5EC9B819A735F900E12723 /* CYRLayoutManager.m in Sources */,
 				8F54EF241781CD87008C1609 /* JLTokenPattern.m in Sources */,
 				8FFEB27E183AD6740032C9FB /* JLObjectiveCTokenizer.m in Sources */,
 				8F9F6BC91822F09D00DE15A8 /* JLDiffTokenizer.m in Sources */,

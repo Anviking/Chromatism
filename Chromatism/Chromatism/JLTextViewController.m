@@ -53,6 +53,7 @@
     if (!_textView) {
         JLTextView *textView = [[JLTextView alloc] initWithFrame:CGRectZero];
         textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        [textView setTheme:JLTokenizerThemeDefault];
         
         if (self.defaultText) {
             textView.text = self.defaultText;
@@ -67,6 +68,11 @@
 - (JLTokenizer *)tokenizer
 {
     return (JLTokenizer*)self.textView.tokenizer;
+}
+
+- (void)toggleDisplayLineNumbers
+{
+    [[self textView] setDrawLineNumbers:![[self textView] drawLineNumbers]];
 }
 
 - (void)viewDidLoad

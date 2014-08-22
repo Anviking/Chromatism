@@ -25,45 +25,81 @@
 
 #import "JLTextView.h"
 #import "Chromatism.h"
+#import "CYRLayoutManager.h"
+
+static void *JLTextViewContext = &JLTextViewContext;
+
+@interface JLTextView ()
+{
+    CYRLayoutManager *_lineNumberLayoutManager;
+    
+    UIColor *_gutterBackgroundColor;
+    UIColor *_gutterLineColor;
+}
+@end
+
+
 
 @implementation JLTextView
+
 @synthesize theme = _theme;
+
+@synthesize drawLineNumbers       = _drawLineNumbers;
+@synthesize drawLineCursor        = _drawLineCursor;
 
 #pragma mark - Initialization & Setup
 
 - (id)init
 {
-    self = [super init];
-    if (self) {
-        [self setup];
-    }
-    return self;
-}
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self setup];
-    }
-    return self;
+    return [self initWithFrame:CGRectMake(0, 0, 0, 0)];
 }
 
 - (id)initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer
 {
-    self = [super initWithFrame:frame textContainer:textContainer];
-    if (self) {
-        [self setup];
-    }
-    return self;
+    return [self initWithFrame:frame];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
+    return [self initWithFrame:CGRectMake(0, 0, 0, 0)];
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+    NSTextStorage *textStorage = [[NSTextStorage alloc] init];
+    CYRLayoutManager *layoutManager = [[CYRLayoutManager alloc] init];
+    
+    _lineNumberLayoutManager = layoutManager;
+    
+    NSTextContainer *textContainer = [[NSTextContainer alloc] initWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
+    
+    //  Wrap text to the text view's frame
+    textContainer.widthTracksTextView = YES;
+    
+    [layoutManager addTextContainer:textContainer];
+    
+    [textStorage removeLayoutManager:textStorage.layoutManagers.firstObject];
+    [textStorage addLayoutManager:layoutManager];
+    
+    if ((self = [super initWithFrame:frame textContainer:textContainer]))
+    {
+        // causes drawRect: to be called on frame resizing and device rotation
+        self.contentMode = UIViewContentModeRedraw;
+        
+        
+        _drawLineCursor        = YES;
+        _drawLineNumbers       = YES;
+        
+        // Inset the content to make room for line numbers
+        self.textContainerInset = UIEdgeInsetsMake(8, _lineNumberLayoutManager.gutterWidth, 8, 0);
+        
+        
+        [self addObserver:self forKeyPath:NSStringFromSelector(@selector(selectedTextRange)) options:NSKeyValueObservingOptionNew context:JLTextViewContext];
+        [self addObserver:self forKeyPath:NSStringFromSelector(@selector(selectedRange)) options:NSKeyValueObservingOptionNew context:JLTextViewContext];
+        
         [self setup];
     }
+    
     return self;
 }
 
@@ -80,7 +116,12 @@
     self.autocorrectionType = UITextAutocorrectionTypeNo;
     self.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.layoutManager.allowsNonContiguousLayout = YES;
-    
+}
+
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(selectedTextRange))];
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(selectedRange))];
 }
 
 - (void)setSyntaxTokenizer:(JLTokenizer *)tokenizer
@@ -103,6 +144,10 @@
     //Set font, text color and background color back to default
     UIColor *backgroundColor = self.syntaxTokenizer.colors[JLTokenTypeBackground];
     [self setBackgroundColor:backgroundColor ? backgroundColor : [UIColor whiteColor] ];
+    
+    //Set gutter colors
+    _gutterBackgroundColor = self.syntaxTokenizer.colors[JLGutterBackgroundColor];
+    _gutterLineColor = self.syntaxTokenizer.colors[JLGutterLineColor];
     
     // Refresh Tokenization
     [self.syntaxTokenizer refreshTokenizationOfTextStorage:self.textStorage];
@@ -179,4 +224,71 @@
         }
     }
 }
+
+
+
+#pragma mark - Line Drawing
+
+// Implementation sourced from https://github.com/illyabusigin/CYRTextView
+// Original implementation sourced from: https://github.com/alldritt/TextKit_LineNumbers
+- (void)drawRect:(CGRect)rect
+{
+    if (_drawLineNumbers)
+    {
+        //  Drag the line number gutter background.  The line numbers them selves are drawn by LineNumberLayoutManager.
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGRect bounds = self.bounds;
+        
+        CGFloat height = MAX(CGRectGetHeight(bounds), self.contentSize.height) + 200;
+        
+        // Set the regular fill
+        CGContextSetFillColorWithColor(context, _gutterBackgroundColor.CGColor);
+        CGContextFillRect(context, CGRectMake(bounds.origin.x, bounds.origin.y, _lineNumberLayoutManager.gutterWidth, height));
+        
+        // Draw line
+        CGContextSetFillColorWithColor(context, _gutterLineColor.CGColor);
+        CGContextFillRect(context, CGRectMake(_lineNumberLayoutManager.gutterWidth, bounds.origin.y, 0.5, height));
+        
+        if (_drawLineCursor)
+        {
+            _lineNumberLayoutManager.selectedRange = self.selectedRange;
+            
+            NSRange glyphRange = [_lineNumberLayoutManager.textStorage.string paragraphRangeForRange:self.selectedRange];
+            glyphRange = [_lineNumberLayoutManager glyphRangeForCharacterRange:glyphRange actualCharacterRange:NULL];
+            _lineNumberLayoutManager.selectedRange = glyphRange;
+            [_lineNumberLayoutManager invalidateDisplayForGlyphRange:glyphRange];
+        }
+    }
+    else
+        _lineNumberLayoutManager.selectedRange = NSMakeRange(-1, 0);
+    
+    [super drawRect:rect];
+}
+
+- (void)setDrawLineNumbers:(BOOL)drawLineNumbers
+{
+    _drawLineNumbers = drawLineNumbers;
+    
+    if (_drawLineNumbers)
+        self.textContainerInset = UIEdgeInsetsMake(8, _lineNumberLayoutManager.gutterWidth, 8, 0);
+    else
+        self.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    
+    // Redraw to remove the stripe at the left
+    [self setNeedsDisplay];
+}
+
+
+#pragma mark - KVO
+
+// Implementation original sourced from https://github.com/illyabusigin/CYRTextView
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (([keyPath isEqualToString:NSStringFromSelector(@selector(selectedTextRange))] ||
+              [keyPath isEqualToString:NSStringFromSelector(@selector(selectedRange))]) && context == JLTextViewContext)
+        [self setNeedsDisplay];
+    else
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
 @end
