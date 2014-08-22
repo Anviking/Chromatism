@@ -66,7 +66,7 @@
 
 - (JLTokenizer *)tokenizer
 {
-    return self.textView.tokenizer;
+    return (JLTokenizer*)self.textView.tokenizer;
 }
 
 - (void)viewDidLoad
@@ -106,6 +106,12 @@
     NSDictionary* info = [notification userInfo];
     UIScrollView *scrollView = self.textView;
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    // Fix size in landscape
+    if (UIInterfaceOrientationIsLandscape([[UIDevice currentDevice] orientation]))
+    {
+        kbSize = CGSizeMake(kbSize.height, kbSize.width);
+    }
     
     UIEdgeInsets contentInsets = scrollView.contentInset;
     contentInsets.bottom = kbSize.height;
