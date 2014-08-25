@@ -34,4 +34,7 @@
 
 // Convenience property for self.textView.syntaxTokenizer
 @property (nonatomic, weak, readonly) JLTokenizer *tokenizer;
+
+- (void)toggleDisplayLineNumbers;
+
 @end

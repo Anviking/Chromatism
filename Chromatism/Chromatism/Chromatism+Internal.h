@@ -53,6 +53,8 @@ FOUNDATION_EXPORT NSString *const JLTokenTypeProjectClassNames;
 FOUNDATION_EXPORT NSString *const JLTokenTypeProjectMethodNames;
 FOUNDATION_EXPORT NSString *const JLTokenTypeDiffAddition;
 FOUNDATION_EXPORT NSString *const JLTokenTypeDiffDeletion;
+FOUNDATION_EXPORT NSString *const JLGutterBackgroundColor;
+FOUNDATION_EXPORT NSString *const JLGutterLineColor;
 
 /// Used as attribute in NSAttributedStrings. You may subclass NSLayoutManager to use this attribute.
 FOUNDATION_EXPORT NSString *const JLDiffColorAttributeName;

@@ -229,9 +229,6 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Anviking;
 				TargetAttributes = {
-					3260A15F17A88BA9008792E6 = {
-						DevelopmentTeam = XU2559U3TH;
-					};
 					3260A17A17A88BA9008792E6 = {
 						TestTargetID = 3260A15F17A88BA9008792E6;
 					};

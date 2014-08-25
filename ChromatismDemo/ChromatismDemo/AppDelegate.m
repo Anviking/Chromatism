@@ -37,11 +37,12 @@
     
     JLTextViewController *viewController = [[JLTextViewController alloc] initWithText:string];
     viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Resign" style:UIBarButtonItemStylePlain target:viewController.textView action:@selector(resignFirstResponder)];
+    viewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Toggle Line Numbers" style:UIBarButtonItemStylePlain target:viewController action:@selector(toggleDisplayLineNumbers)];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     viewController.title = @"Chromatism";
     
     [navigationController.navigationBar setBarStyle:UIBarStyleBlack];
-    viewController.textView.keyboardAppearance = UIKeyboardAppearanceDark;
+    viewController.textView.keyboardAppearance = UIKeyboardAppearanceDefault;
     
     self.window.rootViewController = navigationController;
     self.window.backgroundColor = [UIColor whiteColor];

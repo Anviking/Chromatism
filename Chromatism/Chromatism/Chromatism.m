@@ -44,6 +44,8 @@ NSString *const JLTokenTypeOtherClassNames = @"other_class_names";
 NSString *const JLTokenTypeProjectMethodNames = @"project_method_names";
 NSString *const JLTokenTypeProjectClassNames = @"project_class_names";
 
+NSString *const JLGutterBackgroundColor = @"gutterBackgroundColor";
+NSString *const JLGutterLineColor = @"gutterLineColor";
 
 NSString *const JLTokenTypeDiffAddition = @"diff_addition";
 NSString *const JLTokenTypeDiffDeletion = @"diff_deletion";
@@ -76,7 +78,10 @@ NSString *const JLDiffColorAttributeName = @"diff_color_attribute_name";
                        JLTokenTypeProjectMethodNames : [UIColor colorWithRed:38.0/255 green:71.0/255 blue:75.0/255 alpha:1],
                        
                        JLTokenTypeDiffAddition : [UIColor greenColor],
-                       JLTokenTypeDiffDeletion : [UIColor redColor]
+                       JLTokenTypeDiffDeletion : [UIColor redColor],
+                       
+                       JLGutterBackgroundColor : [UIColor colorWithWhite:0.95 alpha:1],
+                       JLGutterLineColor       : [UIColor lightGrayColor]
                        
                        };
             break;
@@ -99,7 +104,10 @@ NSString *const JLDiffColorAttributeName = @"diff_color_attribute_name";
                        JLTokenTypeProjectClassNames : [UIColor colorWithRed:131.0/255 green:192.0/255 blue:87.0/255 alpha:1],
                        
                        JLTokenTypeDiffAddition : [UIColor greenColor],
-                       JLTokenTypeDiffDeletion : [UIColor redColor]
+                       JLTokenTypeDiffDeletion : [UIColor redColor],
+                       
+                       JLGutterBackgroundColor : [UIColor colorWithRed:19.0/255.0 green:16.0/255.0 blue:26.0/255.0 alpha:1],
+                       JLGutterLineColor       : [UIColor lightGrayColor]
                        
                        };
             break;
