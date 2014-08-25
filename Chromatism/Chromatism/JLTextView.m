@@ -96,11 +96,14 @@
 
 -(void)setTheme:(JLTokenizerTheme)theme
 {
-    self.syntaxTokenizer.colors = [Chromatism colorsForTheme:theme];
-    self.typingAttributes = @{ NSForegroundColorAttributeName : self.syntaxTokenizer.colors[JLTokenTypeText]};
     _theme = theme;
     
-    //Set font, text color and background color back to default
+    // Set font- and background color from the theme
+    self.syntaxTokenizer.colors = [Chromatism colorsForTheme:theme];
+    NSMutableDictionary *typingAttributes = self.typingAttributes.mutableCopy;
+    typingAttributes[NSForegroundColorAttributeName] = self.syntaxTokenizer.colors[JLTokenTypeText];
+    self.typingAttributes = typingAttributes;
+    
     UIColor *backgroundColor = self.syntaxTokenizer.colors[JLTokenTypeBackground];
     [self setBackgroundColor:backgroundColor ? backgroundColor : [UIColor whiteColor] ];
     
