@@ -3,7 +3,7 @@ Chromatism
 
 iOS Syntax highlightning using Swift built for performance, but still at a very experimental non-reliable state.
 
-![image](http://i.imgur.com/A9EgnA1.png)
+![image](http://i.imgur.com/P1ENCfv.png)
 
 ## New since Swift rewrite:
 - JLNestedToken  `/* Comment /* Another Comment */ */`. Could possible do great stuff with {}-scope-aware-auto-completion. Needs some more work though.
