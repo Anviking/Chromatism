@@ -7,254 +7,209 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		32102EE117A948F900CFA161 /* Chromatism+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 32102EE017A948F900CFA161 /* Chromatism+Internal.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		32102EED17A95E2900CFA161 /* demo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 32102EEB17A95E2900CFA161 /* demo.txt */; };
-		32102EEE17A95E2900CFA161 /* description.txt in Resources */ = {isa = PBXBuildFile; fileRef = 32102EEC17A95E2900CFA161 /* description.txt */; };
-		3260A15417A8845F008792E6 /* Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB94E1781C1250023348A /* Helpers.m */; };
-		3260A15617A884EC008792E6 /* JLTokenizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3260A15517A884EC008792E6 /* JLTokenizerTests.m */; };
-		8F3AB92A1781C0BA0023348A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB9291781C0BA0023348A /* XCTest.framework */; };
-		8F3AB92B1781C0BB0023348A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB91B1781C0BA0023348A /* Foundation.framework */; };
-		8F3AB92D1781C0BB0023348A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB92C1781C0BB0023348A /* UIKit.framework */; };
-		8F3AB9301781C0BB0023348A /* libChromatism.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB9181781C0BA0023348A /* libChromatism.a */; };
-		8F3AB9361781C0BB0023348A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F3AB9341781C0BB0023348A /* InfoPlist.strings */; };
-		8F3AB9381781C0BB0023348A /* ChromatismTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9371781C0BB0023348A /* ChromatismTests.m */; };
-		8F3AB9621781C26A0023348A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3AB9611781C26A0023348A /* UIKit.framework */; };
-		8F54EF0E1781C776008C1609 /* Chromatism.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F3AB9201781C0BA0023348A /* Chromatism.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F54EF101781C788008C1609 /* Helpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F3AB94D1781C1250023348A /* Helpers.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F54EF111781C788008C1609 /* JLScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F3AB94F1781C1250023348A /* JLScope.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F54EF131781C788008C1609 /* JLTextViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F3AB9531781C1250023348A /* JLTextViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F54EF141781C788008C1609 /* JLTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F3AB9551781C1250023348A /* JLTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F54EF151781C788008C1609 /* JLTokenPattern.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F3AB9571781C1250023348A /* JLTokenPattern.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F54EF1E1781CD87008C1609 /* Chromatism.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9221781C0BA0023348A /* Chromatism.m */; };
-		8F54EF1F1781CD87008C1609 /* Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB94E1781C1250023348A /* Helpers.m */; };
-		8F54EF201781CD87008C1609 /* JLScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9501781C1250023348A /* JLScope.m */; };
-		8F54EF221781CD87008C1609 /* JLTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9541781C1250023348A /* JLTextViewController.m */; };
-		8F54EF231781CD87008C1609 /* JLTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9561781C1250023348A /* JLTokenizer.m */; };
-		8F54EF241781CD87008C1609 /* JLTokenPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3AB9581781C1250023348A /* JLTokenPattern.m */; };
-		8F9F6BC81822F09D00DE15A8 /* JLDiffTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F9F6BC61822F09D00DE15A8 /* JLDiffTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F9F6BC91822F09D00DE15A8 /* JLDiffTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9F6BC71822F09D00DE15A8 /* JLDiffTokenizer.m */; };
-		8FA0CB0F1795F41B00FF8EB1 /* JLTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8FA0CB101795F41B00FF8EB1 /* JLTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */; };
-		8FE2796517C3842900DD933A /* UIColor+Chromatism.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FE2796317C3842900DD933A /* UIColor+Chromatism.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8FE2796617C3842900DD933A /* UIColor+Chromatism.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE2796417C3842900DD933A /* UIColor+Chromatism.m */; };
-		8FFEB27D183AD6740032C9FB /* JLObjectiveCTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FFEB27B183AD6740032C9FB /* JLObjectiveCTokenizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8FFEB27E183AD6740032C9FB /* JLObjectiveCTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFEB27C183AD6740032C9FB /* JLObjectiveCTokenizer.m */; };
-		8FFEB283183AD8B70032C9FB /* JLTokenizer+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FFEB281183AD8B70032C9FB /* JLTokenizer+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8FFEB284183AD8B70032C9FB /* JLTokenizer+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFEB282183AD8B70032C9FB /* JLTokenizer+Additions.m */; };
+		8F311E86197C8F040030B553 /* ObjectiveC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F311E85197C8F040030B553 /* ObjectiveC.swift */; };
+		8F5961FF198925D70095A8A9 /* JLTokenizingScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9313B61986A8E900DD3993 /* JLTokenizingScope.swift */; };
+		8F596200198926660095A8A9 /* JLTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9313B11984271F00DD3993 /* JLTextStorage.swift */; };
+		8F5D7ADF197D3B4900D73B8E /* JLLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */; };
+		8F7922CA197D39B900A94724 /* JLNestedScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7922C9197D39B900A94724 /* JLNestedScope.swift */; };
+		8F9313B21984271F00DD3993 /* JLTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9313B11984271F00DD3993 /* JLTextStorage.swift */; };
+		8F9313B71986A8E900DD3993 /* JLTokenizingScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9313B61986A8E900DD3993 /* JLTokenizingScope.swift */; };
+		8F9598A2197448B4002EA4AB /* JLTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9598A1197448B4002EA4AB /* JLTokenTests.swift */; };
+		8FB10D21197EF104001A83B1 /* JLScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18B19738B7900F75A76 /* JLScope.swift */; };
+		8FB10D22197EF104001A83B1 /* JLDocumentScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE12922197B5D780084E506 /* JLDocumentScope.swift */; };
+		8FB10D24197EF104001A83B1 /* JLRegexScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F95989D197437BF002EA4AB /* JLRegexScope.swift */; };
+		8FB10D25197EF104001A83B1 /* JLNestedScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7922C9197D39B900A94724 /* JLNestedScope.swift */; };
+		8FB10D26197EF104001A83B1 /* NSIndexSet+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18D197418E300F75A76 /* NSIndexSet+Additions.swift */; };
+		8FB10D28197EF104001A83B1 /* JLTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFC1979940200F4B3EC /* JLTextView.swift */; };
+		8FB10D29197EF104001A83B1 /* JLTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */; };
+		8FB10D2A197EF104001A83B1 /* JLTokenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */; };
+		8FB10D2B197EF104001A83B1 /* JLColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */; };
+		8FB10D2C197EF104001A83B1 /* JLLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */; };
+		8FB10D2F197F0A10001A83B1 /* demo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FB10D2E197F0A10001A83B1 /* demo.txt */; };
+		8FBFC17519738B0400F75A76 /* Chromatism.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FBFC17419738B0400F75A76 /* Chromatism.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8FBFC17B19738B0400F75A76 /* Chromatism.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FBFC16F19738B0400F75A76 /* Chromatism.framework */; };
+		8FBFC18219738B0400F75A76 /* ChromatismTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18119738B0400F75A76 /* ChromatismTests.swift */; };
+		8FBFC18E197418E300F75A76 /* NSIndexSet+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18D197418E300F75A76 /* NSIndexSet+Additions.swift */; };
+		8FBFC19219741B6B00F75A76 /* JLScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */; };
+		8FC8F73D198C7B5A00E4ED32 /* JLKeywordScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8F73C198C7B5A00E4ED32 /* JLKeywordScope.swift */; };
+		8FC8F73F198C7D1B00E4ED32 /* Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8F73E198C7D1B00E4ED32 /* Swift.swift */; };
+		8FC8F740198C7D2400E4ED32 /* JLKeywordScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8F73C198C7B5A00E4ED32 /* JLKeywordScope.swift */; };
+		8FC8F742198C7D4800E4ED32 /* JLKeywordScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8F741198C7D4800E4ED32 /* JLKeywordScopeTests.swift */; };
+		8FCDBFF91978834D00F4B3EC /* JLTokenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */; };
+		8FCDBFFB1979615D00F4B3EC /* JLColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */; };
+		8FE1291B197B1D5D0084E506 /* JLScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18B19738B7900F75A76 /* JLScope.swift */; };
+		8FE1291C197B21900084E506 /* JLRegexScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F95989D197437BF002EA4AB /* JLRegexScope.swift */; };
+		8FE1291E197B21900084E506 /* JLTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFC1979940200F4B3EC /* JLTextView.swift */; };
+		8FE1291F197B21900084E506 /* JLTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */; };
+		8FE12923197B5D780084E506 /* JLDocumentScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE12922197B5D780084E506 /* JLDocumentScope.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		8F3AB92E1781C0BB0023348A /* PBXContainerItemProxy */ = {
+		8FBFC17C19738B0400F75A76 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8F3AB9101781C0BA0023348A /* Project object */;
+			containerPortal = 8FBFC16619738B0400F75A76 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8F3AB9171781C0BA0023348A;
+			remoteGlobalIDString = 8FBFC16E19738B0400F75A76;
 			remoteInfo = Chromatism;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		32102EE017A948F900CFA161 /* Chromatism+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Chromatism+Internal.h"; sourceTree = "<group>"; };
-		32102EEB17A95E2900CFA161 /* demo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = demo.txt; path = bundle.bundle/demo.txt; sourceTree = "<group>"; };
-		32102EEC17A95E2900CFA161 /* description.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = description.txt; path = bundle.bundle/description.txt; sourceTree = "<group>"; };
-		3260A15517A884EC008792E6 /* JLTokenizerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTokenizerTests.m; sourceTree = "<group>"; };
-		8F3AB9181781C0BA0023348A /* libChromatism.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChromatism.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F3AB91B1781C0BA0023348A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		8F3AB91F1781C0BA0023348A /* Chromatism-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Chromatism-Prefix.pch"; sourceTree = "<group>"; };
-		8F3AB9201781C0BA0023348A /* Chromatism.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Chromatism.h; sourceTree = "<group>"; };
-		8F3AB9221781C0BA0023348A /* Chromatism.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Chromatism.m; sourceTree = "<group>"; };
-		8F3AB9281781C0BA0023348A /* ChromatismTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChromatismTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F3AB9291781C0BA0023348A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		8F3AB92C1781C0BB0023348A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		8F3AB9331781C0BB0023348A /* ChromatismTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ChromatismTests-Info.plist"; sourceTree = "<group>"; };
-		8F3AB9351781C0BB0023348A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		8F3AB9371781C0BB0023348A /* ChromatismTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChromatismTests.m; sourceTree = "<group>"; };
-		8F3AB94D1781C1250023348A /* Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Helpers.h; sourceTree = "<group>"; };
-		8F3AB94E1781C1250023348A /* Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Helpers.m; sourceTree = "<group>"; };
-		8F3AB94F1781C1250023348A /* JLScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLScope.h; sourceTree = "<group>"; };
-		8F3AB9501781C1250023348A /* JLScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLScope.m; sourceTree = "<group>"; };
-		8F3AB9531781C1250023348A /* JLTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTextViewController.h; sourceTree = "<group>"; };
-		8F3AB9541781C1250023348A /* JLTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTextViewController.m; sourceTree = "<group>"; };
-		8F3AB9551781C1250023348A /* JLTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTokenizer.h; sourceTree = "<group>"; };
-		8F3AB9561781C1250023348A /* JLTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTokenizer.m; sourceTree = "<group>"; };
-		8F3AB9571781C1250023348A /* JLTokenPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTokenPattern.h; sourceTree = "<group>"; };
-		8F3AB9581781C1250023348A /* JLTokenPattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTokenPattern.m; sourceTree = "<group>"; };
-		8F3AB95F1781C12F0023348A /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
-		8F3AB9611781C26A0023348A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		8F9F6BC61822F09D00DE15A8 /* JLDiffTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLDiffTokenizer.h; sourceTree = "<group>"; };
-		8F9F6BC71822F09D00DE15A8 /* JLDiffTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLDiffTokenizer.m; sourceTree = "<group>"; };
-		8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTextView.h; sourceTree = "<group>"; };
-		8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTextView.m; sourceTree = "<group>"; };
-		8FE2796317C3842900DD933A /* UIColor+Chromatism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Chromatism.h"; sourceTree = "<group>"; };
-		8FE2796417C3842900DD933A /* UIColor+Chromatism.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Chromatism.m"; sourceTree = "<group>"; };
-		8FFEB27B183AD6740032C9FB /* JLObjectiveCTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLObjectiveCTokenizer.h; sourceTree = "<group>"; };
-		8FFEB27C183AD6740032C9FB /* JLObjectiveCTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLObjectiveCTokenizer.m; sourceTree = "<group>"; };
-		8FFEB281183AD8B70032C9FB /* JLTokenizer+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JLTokenizer+Additions.h"; sourceTree = "<group>"; };
-		8FFEB282183AD8B70032C9FB /* JLTokenizer+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JLTokenizer+Additions.m"; sourceTree = "<group>"; };
+		8F311E85197C8F040030B553 /* ObjectiveC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectiveC.swift; sourceTree = "<group>"; };
+		8F7922C9197D39B900A94724 /* JLNestedScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLNestedScope.swift; sourceTree = "<group>"; };
+		8F9313B11984271F00DD3993 /* JLTextStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTextStorage.swift; sourceTree = "<group>"; };
+		8F9313B61986A8E900DD3993 /* JLTokenizingScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTokenizingScope.swift; sourceTree = "<group>"; };
+		8F95989D197437BF002EA4AB /* JLRegexScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLRegexScope.swift; sourceTree = "<group>"; };
+		8F9598A1197448B4002EA4AB /* JLTokenTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTokenTests.swift; sourceTree = "<group>"; };
+		8FB10D2E197F0A10001A83B1 /* demo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = demo.txt; sourceTree = "<group>"; };
+		8FBFC16F19738B0400F75A76 /* Chromatism.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Chromatism.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8FBFC17319738B0400F75A76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8FBFC17419738B0400F75A76 /* Chromatism.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Chromatism.h; sourceTree = "<group>"; };
+		8FBFC17A19738B0400F75A76 /* ChromatismTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChromatismTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8FBFC18019738B0400F75A76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8FBFC18119738B0400F75A76 /* ChromatismTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChromatismTests.swift; sourceTree = "<group>"; };
+		8FBFC18B19738B7900F75A76 /* JLScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLScope.swift; sourceTree = "<group>"; };
+		8FBFC18D197418E300F75A76 /* NSIndexSet+Additions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSIndexSet+Additions.swift"; sourceTree = "<group>"; };
+		8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLScopeTests.swift; sourceTree = "<group>"; };
+		8FC8F73C198C7B5A00E4ED32 /* JLKeywordScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLKeywordScope.swift; sourceTree = "<group>"; };
+		8FC8F73E198C7D1B00E4ED32 /* Swift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Swift.swift; sourceTree = "<group>"; };
+		8FC8F741198C7D4800E4ED32 /* JLKeywordScopeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLKeywordScopeTests.swift; sourceTree = "<group>"; };
+		8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLLanguage.swift; sourceTree = "<group>"; };
+		8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTokenType.swift; sourceTree = "<group>"; };
+		8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLColorTheme.swift; sourceTree = "<group>"; };
+		8FCDBFFC1979940200F4B3EC /* JLTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTextView.swift; sourceTree = "<group>"; };
+		8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTextViewController.swift; sourceTree = "<group>"; };
+		8FE12922197B5D780084E506 /* JLDocumentScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLDocumentScope.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		8F3AB9151781C0BA0023348A /* Frameworks */ = {
+		8FBFC16B19738B0400F75A76 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F3AB9621781C26A0023348A /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8F3AB9251781C0BA0023348A /* Frameworks */ = {
+		8FBFC17719738B0400F75A76 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F3AB9301781C0BB0023348A /* libChromatism.a in Frameworks */,
-				8F3AB92A1781C0BA0023348A /* XCTest.framework in Frameworks */,
-				8F3AB92D1781C0BB0023348A /* UIKit.framework in Frameworks */,
-				8F3AB92B1781C0BB0023348A /* Foundation.framework in Frameworks */,
+				8FBFC17B19738B0400F75A76 /* Chromatism.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8F3AB90F1781C0BA0023348A = {
+		8F049A28198C93290078063F /* Scopes */ = {
 			isa = PBXGroup;
 			children = (
-				8F3AB91D1781C0BA0023348A /* Chromatism */,
-				8F3AB9311781C0BB0023348A /* ChromatismTests */,
-				8F3AB91A1781C0BA0023348A /* Frameworks */,
-				8F3AB9191781C0BA0023348A /* Products */,
+				8FBFC18B19738B7900F75A76 /* JLScope.swift */,
+				8F95989D197437BF002EA4AB /* JLRegexScope.swift */,
+				8FE12922197B5D780084E506 /* JLDocumentScope.swift */,
+				8FC8F73C198C7B5A00E4ED32 /* JLKeywordScope.swift */,
+				8F9313B81986A8FE00DD3993 /* Nested Scopes */,
+			);
+			name = Scopes;
+			sourceTree = "<group>";
+		};
+		8F9313B81986A8FE00DD3993 /* Nested Scopes */ = {
+			isa = PBXGroup;
+			children = (
+				8F7922C9197D39B900A94724 /* JLNestedScope.swift */,
+				8F9313B61986A8E900DD3993 /* JLTokenizingScope.swift */,
+			);
+			name = "Nested Scopes";
+			sourceTree = "<group>";
+		};
+		8FBFC16519738B0400F75A76 = {
+			isa = PBXGroup;
+			children = (
+				8FBFC17119738B0400F75A76 /* Chromatism */,
+				8FBFC17E19738B0400F75A76 /* ChromatismTests */,
+				8FBFC17019738B0400F75A76 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		8F3AB9191781C0BA0023348A /* Products */ = {
+		8FBFC17019738B0400F75A76 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8F3AB9181781C0BA0023348A /* libChromatism.a */,
-				8F3AB9281781C0BA0023348A /* ChromatismTests.xctest */,
+				8FBFC16F19738B0400F75A76 /* Chromatism.framework */,
+				8FBFC17A19738B0400F75A76 /* ChromatismTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8F3AB91A1781C0BA0023348A /* Frameworks */ = {
+		8FBFC17119738B0400F75A76 /* Chromatism */ = {
 			isa = PBXGroup;
 			children = (
-				8F3AB9611781C26A0023348A /* UIKit.framework */,
-				8F3AB91B1781C0BA0023348A /* Foundation.framework */,
-				8F3AB9291781C0BA0023348A /* XCTest.framework */,
-				8F3AB92C1781C0BB0023348A /* UIKit.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		8F3AB91D1781C0BA0023348A /* Chromatism */ = {
-			isa = PBXGroup;
-			children = (
-				8FFEB280183AD6970032C9FB /* General */,
-				8FFEB27F183AD68E0032C9FB /* Tokenizers */,
-				8F3AB9531781C1250023348A /* JLTextViewController.h */,
-				8F3AB9541781C1250023348A /* JLTextViewController.m */,
-				8FA0CB0D1795F41B00FF8EB1 /* JLTextView.h */,
-				8FA0CB0E1795F41B00FF8EB1 /* JLTextView.m */,
-				8F3AB94F1781C1250023348A /* JLScope.h */,
-				8F3AB9501781C1250023348A /* JLScope.m */,
-				8F3AB9571781C1250023348A /* JLTokenPattern.h */,
-				8F3AB9581781C1250023348A /* JLTokenPattern.m */,
-				8F3AB91E1781C0BA0023348A /* Supporting Files */,
+				8FBFC17419738B0400F75A76 /* Chromatism.h */,
+				8F049A28198C93290078063F /* Scopes */,
+				8F9313B11984271F00DD3993 /* JLTextStorage.swift */,
+				8FBFC18D197418E300F75A76 /* NSIndexSet+Additions.swift */,
+				8FCDBFFC1979940200F4B3EC /* JLTextView.swift */,
+				8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */,
+				8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */,
+				8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */,
+				8FCDBFF619787C7C00F4B3EC /* JLLanguage.swift */,
+				8FBFC17219738B0400F75A76 /* Supporting Files */,
 			);
 			path = Chromatism;
 			sourceTree = "<group>";
 		};
-		8F3AB91E1781C0BA0023348A /* Supporting Files */ = {
+		8FBFC17219738B0400F75A76 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8F3AB95F1781C12F0023348A /* test.json */,
-				8F3AB91F1781C0BA0023348A /* Chromatism-Prefix.pch */,
+				8FBFC17319738B0400F75A76 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		8F3AB9311781C0BB0023348A /* ChromatismTests */ = {
+		8FBFC17E19738B0400F75A76 /* ChromatismTests */ = {
 			isa = PBXGroup;
 			children = (
-				3260A15517A884EC008792E6 /* JLTokenizerTests.m */,
-				8F3AB9371781C0BB0023348A /* ChromatismTests.m */,
-				8F3AB9321781C0BB0023348A /* Supporting Files */,
+				8FC8F741198C7D4800E4ED32 /* JLKeywordScopeTests.swift */,
+				8FBFC18119738B0400F75A76 /* ChromatismTests.swift */,
+				8FBFC19119741B6B00F75A76 /* JLScopeTests.swift */,
+				8F9598A1197448B4002EA4AB /* JLTokenTests.swift */,
+				8F311E85197C8F040030B553 /* ObjectiveC.swift */,
+				8FC8F73E198C7D1B00E4ED32 /* Swift.swift */,
+				8FB10D2E197F0A10001A83B1 /* demo.txt */,
+				8FBFC17F19738B0400F75A76 /* Supporting Files */,
 			);
 			path = ChromatismTests;
 			sourceTree = "<group>";
 		};
-		8F3AB9321781C0BB0023348A /* Supporting Files */ = {
+		8FBFC17F19738B0400F75A76 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				32102EEB17A95E2900CFA161 /* demo.txt */,
-				32102EEC17A95E2900CFA161 /* description.txt */,
-				8F3AB9331781C0BB0023348A /* ChromatismTests-Info.plist */,
-				8F3AB9341781C0BB0023348A /* InfoPlist.strings */,
+				8FBFC18019738B0400F75A76 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		8FFEB27F183AD68E0032C9FB /* Tokenizers */ = {
-			isa = PBXGroup;
-			children = (
-				8F3AB9551781C1250023348A /* JLTokenizer.h */,
-				8F3AB9561781C1250023348A /* JLTokenizer.m */,
-				8FFEB281183AD8B70032C9FB /* JLTokenizer+Additions.h */,
-				8FFEB282183AD8B70032C9FB /* JLTokenizer+Additions.m */,
-				8FFEB27B183AD6740032C9FB /* JLObjectiveCTokenizer.h */,
-				8FFEB27C183AD6740032C9FB /* JLObjectiveCTokenizer.m */,
-				8F9F6BC61822F09D00DE15A8 /* JLDiffTokenizer.h */,
-				8F9F6BC71822F09D00DE15A8 /* JLDiffTokenizer.m */,
-			);
-			name = Tokenizers;
-			sourceTree = "<group>";
-		};
-		8FFEB280183AD6970032C9FB /* General */ = {
-			isa = PBXGroup;
-			children = (
-				8F3AB9201781C0BA0023348A /* Chromatism.h */,
-				32102EE017A948F900CFA161 /* Chromatism+Internal.h */,
-				8F3AB9221781C0BA0023348A /* Chromatism.m */,
-				8F3AB94D1781C1250023348A /* Helpers.h */,
-				8F3AB94E1781C1250023348A /* Helpers.m */,
-				8FE2796317C3842900DD933A /* UIColor+Chromatism.h */,
-				8FE2796417C3842900DD933A /* UIColor+Chromatism.m */,
-			);
-			name = General;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		8F54EF0D1781C769008C1609 /* Headers */ = {
+		8FBFC16C19738B0400F75A76 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				32102EE117A948F900CFA161 /* Chromatism+Internal.h in Headers */,
-				8F9F6BC81822F09D00DE15A8 /* JLDiffTokenizer.h in Headers */,
-				8FA0CB0F1795F41B00FF8EB1 /* JLTextView.h in Headers */,
-				8F54EF0E1781C776008C1609 /* Chromatism.h in Headers */,
-				8F54EF101781C788008C1609 /* Helpers.h in Headers */,
-				8FE2796517C3842900DD933A /* UIColor+Chromatism.h in Headers */,
-				8F54EF111781C788008C1609 /* JLScope.h in Headers */,
-				8FFEB27D183AD6740032C9FB /* JLObjectiveCTokenizer.h in Headers */,
-				8F54EF131781C788008C1609 /* JLTextViewController.h in Headers */,
-				8FFEB283183AD8B70032C9FB /* JLTokenizer+Additions.h in Headers */,
-				8F54EF141781C788008C1609 /* JLTokenizer.h in Headers */,
-				8F54EF151781C788008C1609 /* JLTokenPattern.h in Headers */,
+				8FBFC17519738B0400F75A76 /* Chromatism.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8F3AB9171781C0BA0023348A /* Chromatism */ = {
+		8FBFC16E19738B0400F75A76 /* Chromatism */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8F3AB93B1781C0BB0023348A /* Build configuration list for PBXNativeTarget "Chromatism" */;
+			buildConfigurationList = 8FBFC18519738B0400F75A76 /* Build configuration list for PBXNativeTarget "Chromatism" */;
 			buildPhases = (
-				8F3AB9141781C0BA0023348A /* Sources */,
-				8F3AB9151781C0BA0023348A /* Frameworks */,
-				8F54EF0D1781C769008C1609 /* Headers */,
+				8FBFC16A19738B0400F75A76 /* Sources */,
+				8FBFC16B19738B0400F75A76 /* Frameworks */,
+				8FBFC16C19738B0400F75A76 /* Headers */,
+				8FBFC16D19738B0400F75A76 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -262,119 +217,140 @@
 			);
 			name = Chromatism;
 			productName = Chromatism;
-			productReference = 8F3AB9181781C0BA0023348A /* libChromatism.a */;
-			productType = "com.apple.product-type.library.static";
+			productReference = 8FBFC16F19738B0400F75A76 /* Chromatism.framework */;
+			productType = "com.apple.product-type.framework";
 		};
-		8F3AB9271781C0BA0023348A /* ChromatismTests */ = {
+		8FBFC17919738B0400F75A76 /* ChromatismTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8F3AB93E1781C0BB0023348A /* Build configuration list for PBXNativeTarget "ChromatismTests" */;
+			buildConfigurationList = 8FBFC18819738B0400F75A76 /* Build configuration list for PBXNativeTarget "ChromatismTests" */;
 			buildPhases = (
-				8F3AB9241781C0BA0023348A /* Sources */,
-				8F3AB9251781C0BA0023348A /* Frameworks */,
-				8F3AB9261781C0BA0023348A /* Resources */,
+				8FBFC17619738B0400F75A76 /* Sources */,
+				8FBFC17719738B0400F75A76 /* Frameworks */,
+				8FBFC17819738B0400F75A76 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				8F3AB92F1781C0BB0023348A /* PBXTargetDependency */,
+				8FBFC17D19738B0400F75A76 /* PBXTargetDependency */,
 			);
 			name = ChromatismTests;
 			productName = ChromatismTests;
-			productReference = 8F3AB9281781C0BA0023348A /* ChromatismTests.xctest */;
+			productReference = 8FBFC17A19738B0400F75A76 /* ChromatismTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		8F3AB9101781C0BA0023348A /* Project object */ = {
+		8FBFC16619738B0400F75A76 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
-				ORGANIZATIONNAME = Anviking;
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = anviking;
+				TargetAttributes = {
+					8FBFC16E19738B0400F75A76 = {
+						CreatedOnToolsVersion = 6.0;
+					};
+					8FBFC17919738B0400F75A76 = {
+						CreatedOnToolsVersion = 6.0;
+						TestTargetID = 8FBFC16E19738B0400F75A76;
+					};
+				};
 			};
-			buildConfigurationList = 8F3AB9131781C0BA0023348A /* Build configuration list for PBXProject "Chromatism" */;
+			buildConfigurationList = 8FBFC16919738B0400F75A76 /* Build configuration list for PBXProject "Chromatism" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 8F3AB90F1781C0BA0023348A;
-			productRefGroup = 8F3AB9191781C0BA0023348A /* Products */;
+			mainGroup = 8FBFC16519738B0400F75A76;
+			productRefGroup = 8FBFC17019738B0400F75A76 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8F3AB9171781C0BA0023348A /* Chromatism */,
-				8F3AB9271781C0BA0023348A /* ChromatismTests */,
+				8FBFC16E19738B0400F75A76 /* Chromatism */,
+				8FBFC17919738B0400F75A76 /* ChromatismTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		8F3AB9261781C0BA0023348A /* Resources */ = {
+		8FBFC16D19738B0400F75A76 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F3AB9361781C0BB0023348A /* InfoPlist.strings in Resources */,
-				32102EEE17A95E2900CFA161 /* description.txt in Resources */,
-				32102EED17A95E2900CFA161 /* demo.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FBFC17819738B0400F75A76 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8FB10D2F197F0A10001A83B1 /* demo.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		8F3AB9141781C0BA0023348A /* Sources */ = {
+		8FBFC16A19738B0400F75A76 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F54EF241781CD87008C1609 /* JLTokenPattern.m in Sources */,
-				8FFEB27E183AD6740032C9FB /* JLObjectiveCTokenizer.m in Sources */,
-				8F9F6BC91822F09D00DE15A8 /* JLDiffTokenizer.m in Sources */,
-				8FFEB284183AD8B70032C9FB /* JLTokenizer+Additions.m in Sources */,
-				8F54EF201781CD87008C1609 /* JLScope.m in Sources */,
-				8FE2796617C3842900DD933A /* UIColor+Chromatism.m in Sources */,
-				8FA0CB101795F41B00FF8EB1 /* JLTextView.m in Sources */,
-				8F54EF1F1781CD87008C1609 /* Helpers.m in Sources */,
-				8F54EF221781CD87008C1609 /* JLTextViewController.m in Sources */,
-				8F54EF231781CD87008C1609 /* JLTokenizer.m in Sources */,
-				8F54EF1E1781CD87008C1609 /* Chromatism.m in Sources */,
+				8FC8F73D198C7B5A00E4ED32 /* JLKeywordScope.swift in Sources */,
+				8FE1291E197B21900084E506 /* JLTextView.swift in Sources */,
+				8F7922CA197D39B900A94724 /* JLNestedScope.swift in Sources */,
+				8FE1291B197B1D5D0084E506 /* JLScope.swift in Sources */,
+				8FCDBFF91978834D00F4B3EC /* JLTokenType.swift in Sources */,
+				8FCDBFFB1979615D00F4B3EC /* JLColorTheme.swift in Sources */,
+				8F5D7ADF197D3B4900D73B8E /* JLLanguage.swift in Sources */,
+				8FBFC18E197418E300F75A76 /* NSIndexSet+Additions.swift in Sources */,
+				8FE1291C197B21900084E506 /* JLRegexScope.swift in Sources */,
+				8FE1291F197B21900084E506 /* JLTextViewController.swift in Sources */,
+				8FE12923197B5D780084E506 /* JLDocumentScope.swift in Sources */,
+				8F9313B21984271F00DD3993 /* JLTextStorage.swift in Sources */,
+				8F9313B71986A8E900DD3993 /* JLTokenizingScope.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8F3AB9241781C0BA0023348A /* Sources */ = {
+		8FBFC17619738B0400F75A76 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F3AB9381781C0BB0023348A /* ChromatismTests.m in Sources */,
-				3260A15417A8845F008792E6 /* Helpers.m in Sources */,
-				3260A15617A884EC008792E6 /* JLTokenizerTests.m in Sources */,
+				8FBFC19219741B6B00F75A76 /* JLScopeTests.swift in Sources */,
+				8FB10D22197EF104001A83B1 /* JLDocumentScope.swift in Sources */,
+				8F9598A2197448B4002EA4AB /* JLTokenTests.swift in Sources */,
+				8FB10D21197EF104001A83B1 /* JLScope.swift in Sources */,
+				8F5961FF198925D70095A8A9 /* JLTokenizingScope.swift in Sources */,
+				8FB10D2C197EF104001A83B1 /* JLLanguage.swift in Sources */,
+				8FB10D28197EF104001A83B1 /* JLTextView.swift in Sources */,
+				8FB10D2B197EF104001A83B1 /* JLColorTheme.swift in Sources */,
+				8F311E86197C8F040030B553 /* ObjectiveC.swift in Sources */,
+				8FBFC18219738B0400F75A76 /* ChromatismTests.swift in Sources */,
+				8FC8F73F198C7D1B00E4ED32 /* Swift.swift in Sources */,
+				8FB10D29197EF104001A83B1 /* JLTextViewController.swift in Sources */,
+				8FC8F740198C7D2400E4ED32 /* JLKeywordScope.swift in Sources */,
+				8FB10D25197EF104001A83B1 /* JLNestedScope.swift in Sources */,
+				8FB10D24197EF104001A83B1 /* JLRegexScope.swift in Sources */,
+				8FC8F742198C7D4800E4ED32 /* JLKeywordScopeTests.swift in Sources */,
+				8FB10D2A197EF104001A83B1 /* JLTokenType.swift in Sources */,
+				8F596200198926660095A8A9 /* JLTextStorage.swift in Sources */,
+				8FB10D26197EF104001A83B1 /* NSIndexSet+Additions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		8F3AB92F1781C0BB0023348A /* PBXTargetDependency */ = {
+		8FBFC17D19738B0400F75A76 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8F3AB9171781C0BA0023348A /* Chromatism */;
-			targetProxy = 8F3AB92E1781C0BB0023348A /* PBXContainerItemProxy */;
+			target = 8FBFC16E19738B0400F75A76 /* Chromatism */;
+			targetProxy = 8FBFC17C19738B0400F75A76 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXVariantGroup section */
-		8F3AB9341781C0BB0023348A /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8F3AB9351781C0BB0023348A /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
-		8F3AB9391781C0BB0023348A /* Debug */ = {
+		8FBFC18319738B0400F75A76 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -389,8 +365,12 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -399,21 +379,24 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRIVATE_HEADERS_FOLDER_PATH = "$(PUBLIC_HEADERS_FOLDER_PATH)/Private";
-				PRODUCT_NAME = Chromatism;
-				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/Chromatism;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		8F3AB93A1781C0BB0023348A /* Release */ = {
+		8FBFC18419738B0400F75A76 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -428,125 +411,124 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRIVATE_HEADERS_FOLDER_PATH = "$(PUBLIC_HEADERS_FOLDER_PATH)/Private";
-				PRODUCT_NAME = Chromatism;
-				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/Chromatism;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		8F3AB93C1781C0BB0023348A /* Debug */ = {
+		8FBFC18619738B0400F75A76 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DSTROOT = /tmp/Chromatism.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Chromatism/Chromatism-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Chromatism/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		8F3AB93D1781C0BB0023348A /* Release */ = {
+		8FBFC18719738B0400F75A76 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DSTROOT = /tmp/Chromatism.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Chromatism/Chromatism-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Chromatism/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
-		8F3AB93F1781C0BB0023348A /* Debug */ = {
+		8FBFC18919738B0400F75A76 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
-					"$(SYSTEM_APPS_DIR)/Xcode5-DP2.app/Contents/Developer/Library/Frameworks",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Chromatism/Chromatism-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ChromatismTests/ChromatismTests-Info.plist";
+				INFOPLIST_FILE = ChromatismTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
 		};
-		8F3AB9401781C0BB0023348A /* Release */ = {
+		8FBFC18A19738B0400F75A76 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
-					"$(SYSTEM_APPS_DIR)/Xcode5-DP2.app/Contents/Developer/Library/Frameworks",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Chromatism/Chromatism-Prefix.pch";
-				INFOPLIST_FILE = "ChromatismTests/ChromatismTests-Info.plist";
+				INFOPLIST_FILE = ChromatismTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8F3AB9131781C0BA0023348A /* Build configuration list for PBXProject "Chromatism" */ = {
+		8FBFC16919738B0400F75A76 /* Build configuration list for PBXProject "Chromatism" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8F3AB9391781C0BB0023348A /* Debug */,
-				8F3AB93A1781C0BB0023348A /* Release */,
+				8FBFC18319738B0400F75A76 /* Debug */,
+				8FBFC18419738B0400F75A76 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8F3AB93B1781C0BB0023348A /* Build configuration list for PBXNativeTarget "Chromatism" */ = {
+		8FBFC18519738B0400F75A76 /* Build configuration list for PBXNativeTarget "Chromatism" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8F3AB93C1781C0BB0023348A /* Debug */,
-				8F3AB93D1781C0BB0023348A /* Release */,
+				8FBFC18619738B0400F75A76 /* Debug */,
+				8FBFC18719738B0400F75A76 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8F3AB93E1781C0BB0023348A /* Build configuration list for PBXNativeTarget "ChromatismTests" */ = {
+		8FBFC18819738B0400F75A76 /* Build configuration list for PBXNativeTarget "ChromatismTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8F3AB93F1781C0BB0023348A /* Debug */,
-				8F3AB9401781C0BB0023348A /* Release */,
+				8FBFC18919738B0400F75A76 /* Debug */,
+				8FBFC18A19738B0400F75A76 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 8F3AB9101781C0BA0023348A /* Project object */;
+	rootObject = 8FBFC16619738B0400F75A76 /* Project object */;
 }
