@@ -53,18 +53,18 @@ private struct Branch: Node, Printable {
                 let firstCharacter = String(string[string.startIndex ... string.startIndex])
                 let remainingString = string[string.startIndex.successor() ..< string.endIndex]
                 if var array = dictionary[firstCharacter] {
-                    array += remainingString
+                    array.append(remainingString)
                     dictionary[firstCharacter] = array
                 } else {
                     dictionary[firstCharacter] = [remainingString]
                 }
             } else {
                 // This means end of a match
-                children += Leaf()
+                children.append(Leaf())
             }
         }
         for (key, value) in dictionary {
-            children += Branch(character: key, array: value)
+            children.append(Branch(character: key, array: value))
         }
         
     }

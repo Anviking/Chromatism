@@ -17,6 +17,10 @@ public class JLTextStorage: NSTextStorage {
         super.init()
         self.documentScope.cascadeAttributedString(self)
     }
+
+    required public init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: Syntax Highlighting
     
@@ -38,16 +42,16 @@ public class JLTextStorage: NSTextStorage {
     
     public override var string: String { return backingStore.string }
     
-    public override func attributesAtIndex(location: Int, effectiveRange range: NSRangePointer) -> [NSObject : AnyObject]! {
+    public override func attributesAtIndex(location: Int, effectiveRange range: NSRangePointer) -> [NSObject : AnyObject] {
         return backingStore.attributesAtIndex(location, effectiveRange: range)
     }
     
-    public override func replaceCharactersInRange(range: NSRange, withString str: String!) {
+    public override func replaceCharactersInRange(range: NSRange, withString str: String) {
         let actions = NSTextStorageEditActions.EditedCharacters | NSTextStorageEditActions.EditedAttributes
-        let delta = str.bridgeToObjectiveC().length - range.length
+        let delta = str.utf16Count - range.length
         edited(actions, range: range, changeInLength: delta)
         backingStore.replaceCharactersInRange(range, withString: str)
-        editedLineRange = string.bridgeToObjectiveC().lineRangeForRange(editedRange)
+        editedLineRange = (string as NSString).lineRangeForRange(editedRange)
         documentScope.invalidateAttributesInIndexes(NSIndexSet(indexesInRange: range))
         documentScope.shiftIndexesAtLoaction(range.end, by: delta)
     }

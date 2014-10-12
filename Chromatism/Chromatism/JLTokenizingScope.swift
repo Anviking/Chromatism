@@ -42,11 +42,11 @@ public class JLTokenizingScope: JLScope {
     public convenience  init(incrementing: [String], decrementing:[String]) {
         var tokens = [Token]()
         for string in incrementing {
-            tokens += Token(pattern: string, delta: 1)
+            tokens.append(Token(pattern: string, delta: 1))
         }
         
         for string in decrementing {
-            tokens += Token(pattern: string, delta: -1)
+            tokens.append(Token(pattern: string, delta: -1))
         }
         
         self.init(tokens: tokens)
@@ -79,7 +79,7 @@ public class JLTokenizingScope: JLScope {
             for token in self.tokens {
                 token.expression.enumerateMatchesInString(self.attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
                     if !foundTokenIndexes.containsAnyIndexesInRange(result.range) {
-                        array += TokenResult(result: result, token: token)
+                        array.append(TokenResult(result: result, token: token))
                         foundTokenIndexes.addIndexesInRange(result.range)
                     }
                     })
@@ -127,7 +127,7 @@ public class JLTokenizingScope: JLScope {
             self.token = token
             var i = 0
             while i < result.numberOfRanges {
-                ranges += result.rangeAtIndex(i)
+                ranges.append(result.rangeAtIndex(i))
                 i++
             }
         }

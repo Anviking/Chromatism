@@ -9,7 +9,7 @@
 import UIKit
 
 public class JLScope: NSObject, Printable, Equatable {
-    init() {
+    override init() {
         super.init()
     }
     
@@ -27,7 +27,7 @@ public class JLScope: NSObject, Printable, Equatable {
     var subscopes = [JLScope]()
     
     func addSubscope(subscope: JLScope) {
-        self.subscopes += subscope
+        subscopes.append(subscope)
     }
     
     func perform() {

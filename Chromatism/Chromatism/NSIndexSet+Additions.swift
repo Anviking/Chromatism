@@ -35,31 +35,31 @@ func NSIndexSetDelta(oldSet: NSIndexSet, newSet: NSIndexSet) -> (additions: NSMu
     return (additions, deletions)
 }
 
-@infix func -(left: NSIndexSet, right: NSIndexSet) -> NSMutableIndexSet {
+func -(left: NSIndexSet, right: NSIndexSet) -> NSMutableIndexSet {
     let indexSet = left.mutableCopy() as NSMutableIndexSet
     indexSet.removeIndexes(right)
     return indexSet
 }
 
-@infix func +(left: NSIndexSet, right: NSIndexSet) -> NSMutableIndexSet {
+func +(left: NSIndexSet, right: NSIndexSet) -> NSMutableIndexSet {
     let indexSet = left.mutableCopy() as NSMutableIndexSet
     indexSet.addIndexes(right)
     return indexSet
 }
 
-@infix func -=(left: NSMutableIndexSet, right: NSIndexSet) {
+func -=(left: NSMutableIndexSet, right: NSIndexSet) {
     left.removeIndexes(right)
 }
 
-@infix func +=(left: NSMutableIndexSet, right: NSIndexSet) {
+func +=(left: NSMutableIndexSet, right: NSIndexSet) {
     left.addIndexes(right)
 }
 
-@infix func -=(left: NSMutableIndexSet, right: NSRange) {
+func -=(left: NSMutableIndexSet, right: NSRange) {
     left.removeIndexesInRange(right)
 }
 
-@infix func +=(left: NSMutableIndexSet, right: NSRange) {
+func +=(left: NSMutableIndexSet, right: NSRange) {
     left.addIndexesInRange(right)
 }
 

@@ -10,7 +10,7 @@ import UIKit
 
 public class JLDocumentScope: JLScope {
     
-    init() {
+    override init() {
         super.init()
     }
     

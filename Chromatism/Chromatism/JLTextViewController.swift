@@ -18,6 +18,10 @@ public class JLTextViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         registerForKeyboardNotifications()
     }
+
+    required public init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     deinit {
         unregisterForKeyboardNotifications()
@@ -41,7 +45,8 @@ public class JLTextViewController: UIViewController {
     
     // Called when the UIKeyboardDidShowNotification is sent.
     func keyboardWasShown(notification: NSNotification) {
-        let info = notification.userInfo
+        // FIXME: ! could be wrong
+        let info = notification.userInfo!
         let scrollView = self.textView
         let kbSize = (info[UIKeyboardFrameBeginUserInfoKey] as NSValue).CGRectValue().size;
         
@@ -50,7 +55,8 @@ public class JLTextViewController: UIViewController {
         scrollView.contentInset = contentInsets;
         scrollView.scrollIndicatorInsets = contentInsets;
         
-        var point = textView.caretRectForPosition(textView.selectedTextRange.start).origin;
+        // FIXME: ! could be wrong
+        var point = textView.caretRectForPosition(textView.selectedTextRange!.start).origin;
         point.y = min(point.y, self.textView.frame.size.height - kbSize.height);
         
         var aRect = self.view.frame;

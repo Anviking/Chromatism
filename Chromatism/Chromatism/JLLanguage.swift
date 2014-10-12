@@ -57,7 +57,7 @@ public class JLLanguage {
         
         var keywords = JLKeywordScope(keywords: "true false YES NO TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super", tokenType: .Keyword)
         
-        public init() {
+        public required init() {
             super.init()
             documentScope[
                 blockComments,
@@ -83,7 +83,7 @@ public class JLLanguage {
         var dictionaryLiteral = JLTokenizingScope(incrementingPattern: "\\@\\{", decrementingPattern: "\\}", tokenType: .OtherMethodNames, hollow: true)
         var methodCallArguments = JLRegexScope(pattern: "\\b\\w+(:|(?=\\]))", tokenTypes: .OtherMethodNames)
         
-        public init() {
+        public required init() {
             let openBracket = JLTokenizingScope.Token(pattern: "\\[", delta: 1)
             let closeBracket = JLTokenizingScope.Token(pattern: "\\]", delta: -1)
             let arrayOpen = JLTokenizingScope.Token(pattern: "\\@\\[", delta: 1)
@@ -134,7 +134,7 @@ public class JLLanguage {
         var swiftTypes = JLKeywordScope(keywords: "Array AutoreleasingUnsafePointer BidirectionalReverseView Bit Bool CFunctionPointer COpaquePointer CVaListPointer Character CollectionOfOne ConstUnsafePointer ContiguousArray Dictionary DictionaryGenerator DictionaryIndex Double EmptyCollection EmptyGenerator EnumerateGenerator FilterCollectionView FilterCollectionViewIndex FilterGenerator FilterSequenceView Float Float80 FloatingPointClassification GeneratorOf GeneratorOfOne GeneratorSequence HeapBuffer HeapBuffer HeapBufferStorage HeapBufferStorageBase ImplicitlyUnwrappedOptional IndexingGenerator Int Int16 Int32 Int64 Int8 IntEncoder LazyBidirectionalCollection LazyForwardCollection LazyRandomAccessCollection LazySequence Less MapCollectionView MapSequenceGenerator MapSequenceView MirrorDisposition ObjectIdentifier OnHeap Optional PermutationGenerator QuickLookObject RandomAccessReverseView Range RangeGenerator RawByte Repeat ReverseBidirectionalIndex ReverseRandomAccessIndex SequenceOf SinkOf Slice StaticString StrideThrough StrideThroughGenerator StrideTo StrideToGenerator String Index UTF8View Index UnicodeScalarView IndexType GeneratorType UTF16View UInt UInt16 UInt32 UInt64 UInt8 UTF16 UTF32 UTF8 UnicodeDecodingResult UnicodeScalar Unmanaged UnsafeArray UnsafeArrayGenerator UnsafeMutableArray UnsafePointer VaListBuilder Header Zip2 ZipGenerator2", tokenType: .OtherClassNames)
         var dotNotation = JLRegexScope(pattern: "\\.\\w+", tokenTypes: .OtherProperties)
         
-        public init() {
+      required   public init() {
             
             super.init()
             documentScope[

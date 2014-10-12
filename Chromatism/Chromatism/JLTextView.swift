@@ -38,6 +38,10 @@ public class JLTextView: UITextView, JLNestedScopeDelegate {
         font = UIFont(name: "Menlo-Regular", size: 15)
 //        layoutManager.allowsNonContiguousLayout = true
     }
+
+    required public init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: Override UITextView
 
