@@ -12,7 +12,7 @@ class JLKeywordScope: JLRegexScope {
     init(keywords: [String], prefix: String, suffix: String, tokenType: JLTokenType) {
         let pattern = prefix + Branch(character: "", array: keywords).description + suffix
         let expression = NSRegularExpression(pattern: pattern, options: nil, error: nil)
-        super.init(regularExpression: expression, tokenTypes: [tokenType])
+        super.init(regularExpression: expression!, tokenTypes: [tokenType])
     }
     
     /// Create a JLKeywordScope with prefix and suffix of word boundaries (\\b)

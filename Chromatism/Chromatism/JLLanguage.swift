@@ -53,7 +53,7 @@ public class JLLanguage {
         var strings = JLRegexScope(pattern: "(\"|@\")[^\"\\n]*(@\"|\")", tokenTypes: .String)
         var angularImports = JLRegexScope(pattern: "<.*?>", tokenTypes: .String)
         var numbers = JLRegexScope(pattern: "(?<=\\s)\\d+", tokenTypes: .Number)
-        var functions = JLRegexScope(pattern: "\\w+\\s*(?>\\(.*\\)", tokenTypes: .OtherMethodNames)
+        var functions = JLRegexScope(pattern: "\\w+\\s*(?>\\(.*\\))", tokenTypes: .OtherMethodNames)
         
         var keywords = JLKeywordScope(keywords: "true false YES NO TRUE FALSE bool BOOL nil id void self NULL if else strong weak nonatomic atomic assign copy typedef enum auto break case const char continue do default double extern float for goto int long register return short signed sizeof static struct switch typedef union unsigned volatile while nonatomic atomic nonatomic readonly super", tokenType: .Keyword)
         

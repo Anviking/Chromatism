@@ -26,7 +26,7 @@ public class JLTokenizingScope: JLScope {
         
         init(pattern: String, delta: Int) {
             self.delta = delta
-            self.expression = NSRegularExpression(pattern: pattern, options: nil, error: nil)
+            self.expression = NSRegularExpression(pattern: pattern, options: nil, error: nil)!
         }
     }
     

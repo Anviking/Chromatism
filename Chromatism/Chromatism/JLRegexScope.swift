@@ -22,15 +22,9 @@ public class JLRegexScope: JLScope {
         super.init()
     }
     
-    convenience init(pattern: String, options: NSRegularExpressionOptions, tokenTypes: JLTokenType...) {
+    convenience init(pattern: String, options: NSRegularExpressionOptions = .AnchorsMatchLines, tokenTypes: JLTokenType...) {
         let expression = NSRegularExpression(pattern: pattern, options: options, error: nil)
-        self.init(regularExpression: expression, tokenTypes: tokenTypes)
-    }
-    
-    /// Creates a JLRegexScope with .AnchorsMatchLines options
-    convenience init(pattern: String, tokenTypes: JLTokenType...) {
-        let expression = NSRegularExpression(pattern: pattern, options: .AnchorsMatchLines, error: nil)
-        self.init(regularExpression: expression, tokenTypes: tokenTypes)
+        self.init(regularExpression: expression!, tokenTypes: tokenTypes)
     }
     
     override func perform(parentIndexSet: NSIndexSet) {
@@ -56,6 +50,6 @@ public class JLRegexScope: JLScope {
     }
     
     override public var description: String {
-    return "JLToken"
+        return "JLToken"
     }
 }
