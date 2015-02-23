@@ -34,7 +34,7 @@ public class JLRegexScope: JLScope {
                 })
             })
         
-        performSubscopes(attributedString, indexSet: indexSet.mutableCopy() as NSMutableIndexSet)
+        performSubscopes(attributedString, indexSet: indexSet.mutableCopy() as! NSMutableIndexSet)
     }
     
     private func process(result: NSTextCheckingResult, attributedString: NSMutableAttributedString) {
