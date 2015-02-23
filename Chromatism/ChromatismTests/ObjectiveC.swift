@@ -11,14 +11,14 @@ import XCTest
 
 class ObjectiveC: XCTestCase {
     
-    let string = NSString(contentsOfURL: NSBundle(forClass: ObjectiveC.self).URLForResource("demo", withExtension: "txt")!, encoding: NSUTF8StringEncoding, error: nil)
+    let string = NSString(contentsOfURL: NSBundle(forClass: ObjectiveC.self).URLForResource("demo", withExtension: "txt")!, encoding: NSUTF8StringEncoding, error: nil) as! String
     
     var attributedString: NSMutableAttributedString!
     var language: JLLanguage.ObjectiveC!
     
     override func setUp() {
         super.setUp()
-        attributedString = NSMutableAttributedString(string: string, attributes: [:])
+        attributedString = NSMutableAttributedString(string: string)
         language = JLLanguage.ObjectiveC()
         language.documentScope.cascadeAttributedString(attributedString)
         language.documentScope.theme = .Default
