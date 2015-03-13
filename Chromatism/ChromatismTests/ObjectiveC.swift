@@ -11,7 +11,7 @@ import XCTest
 
 class ObjectiveC: XCTestCase {
     
-    let string = NSString(contentsOfURL: NSBundle(forClass: ObjectiveC.self).URLForResource("demo", withExtension: "txt")!, encoding: NSUTF8StringEncoding, error: nil) as! String
+    let string = NSString(contentsOfURL: NSBundle(forClass: ObjectiveC.self).URLForResource("demo", withExtension: "txt")!, encoding: NSUTF8StringEncoding, error: nil) as String
     
     var attributedString: NSMutableAttributedString!
     var language: JLLanguage.ObjectiveC!
