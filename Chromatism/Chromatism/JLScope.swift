@@ -38,9 +38,9 @@ public class JLScope: NSObject, Printable, Equatable {
 
         // Create a copy of the indexSet and call perform to subscopes
         // The results of the subscope is removed from the indexSet copy before the next subscope is performed
-        let indexSetCopy = indexSet.mutableCopy() as! NSMutableIndexSet
+        let indexSetCopy = indexSet.mutableCopy() as NSMutableIndexSet
         performSubscopes(attributedString, indexSet: indexSetCopy)
-        self.indexSet = indexSet.mutableCopy() as! NSMutableIndexSet
+        self.indexSet = indexSet.mutableCopy() as NSMutableIndexSet
     }
     
     // Will change indexSet
