@@ -72,8 +72,8 @@ extension String {
     }
 }
 
- func + (left: NSAttributedString, right: NSAttributedString) -> NSMutableAttributedString {
-    let string = left.mutableCopy() as! NSMutableAttributedString
+@infix func + (left: NSAttributedString, right: NSAttributedString) -> NSMutableAttributedString {
+    let string = left.mutableCopy() as NSMutableAttributedString
     string.appendAttributedString(right)
     return string
 }
