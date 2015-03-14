@@ -48,7 +48,7 @@ public class JLTextStorage: NSTextStorage {
     
     public override func replaceCharactersInRange(range: NSRange, withString str: String) {
         let actions = NSTextStorageEditActions.EditedCharacters | NSTextStorageEditActions.EditedAttributes
-        let delta = str.utf16Count - range.length
+        let delta = count(str.utf16) - range.length
         edited(actions, range: range, changeInLength: delta)
         backingStore.replaceCharactersInRange(range, withString: str)
         editedLineRange = (string as NSString).lineRangeForRange(editedRange)
