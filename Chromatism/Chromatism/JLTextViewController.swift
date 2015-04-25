@@ -48,7 +48,7 @@ public class JLTextViewController: UIViewController {
         // FIXME: ! could be wrong
         let info = notification.userInfo!
         let scrollView = self.textView
-        let kbSize = (info[UIKeyboardFrameBeginUserInfoKey] as NSValue).CGRectValue().size;
+        let kbSize = (info[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue().size;
         
         var contentInsets = scrollView.contentInset;
         contentInsets.bottom = kbSize.height;

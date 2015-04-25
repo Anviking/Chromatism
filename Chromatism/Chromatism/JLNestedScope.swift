@@ -65,7 +65,7 @@ public class JLNestedScope: JLScope {
         println("Intersection: \(intersection)")
         
         self.indexSet = newIndexSet
-        oldIndexSet = newIndexSet.mutableCopy() as NSMutableIndexSet
+        oldIndexSet = newIndexSet.mutableCopy() as! NSMutableIndexSet
     }
     
     func incrementingTokenIsValid(token: JLTokenizingScope.TokenResult) -> Bool {

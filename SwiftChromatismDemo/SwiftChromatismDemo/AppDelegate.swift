@@ -15,15 +15,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         // Override point for customization after application launch.
         
         // Load demo text
         let url = NSBundle.mainBundle().URLForResource("objc", withExtension: "txt");
-        let string = NSString(contentsOfURL: url!, encoding: NSUTF8StringEncoding, error: nil)
+        let string = NSString(contentsOfURL: url!, encoding: NSUTF8StringEncoding, error: nil) as! String
         
-        let viewController = JLTextViewController(text: string!, language: .ObjectiveC, theme: .Default)
+        let viewController = JLTextViewController(text: string, language: .ObjectiveC, theme: .Default)
         
         viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Resign", style: .Plain, target: viewController.textView, action:"resignFirstResponder")
         

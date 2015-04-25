@@ -49,7 +49,7 @@ private struct Branch: Node, Printable {
         self.character = character
         var dictionary = [String: [String]]()
         for string in array {
-            if countElements(string) > 0 {
+            if count(string) > 0 {
                 let firstCharacter = String(string[string.startIndex ... string.startIndex])
                 let remainingString = string[string.startIndex.successor() ..< string.endIndex]
                 if var array = dictionary[firstCharacter] {
@@ -71,7 +71,7 @@ private struct Branch: Node, Printable {
     
     var pattern: String {
     var array = children.map { $0.pattern }
-    array.sort { countElements($0) < countElements($1) }
+    array.sort { count($0) < count($1) }
         
     switch array.count {
         case 0: return character + ""
