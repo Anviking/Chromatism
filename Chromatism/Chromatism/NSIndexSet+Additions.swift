@@ -36,13 +36,13 @@ func NSIndexSetDelta(oldSet: NSIndexSet, newSet: NSIndexSet) -> (additions: NSMu
 }
 
 func -(left: NSIndexSet, right: NSIndexSet) -> NSMutableIndexSet {
-    let indexSet = left.mutableCopy() as! NSMutableIndexSet
+    let indexSet = left.mutableCopy() as NSMutableIndexSet
     indexSet.removeIndexes(right)
     return indexSet
 }
 
 func +(left: NSIndexSet, right: NSIndexSet) -> NSMutableIndexSet {
-    let indexSet = left.mutableCopy() as! NSMutableIndexSet
+    let indexSet = left.mutableCopy() as NSMutableIndexSet
     indexSet.addIndexes(right)
     return indexSet
 }

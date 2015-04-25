@@ -11,7 +11,7 @@ import XCTest
 
 class JLKeywordScopeTests: XCTestCase {
     
-    let string = NSString(contentsOfURL: NSBundle(forClass: ObjectiveC.self).URLForResource("demo", withExtension: "txt")!, encoding: NSUTF8StringEncoding, error: nil) as! String
+    let string = NSString(contentsOfURL: NSBundle(forClass: ObjectiveC.self).URLForResource("demo", withExtension: "txt"), encoding: NSUTF8StringEncoding, error: nil)
     var attributedString: NSMutableAttributedString!
     
     var keywords = "Array|AutoreleasingUnsafePointer|BidirectionalReverseView|Bit|Bool|CFunctionPointer|COpaquePointer|CVaListPointer|Character|CollectionOfOne|ConstUnsafePointer|ContiguousArray|Dictionary|DictionaryGenerator|DictionaryIndex|Double|EmptyCollection|EmptyGenerator|EnumerateGenerator|FilterCollectionView|FilterCollectionViewIndex|FilterGenerator|FilterSequenceView|Float|Float80|FloatingPointClassification|GeneratorOf|GeneratorOfOne|GeneratorSequence|HeapBuffer|HeapBuffer|HeapBufferStorage|HeapBufferStorageBase|ImplicitlyUnwrappedOptional|IndexingGenerator|Int|Int16|Int32|Int64|Int8|IntEncoder|LazyBidirectionalCollection|LazyForwardCollection|LazyRandomAccessCollection|LazySequence|Less|MapCollectionView|MapSequenceGenerator|MapSequenceView|MirrorDisposition|ObjectIdentifier|OnHeap|Optional|PermutationGenerator|QuickLookObject|RandomAccessReverseView|Range|RangeGenerator|RawByte|Repeat|ReverseBidirectionalIndex|ReverseRandomAccessIndex|SequenceOf|SinkOf|Slice|StaticString|StrideThrough|StrideThroughGenerator|StrideTo|StrideToGenerator|String|Index|UTF8View|Index|UnicodeScalarView|IndexType|GeneratorType|UTF16View|UInt|UInt16|UInt32|UInt64|UInt8|UTF16|UTF32|UTF8|UnicodeDecodingResult|UnicodeScalar|Unmanaged|UnsafeArray|UnsafeArrayGenerator|UnsafeMutableArray|UnsafePointer|VaListBuilder|Header|Zip2|ZipGenerator2".componentsSeparatedByString("|")
@@ -45,7 +45,7 @@ class JLKeywordScopeTests: XCTestCase {
     
     func testKeywordPattern() {
         // This is an example of a performance test case.
-        let scope = JLKeywordScope(keywords: keywords, tokenType: .Keyword)
+        let scope = JLKeywordScope(keywords: keywords, tokenTypes: .Keyword)
         scope.attributedString = attributedString
         scope.theme = .Default
         self.measureBlock() {
