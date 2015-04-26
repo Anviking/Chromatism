@@ -127,7 +127,7 @@ public class JLLanguage {
     public class Swift: JLLanguage {
         var blockComments = JLTokenizingScope(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .Comment, hollow: false)
         var lineComments = JLRegexScope(pattern: "//(.*)", tokenTypes: .Comment)
-        var keywords = JLKeywordScope(keywords: "class protocol init required public internal import private nil super var let func override deinit", tokenType: .Keyword)
+        var keywords = JLKeywordScope(keywords: "class protocol init required public internal import private nil super var let func override deinit return", tokenType: .Keyword)
         var atKeywords = JLKeywordScope(keywords: ["optional", "UIApplicationMain"], prefix: "@", suffix: "\\b", tokenType: .Keyword)
         var projectClassNames = JLRegexScope(pattern: "\\b[A-Z]{3}[a-zA-Z]+\\b", tokenTypes: .ProjectClassNames)
         var NSUIClassNames = JLRegexScope(pattern: "\\b(NS|UI)[A-Z][a-zA-Z]+\\b", tokenTypes: .OtherClassNames)
