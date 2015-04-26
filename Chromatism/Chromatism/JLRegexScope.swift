@@ -24,6 +24,7 @@ public class JLRegexScope: JLScope {
     
     convenience init(pattern: String, options: NSRegularExpressionOptions = .AnchorsMatchLines, tokenTypes: JLTokenType...) {
         let expression = NSRegularExpression(pattern: pattern, options: options, error: nil)
+        println(pattern)
         self.init(regularExpression: expression!, tokenTypes: tokenTypes)
     }
     
