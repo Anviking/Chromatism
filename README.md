@@ -17,6 +17,4 @@ iOS Syntax highlightning using Swift built for performance, but still at a very 
 - Add a symbol-recognicion-scope
 - Add more languages
 
-## Xcode 6.3 Beta
-There is a [branch](https://github.com/Anviking/Chromatism/tree/xcode-6.3) for that
 
