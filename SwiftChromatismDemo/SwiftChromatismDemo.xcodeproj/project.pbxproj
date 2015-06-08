@@ -203,6 +203,7 @@
 		8F105F0D194D1C8100BF037F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = anviking;
 				TargetAttributes = {

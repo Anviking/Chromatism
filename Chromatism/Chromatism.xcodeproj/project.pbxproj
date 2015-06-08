@@ -37,6 +37,7 @@
 		8FC8F742198C7D4800E4ED32 /* JLKeywordScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC8F741198C7D4800E4ED32 /* JLKeywordScopeTests.swift */; };
 		8FCDBFF91978834D00F4B3EC /* JLTokenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */; };
 		8FCDBFFB1979615D00F4B3EC /* JLColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */; };
+		8FDF6C671B226EB40044D754 /* JLIndentator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FDF6C661B226EB40044D754 /* JLIndentator.swift */; };
 		8FE1291B197B1D5D0084E506 /* JLScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBFC18B19738B7900F75A76 /* JLScope.swift */; };
 		8FE1291C197B21900084E506 /* JLRegexScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F95989D197437BF002EA4AB /* JLRegexScope.swift */; };
 		8FE1291E197B21900084E506 /* JLTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCDBFFC1979940200F4B3EC /* JLTextView.swift */; };
@@ -79,6 +80,7 @@
 		8FCDBFFA1979615D00F4B3EC /* JLColorTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLColorTheme.swift; sourceTree = "<group>"; };
 		8FCDBFFC1979940200F4B3EC /* JLTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTextView.swift; sourceTree = "<group>"; };
 		8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLTextViewController.swift; sourceTree = "<group>"; };
+		8FDF6C661B226EB40044D754 /* JLIndentator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLIndentator.swift; sourceTree = "<group>"; };
 		8FE12922197B5D780084E506 /* JLDocumentScope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLDocumentScope.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -147,6 +149,7 @@
 				8F049A28198C93290078063F /* Scopes */,
 				8F9313B11984271F00DD3993 /* JLTextStorage.swift */,
 				8FBFC18D197418E300F75A76 /* NSIndexSet+Additions.swift */,
+				8FDF6C661B226EB40044D754 /* JLIndentator.swift */,
 				8FCDBFFC1979940200F4B3EC /* JLTextView.swift */,
 				8FCDBFFF19799B6700F4B3EC /* JLTextViewController.swift */,
 				8FCDBFF81978834D00F4B3EC /* JLTokenType.swift */,
@@ -244,6 +247,7 @@
 		8FBFC16619738B0400F75A76 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = anviking;
 				TargetAttributes = {
@@ -308,6 +312,7 @@
 				8FE1291C197B21900084E506 /* JLRegexScope.swift in Sources */,
 				8FE1291F197B21900084E506 /* JLTextViewController.swift in Sources */,
 				8FE12923197B5D780084E506 /* JLDocumentScope.swift in Sources */,
+				8FDF6C671B226EB40044D754 /* JLIndentator.swift in Sources */,
 				8F9313B21984271F00DD3993 /* JLTextStorage.swift in Sources */,
 				8F9313B71986A8E900DD3993 /* JLTokenizingScope.swift in Sources */,
 			);
