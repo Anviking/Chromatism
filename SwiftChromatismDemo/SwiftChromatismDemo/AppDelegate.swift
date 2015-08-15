@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Load demo text
         let url = NSBundle.mainBundle().URLForResource("swift", withExtension: "txt");
-        let string = NSString(contentsOfURL: url!, encoding: NSUTF8StringEncoding, error: nil) as! String
+        let string = NSString(contentsOfURL: url!, encoding: NSUTF8StringEncoding)
         
         let viewController = JLTextViewController(text: string, language: .Swift, theme: .Dusk)
         

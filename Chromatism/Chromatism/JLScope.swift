@@ -8,7 +8,8 @@
 
 import UIKit
 
-public class JLScope: NSObject, Printable, Equatable {
+public class JLScope: NSObject {
+    
     override init() {
         super.init()
     }
@@ -46,18 +47,18 @@ public class JLScope: NSObject, Printable, Equatable {
     // Will change indexSet
     func performSubscopes(attributedString: NSMutableAttributedString, indexSet: NSMutableIndexSet) {
         
-        var deletions = NSMutableIndexSet()
-        for (index, scope) in enumerate(subscopes) {
+        let deletions = NSMutableIndexSet()
+        for scope in subscopes {
             scope.theme = theme
             
-            var oldSet = scope.indexSet
+            let oldSet = scope.indexSet
             scope.invalidateAttributesInIndexes(indexSet)
             scope.perform(indexSet)
-            var newSet = scope.indexSet
+            let newSet = scope.indexSet
             
             indexSet -= newSet
             if scope.multiline {
-                deletions += NSIndexSetDelta(oldSet, newSet).deletions
+                deletions += NSIndexSetDelta(oldSet, newSet: newSet).deletions
             }
         }
         if deletions.count > 0 {

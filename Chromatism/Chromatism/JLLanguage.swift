@@ -15,7 +15,7 @@ public enum JLLanguageType {
     /**
     Warning: Will probably be changed in the future to take arguments
     
-    :returns: A functional JLLanguage object.
+    - returns: A functional JLLanguage object.
     */
     func language() -> JLLanguage {
         switch self {

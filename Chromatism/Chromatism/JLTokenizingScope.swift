@@ -26,7 +26,7 @@ public class JLTokenizingScope: JLScope {
         
         init(pattern: String, delta: Int) {
             self.delta = delta
-            self.expression = NSRegularExpression(pattern: pattern, options: nil, error: nil)!
+            self.expression = try! NSRegularExpression(pattern: pattern, options: [])
         }
     }
     
@@ -77,7 +77,7 @@ public class JLTokenizingScope: JLScope {
         var foundTokenIndexes = NSMutableIndexSet()
         indexSet.enumerateRangesUsingBlock { (range, _) in
             for token in self.tokens {
-                token.expression.enumerateMatchesInString(self.attributedString.string, options: nil, range: range, usingBlock: { (result, _, _) in
+                token.expression.enumerateMatchesInString(self.attributedString.string, options: [], range: range, usingBlock: { (result, _, _) in
                     if !foundTokenIndexes.containsAnyIndexesInRange(result.range) {
                         array.append(TokenResult(result: result, token: token))
                         foundTokenIndexes.addIndexesInRange(result.range)
@@ -88,7 +88,7 @@ public class JLTokenizingScope: JLScope {
         
         
         matches += array
-        matches.sort { $0.range.location < $1.range.location }
+        matches.sortInPlace { $0.range.location < $1.range.location }
         
 //        oldLineIndexes =
         
@@ -104,7 +104,7 @@ public class JLTokenizingScope: JLScope {
     
     override func shiftIndexesAtLoaction(location: Int, by delta: Int) {
         
-        for (index, token) in enumerate(matches.reverse()) {
+        for (index, token) in Array(matches.reverse()).enumerate() {
             if token.range.location < location { break }
             token.shiftRanges(delta)
         }
@@ -117,7 +117,7 @@ public class JLTokenizingScope: JLScope {
         matches = matches.filter { !(indexSet.containsIndexesInRange($0.range)) }
     }
     
-    public class TokenResult: Printable {
+    public class TokenResult: CustomStringConvertible {
         var range: NSRange { return ranges[0] }
         var ranges: [NSRange]
         var token: Token

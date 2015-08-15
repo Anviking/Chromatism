@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class JLTextView: UITextView, JLNestedScopeDelegate {
+public class JLTextView: UITextView {
     
     public var language: JLLanguage
     public var theme: JLColorTheme {
@@ -53,7 +53,12 @@ public class JLTextView: UITextView, JLNestedScopeDelegate {
     
     func updateTypingAttributes() {
         let color = theme[JLTokenType.Text]!
-        typingAttributes = [NSForegroundColorAttributeName: color, NSFontAttributeName: font]
+        var dictionary: [String: AnyObject] = [NSForegroundColorAttributeName: color]
+        if let font = font {
+            dictionary[NSFontAttributeName] = font
+        }
+        
+        typingAttributes = dictionary
     }
     
     override public var text: String! {
@@ -63,13 +68,13 @@ public class JLTextView: UITextView, JLNestedScopeDelegate {
     }
     }
     
-    override public var textColor: UIColor! {
+    override public var textColor: UIColor? {
     didSet {
         updateTypingAttributes()
     }
     }
     
-    override public var font: UIFont! {
+    override public var font: UIFont? {
     didSet {
         updateTypingAttributes()
     }
@@ -84,7 +89,7 @@ extension JLTextView: JLNestedScopeDelegate {
             additions.enumerateRangesUsingBlock { (range, stop) in
                 
                 let range = self.textRange(range.start ..< range.end)
-                let array = self.selectionRectsForRange(range) as! [UITextSelectionRect]
+                let array = self.selectionRectsForRange(range!) as! [UITextSelectionRect]
                 for value in array {
                     self.flash(value.rect, color: UIColor(white: 0.0, alpha: 0.1))
                 }
@@ -116,7 +121,7 @@ extension JLTextView: JLNestedScopeDelegate {
 
 private extension UIView {
     func animateToColor(color: UIColor, transform: CGAffineTransform, duration: Double, completion: () -> Void) {
-        UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.3, options: nil, animations: {
+        UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.3, options: [], animations: {
             self.backgroundColor = color
             self.transform = transform
             }, completion: { _ in
@@ -126,10 +131,16 @@ private extension UIView {
 }
 
 private extension UITextView {
-    func textRange(range: Range<Int>) -> UITextRange {
+    func textRange(range: Range<Int>) -> UITextRange? {
         let beginning = beginningOfDocument
-        let start = positionFromPosition(beginning, offset: range.startIndex)
-        let end = positionFromPosition(beginning, offset: range.endIndex)
+        
+        guard let start = positionFromPosition(beginning, offset: range.startIndex) else {
+            return nil
+        }
+        guard let end = positionFromPosition(beginning, offset: range.endIndex) else {
+            return nil
+        }
+        
         return textRangeFromPosition(start, toPosition: end)
     }
 }

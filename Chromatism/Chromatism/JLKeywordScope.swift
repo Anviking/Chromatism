@@ -11,7 +11,12 @@ import UIKit
 class JLKeywordScope: JLRegexScope {
     init(keywords: [String], prefix: String, suffix: String, tokenType: JLTokenType) {
         let pattern = prefix + Branch(character: "", array: keywords).description + suffix
-        let expression = NSRegularExpression(pattern: pattern, options: nil, error: nil)
+        let expression: NSRegularExpression?
+        do {
+            expression = try NSRegularExpression(pattern: pattern, options: [])
+        } catch _ {
+            expression = nil
+        }
         super.init(regularExpression: expression!, tokenTypes: [tokenType])
     }
     
@@ -35,21 +40,19 @@ private struct Leaf: Node {
     var pattern: String { return "" }
 }
 
-private struct Branch: Node, Printable {
+private struct Branch: Node, CustomStringConvertible {
     var children = [Node]()
     var character: String
     
     func perform(string: NSString, range: Range<Int>) {
-        for i in range {
-            
-        }
+
     }
     
     init(character: String, array: [String]) {
         self.character = character
         var dictionary = [String: [String]]()
         for string in array {
-            if count(string) > 0 {
+            if string.characters.count > 0 {
                 let firstCharacter = String(string[string.startIndex ... string.startIndex])
                 let remainingString = string[string.startIndex.successor() ..< string.endIndex]
                 if var array = dictionary[firstCharacter] {
@@ -71,12 +74,12 @@ private struct Branch: Node, Printable {
     
     var pattern: String {
     var array = children.map { $0.pattern }
-    array.sort { count($0) < count($1) }
+    array.sortInPlace { $0.characters.count < $1.characters.count }
         
     switch array.count {
         case 0: return character + ""
         case 1: return character + array[0]
-        default: return character + "(?:" + join("|", array) + ")"
+        default: return character + "(?:" + "|".join(array) + ")"
     }
     }
     
