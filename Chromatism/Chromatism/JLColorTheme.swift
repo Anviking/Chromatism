@@ -61,19 +61,17 @@ public enum JLColorTheme {
         .ProjectClassNames:            UIColorRGB(131, g: 192, b: 87),
         .ProjectConstants:             UIColorRGB(131, g: 192, b: 87),
         .ProjectProperties:            UIColorRGB(131, g: 192, b: 87)
-
+        
     ]
     
     var dictionary: [JLTokenType: UIColor] {
-    switch self {
-    case .Default:
-        return JLColorTheme.defaultTheme
-    case .Dusk:
-        return JLColorTheme.duskTheme
-    case .Other(let dictionary):
-        return dictionary
-    default:
-        break
+        switch self {
+        case .Default:
+            return JLColorTheme.defaultTheme
+        case .Dusk:
+            return JLColorTheme.duskTheme
+        case .Other(let dictionary):
+            return dictionary
         }
     }
 }

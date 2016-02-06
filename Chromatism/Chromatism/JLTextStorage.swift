@@ -26,7 +26,7 @@ public class JLTextStorage: NSTextStorage {
     
     public override func processEditing() {
         if let range = editedLineRange {
-            let layoutManager = layoutManagers[0] as NSLayoutManager
+            // let layoutManager = layoutManagers[0] as NSLayoutManager
             //println("Non Contigigous Layout: \(layoutManager.hasNonContiguousLayout)")
             let editedLineIndexSet = NSIndexSet(indexesInRange: range)
             documentScope.perform(editedLineIndexSet)
@@ -56,12 +56,11 @@ public class JLTextStorage: NSTextStorage {
         documentScope.shiftIndexesAtLoaction(range.end, by: delta)
     }
     
-    override var attributes: [NSObject: AnyObject] {
-        
-    }
     
-    public func setAttributes(attrs: [NSObject : AnyObject]!, range: NSRange) {
+    
+    public override func setAttributes(attrs: [String : AnyObject]?, range: NSRange) {
         backingStore.setAttributes(attrs, range: range)
         edited(.EditedAttributes, range: range, changeInLength: 0)
     }
+
 }

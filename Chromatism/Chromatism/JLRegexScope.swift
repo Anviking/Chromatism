@@ -36,7 +36,7 @@ public class JLRegexScope: JLScope {
     override func perform(parentIndexSet: NSIndexSet) {
         parentIndexSet.enumerateRangesUsingBlock({ (range, stop) in
             self.regularExpression.enumerateMatchesInString(self.attributedString.string, options: [], range: range, usingBlock: {(result, flags, stop) in
-                    self.process(result, attributedString: self.attributedString)
+                    self.process(result!, attributedString: self.attributedString)
                 })
             })
         

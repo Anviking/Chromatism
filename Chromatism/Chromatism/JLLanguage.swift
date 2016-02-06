@@ -13,30 +13,29 @@ public enum JLLanguageType {
     
     
     /**
-    Warning: Will probably be changed in the future to take arguments
-    
-    - returns: A functional JLLanguage object.
-    */
+     Warning: Will probably be changed in the future to take arguments
+     
+     - returns: A functional JLLanguage object.
+     */
     func language() -> JLLanguage {
         switch self {
         case C:                     return JLLanguage.C()
         case ObjectiveC:            return JLLanguage.ObjectiveC()
         case Swift:                 return JLLanguage.Swift()
         case Other(let language):   return language
-        default:                    return JLLanguage()
         }
     }
     
     /* Does not appear to be working yet
-    var languageClass: JLLanguage.Type {
-    switch self {
-    case C:                     return JLLanguage.C.self
-    case ObjectiveC:            return JLLanguage.ObjectiveC.self
-    case Other(let language):   return language
-    default:                    return JLLanguage.self
-    }
-    }
-    */
+     var languageClass: JLLanguage.Type {
+     switch self {
+     case C:                     return JLLanguage.C.self
+     case ObjectiveC:            return JLLanguage.ObjectiveC.self
+     case Other(let language):   return language
+     default:                    return JLLanguage.self
+     }
+     }
+     */
 }
 
 public class JLLanguage {
@@ -139,7 +138,7 @@ public class JLLanguage {
         var interpolation = JLRegexScope(pattern: "(?<=\\\\\\().*?(?=\\))", tokenTypes: .Text)
         
         
-      required   public init() {
+        required   public init() {
             
             super.init()
             documentScope[

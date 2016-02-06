@@ -74,13 +74,13 @@ public class JLTokenizingScope: JLScope {
         
         // Find Matches
         var array = [TokenResult]()
-        var foundTokenIndexes = NSMutableIndexSet()
+        let foundTokenIndexes = NSMutableIndexSet()
         indexSet.enumerateRangesUsingBlock { (range, _) in
             for token in self.tokens {
                 token.expression.enumerateMatchesInString(self.attributedString.string, options: [], range: range, usingBlock: { (result, _, _) in
-                    if !foundTokenIndexes.containsAnyIndexesInRange(result.range) {
-                        array.append(TokenResult(result: result, token: token))
-                        foundTokenIndexes.addIndexesInRange(result.range)
+                    if !foundTokenIndexes.containsAnyIndexesInRange(result!.range) {
+                        array.append(TokenResult(result: result!, token: token))
+                        foundTokenIndexes.addIndexesInRange(result!.range)
                     }
                     })
             }
@@ -104,7 +104,7 @@ public class JLTokenizingScope: JLScope {
     
     override func shiftIndexesAtLoaction(location: Int, by delta: Int) {
         
-        for (index, token) in Array(matches.reverse()).enumerate() {
+        for (_, token) in Array(matches.reverse()).enumerate() {
             if token.range.location < location { break }
             token.shiftRanges(delta)
         }
@@ -128,7 +128,7 @@ public class JLTokenizingScope: JLScope {
             var i = 0
             while i < result.numberOfRanges {
                 ranges.append(result.rangeAtIndex(i))
-                i++
+                i += 1
             }
         }
         

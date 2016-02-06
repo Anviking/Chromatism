@@ -23,7 +23,7 @@ public class JLTextView: UITextView {
         self.language = language.language()
         self.theme = theme
 
-        let frame = CGRect.zeroRect
+        let frame = CGRect.zero
         _textStorage = JLTextStorage(documentScope: self.language.documentScope)
         self.language.documentScope.theme = theme
         let layoutManager = NSLayoutManager()

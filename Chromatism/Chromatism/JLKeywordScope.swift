@@ -79,7 +79,7 @@ private struct Branch: Node, CustomStringConvertible {
     switch array.count {
         case 0: return character + ""
         case 1: return character + array[0]
-        default: return character + "(?:" + "|".join(array) + ")"
+        default: return character + "(?:" + array.joinWithSeparator("|") + ")"
     }
     }
     
