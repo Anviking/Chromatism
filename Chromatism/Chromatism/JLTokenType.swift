@@ -9,26 +9,26 @@
 import UIKit
 
 public enum JLTokenType {
-    case None
-    case Text
-    case Background
-    case Comment
-    case DocumentationComment
-    case DocumentationCommentKeyword
-    case String
-    case Character
-    case Number
-    case Keyword
-    case Preprocessor
-    case URL
-    case Attribute
-    case Project
-    case OtherMethodNames
-    case OtherProperties
-    case OtherConstants
-    case OtherClassNames
-    case ProjectMethodNames
-    case ProjectProperties
-    case ProjectConstants
-    case ProjectClassNames
+    case none
+    case text
+    case background
+    case comment
+    case documentationComment
+    case documentationCommentKeyword
+    case string
+    case character
+    case number
+    case keyword
+    case preprocessor
+    case url
+    case attribute
+    case project
+    case otherMethodNames
+    case otherProperties
+    case otherConstants
+    case otherClassNames
+    case projectMethodNames
+    case projectProperties
+    case projectConstants
+    case projectClassNames
 }

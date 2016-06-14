@@ -11,7 +11,7 @@ import XCTest
 
 class ObjectiveC: XCTestCase {
     
-    let string = NSString(contentsOfURL: NSBundle(forClass: ObjectiveC.self).URLForResource("demo", withExtension: "txt")!, encoding: NSUTF8StringEncoding, error: nil) as! String
+    let string = String(contentsOfURL: Bundle(for: ObjectiveC.self).urlForResource("demo", withExtension: "txt")!, encoding: String.Encoding.utf8)
     
     var attributedString: NSMutableAttributedString!
     var language: JLLanguage.ObjectiveC!
@@ -21,71 +21,71 @@ class ObjectiveC: XCTestCase {
         attributedString = NSMutableAttributedString(string: string)
         language = JLLanguage.ObjectiveC()
         language.documentScope.cascadeAttributedString(attributedString)
-        language.documentScope.theme = .Default
+        language.documentScope.theme = .default
     }
     
     func testEverything() {
-        measureBlock {
+        measure {
             self.language.documentScope.perform()
         }
     }
     
     func testSquareBrackets() {
-        measureBlock {
+        measure {
             self.language.squareBrackets.perform()
         }
     }
     
     func testBlockComments() {
-        measureBlock {
+        measure {
             self.language.blockComments.perform()
         }
     }
     
     func testLineComments() {
-        measureBlock {
+        measure {
             self.language.lineComments.perform()
         }
     }
     
     func testPreprocessor() {
-        measureBlock {
+        measure {
             self.language.preprocessor.perform()
         }
     }
     
     func testStrings() {
-        measureBlock {
+        measure {
             self.language.strings.perform()
         }
     }
     
     func testNumbers() {
-        measureBlock {
+        measure {
             self.language.numbers.perform()
         }
     }
     
     func testFunctions() {
-        measureBlock {
+        measure {
             self.language.functions.perform()
         }
     }
     
     func testKeywords() {
-        measureBlock {
+        measure {
             self.language.keywords.perform()
         }
     }
     
     func testDotNotation() {
-        measureBlock {
+        measure {
             self.language.dotNotation.perform()
         }
     }
     
     func testObjectiveCKeywords() {
-        measureBlock {
+        measure {
             self.language.objcKeywords.perform()
         }
     }

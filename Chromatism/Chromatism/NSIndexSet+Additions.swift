@@ -8,19 +8,7 @@
 
 import UIKit
 
-extension NSIndexSet {
-    func intersectionWithSet(set: NSIndexSet) -> NSMutableIndexSet {
-        let finalSet = NSMutableIndexSet()
-        self.enumerateIndexesUsingBlock({ (index, stop) in
-            if set.containsIndex(index) {
-                finalSet.addIndex(index)
-            }
-            })
-        return finalSet
-    }
-}
-
-func NSIndexSetDelta(oldSet: NSIndexSet, newSet: NSIndexSet) -> (additions: NSMutableIndexSet, deletions: NSMutableIndexSet) {
+func NSIndexSetDelta(_ oldSet: IndexSet, newSet: IndexSet) -> (additions: IndexSet, deletions: IndexSet) {
     // Old: ABC
     // ∆(-)  B
     // ∆(+)    D
@@ -35,32 +23,36 @@ func NSIndexSetDelta(oldSet: NSIndexSet, newSet: NSIndexSet) -> (additions: NSMu
     return (additions, deletions)
 }
 
-func -(left: NSIndexSet, right: NSIndexSet) -> NSMutableIndexSet {
-    let indexSet = left.mutableCopy() as! NSMutableIndexSet
-    indexSet.removeIndexes(right)
+func -(left: IndexSet, right: IndexSet) -> IndexSet {
+    var indexSet = left
+    for range in right.rangeView() {
+        indexSet.remove(integersIn: Range(range))
+    }
     return indexSet
 }
 
-func +(left: NSIndexSet, right: NSIndexSet) -> NSMutableIndexSet {
-    let indexSet = left.mutableCopy() as! NSMutableIndexSet
-    indexSet.addIndexes(right)
+func +(left: IndexSet, right: IndexSet) -> IndexSet {
+    var indexSet = left
+    for range in right.rangeView() {
+        indexSet.insert(integersIn: Range(range))
+    }
     return indexSet
 }
 
-func -=(left: NSMutableIndexSet, right: NSIndexSet) {
-    left.removeIndexes(right)
+func -=(left: inout IndexSet, right: IndexSet) {
+    left = left - right
 }
 
-func +=(left: NSMutableIndexSet, right: NSIndexSet) {
-    left.addIndexes(right)
+func +=(left: inout IndexSet, right: IndexSet) {
+    left = left + right
 }
 
-func -=(left: NSMutableIndexSet, right: NSRange) {
-    left.removeIndexesInRange(right)
+func -=(left: inout IndexSet, right: Range<Int>) {
+    left.remove(integersIn: right)
 }
 
-func +=(left: NSMutableIndexSet, right: NSRange) {
-    left.addIndexesInRange(right)
+func +=(left: inout IndexSet, right: Range<Int>) {
+    left.insert(integersIn: right)
 }
 
 extension NSRange {

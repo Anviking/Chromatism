@@ -9,7 +9,7 @@
 import UIKit
 
 protocol JLNestedScopeDelegate {
-    func nestedScopeDidPerform(scope: JLNestedScope, additions: NSIndexSet)
+    func nestedScopeDidPerform(_ scope: JLNestedScope, additions: IndexSet)
 }
 
 public class JLNestedScope: JLScope {
@@ -28,10 +28,10 @@ public class JLNestedScope: JLScope {
         multiline = true
     }
     
-    private var oldIndexSet = NSMutableIndexSet()
+    private var oldIndexSet = IndexSet()
     
-    func perform(indexSet: NSIndexSet, tokens: [JLTokenizingScope.TokenResult]) {
-        let newIndexSet = NSMutableIndexSet()
+    func perform(_ indexSet: IndexSet, tokens: [JLTokenizingScope.TokenResult]) {
+        var newIndexSet = IndexSet()
         
         var incrementingTokens = Dictionary<Int, JLTokenizingScope.TokenResult>()
         var depth = 0
@@ -43,7 +43,7 @@ public class JLNestedScope: JLScope {
                 let decrementingToken = result
                 if incrementingTokenIsValid(incrementingToken) && decrementingTokenIsValid(decrementingToken) {
                     let indexes = indexesForTokens(incrementingToken, decrementingToken: decrementingToken, hollow: hollow)
-                    if indexes.lastIndex < attributedString.length {
+                    if indexes.last < attributedString.length {
                         newIndexSet += indexes
                     }
                 }
@@ -54,7 +54,7 @@ public class JLNestedScope: JLScope {
         // We only need update attributes in indexes that just was added
         // And in indexes that has been reset by the document scope
         let additions = NSIndexSetDelta(oldIndexSet, newSet: newIndexSet).additions
-        let intersection = indexSet.intersectionWithSet(newIndexSet)
+        let intersection = indexSet.intersection(newIndexSet)
         setAttributesInIndexSet(intersection + additions)
         
         //println("\(incrementingToken.expression.pattern) - Additions: \(additions)")
@@ -64,44 +64,44 @@ public class JLNestedScope: JLScope {
         print("Intersection: \(intersection)")
         
         self.indexSet = newIndexSet
-        oldIndexSet = newIndexSet.mutableCopy() as! NSMutableIndexSet
+        oldIndexSet = newIndexSet
     }
     
-    func incrementingTokenIsValid(token: JLTokenizingScope.TokenResult) -> Bool {
+    func incrementingTokenIsValid(_ token: JLTokenizingScope.TokenResult) -> Bool {
         return token.token === self.incrementingToken
     }
     
-    func decrementingTokenIsValid(token: JLTokenizingScope.TokenResult) -> Bool {
+    func decrementingTokenIsValid(_ token: JLTokenizingScope.TokenResult) -> Bool {
         return token.token === self.decrementingToken
     }
     
-    private func setAttributesInIndexSet(indexSet: NSIndexSet) {
-        indexSet.enumerateRangesUsingBlock { (range, stop) in
+    private func setAttributesInIndexSet(_ indexSet: IndexSet) {
+        for range in indexSet.rangeView() {
             if let color = self.theme?[self.tokenType] {
-                self.attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+                self.attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: NSRange(Range(range)))
             }
         }
     }
     
-    override func invalidateAttributesInIndexes(indexSet: NSIndexSet) {
+    override func invalidateAttributesInIndexes(_ indexSet: IndexSet) {
         self.indexSet -= indexSet
     }
     
-    override func shiftIndexesAtLoaction(location: Int, by delta: Int) {
-        oldIndexSet.shiftIndexesStartingAtIndex(location, by: delta)
-        indexSet.shiftIndexesStartingAtIndex(location, by: delta)
+    override func shiftIndexesAtLoaction(_ location: Int, by delta: Int) {
+        oldIndexSet.shift(startingAt: location, by: delta)
+        indexSet.shift(startingAt: location, by: delta)
     }
     
     
-    func indexesForTokens(incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult, hollow: Bool) -> NSIndexSet {
-        let indexSet = NSMutableIndexSet()
+    func indexesForTokens(_ incrementingToken: JLTokenizingScope.TokenResult, decrementingToken: JLTokenizingScope.TokenResult, hollow: Bool) -> IndexSet {
+        var indexSet = IndexSet()
         if hollow {
-            indexSet += incrementingToken.range
-            indexSet += decrementingToken.range
+            indexSet.insert(integersIn: incrementingToken.range.toRange()!)
+            indexSet.insert(integersIn: decrementingToken.range.toRange()!)
         } else {
-            indexSet += NSRange(incrementingToken.range.start ..< decrementingToken.range.end)
+            indexSet += (incrementingToken.range.start ..< decrementingToken.range.end)
         }
-        return indexSet
+        return indexSet as IndexSet
     }
 }
 

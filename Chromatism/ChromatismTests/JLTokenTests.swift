@@ -12,6 +12,6 @@ import XCTest
 class JLTokenTests: XCTestCase {
     
     var attributedString = "//Hello World!\nHello".text
-    let commentColor = JLColorTheme.Default.dictionary[.Comment]!
-    let worldColor = JLColorTheme.Default.dictionary[.Keyword]!
+    let commentColor = JLColorTheme.default.dictionary[.comment]!
+    let worldColor = JLColorTheme.default.dictionary[.keyword]!
 }

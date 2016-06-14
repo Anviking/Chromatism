@@ -13,7 +13,7 @@ public class JLTextView: UITextView {
     public var language: JLLanguage
     public var theme: JLColorTheme {
     didSet {
-        backgroundColor = theme[.Background]
+        backgroundColor = theme[.background]
         language.documentScope.theme = theme
     }}
     
@@ -34,7 +34,7 @@ public class JLTextView: UITextView {
         super.init(frame: frame, textContainer: textContainer)
         
         self.language.documentScope.cascade { $0.delegate = self }
-        backgroundColor = theme[JLTokenType.Background]
+        backgroundColor = theme[JLTokenType.background]
         font = UIFont(name: "Menlo-Regular", size: 15)
 //        layoutManager.allowsNonContiguousLayout = true
     }
@@ -45,14 +45,14 @@ public class JLTextView: UITextView {
     
     // MARK: Override UITextView
 
-    override public var attributedText: NSAttributedString! {
+    override public var attributedText: AttributedString! {
     didSet {
 
     }
     }
     
     func updateTypingAttributes() {
-        let color = theme[JLTokenType.Text]!
+        let color = theme[JLTokenType.text]!
         var dictionary: [String: AnyObject] = [NSForegroundColorAttributeName: color]
         if let font = font {
             dictionary[NSFontAttributeName] = font
@@ -64,7 +64,7 @@ public class JLTextView: UITextView {
     override public var text: String! {
     didSet {
         updateTypingAttributes()
-        attributedText = NSAttributedString(string: text, attributes: typingAttributes)
+        attributedText = AttributedString(string: text, attributes: typingAttributes)
     }
     }
     
@@ -84,12 +84,11 @@ public class JLTextView: UITextView {
 // MARK: JLScopeDelegate
 
 extension JLTextView: JLNestedScopeDelegate {
-    func nestedScopeDidPerform(scope: JLNestedScope, additions: NSIndexSet) {
-        dispatch_async(dispatch_get_main_queue(), {
-            additions.enumerateRangesUsingBlock { (range, stop) in
-                
-                let range = self.textRange(range.start ..< range.end)
-                let array = self.selectionRectsForRange(range!) as! [UITextSelectionRect]
+    func nestedScopeDidPerform(_ scope: JLNestedScope, additions: IndexSet) {
+        DispatchQueue.main.async(execute: {
+            for range in additions.rangeView() {
+                let range = self.textRange(Range(range))
+                let array = self.selectionRects(for: range!) as! [UITextSelectionRect]
                 for value in array {
                     self.flash(value.rect, color: UIColor(white: 0.0, alpha: 0.1))
                 }
@@ -97,22 +96,22 @@ extension JLTextView: JLNestedScopeDelegate {
             })
     }
     
-    func flash(rect: CGRect, color: UIColor) {
+    func flash(_ rect: CGRect, color: UIColor) {
         let view = UIView(frame: rect)
-        view.backgroundColor = UIColor.clearColor()
+        view.backgroundColor = UIColor.clear()
         self.addSubview(view)
         
         let duration = 0.2
 
         
-        let gone = CGAffineTransformMakeScale(0, 0)
-        let visible = CGAffineTransformMakeScale(1, 1)
+        let gone = CGAffineTransform(scaleX: 0, y: 0)
+        let visible = CGAffineTransform(scaleX: 1, y: 1)
         
         view.transform = gone
         
         // Its ok for this to be hacky for now
         view.animateToColor(color, transform: visible, duration: duration, completion: {
-            view.animateToColor(UIColor.clearColor(), transform: gone, duration: duration, completion: {
+            view.animateToColor(UIColor.clear(), transform: gone, duration: duration, completion: {
                 view.removeFromSuperview()
                 })
             })
@@ -120,8 +119,8 @@ extension JLTextView: JLNestedScopeDelegate {
 }
 
 private extension UIView {
-    func animateToColor(color: UIColor, transform: CGAffineTransform, duration: Double, completion: () -> Void) {
-        UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.3, options: [], animations: {
+    func animateToColor(_ color: UIColor, transform: CGAffineTransform, duration: Double, completion: () -> Void) {
+        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.3, options: [], animations: {
             self.backgroundColor = color
             self.transform = transform
             }, completion: { _ in
@@ -131,16 +130,16 @@ private extension UIView {
 }
 
 private extension UITextView {
-    func textRange(range: Range<Int>) -> UITextRange? {
+    func textRange(_ range: Range<Int>) -> UITextRange? {
         let beginning = beginningOfDocument
         
-        guard let start = positionFromPosition(beginning, offset: range.startIndex) else {
+        guard let start = position(from: beginning, offset: range.lowerBound) else {
             return nil
         }
-        guard let end = positionFromPosition(beginning, offset: range.endIndex) else {
+        guard let end = position(from: beginning, offset: range.upperBound) else {
             return nil
         }
         
-        return textRangeFromPosition(start, toPosition: end)
+        return self.textRange(from: start, to: end)
     }
 }

@@ -14,35 +14,36 @@ public class JLDocumentScope: JLScope {
         super.init()
     }
     
-    override func perform(indexSet: NSIndexSet)  {
-        indexSet.enumerateRangesUsingBlock({(range, stop) in
-            if let color = self.theme?[.Text] {
-                self.attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+    override public func perform(_ indexSet: inout IndexSet)  {
+        for range in indexSet.rangeView() {
+            if let color = self.theme?[.text] {
+                self.attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: NSRange(Range(range)))
             }
-            })
-        super.perform(indexSet)
+        }
+        
+        super.perform(&indexSet)
     }
     
-    func cascadeAttributedString(attributedString: NSMutableAttributedString) {
+    func cascadeAttributedString(_ attributedString: NSMutableAttributedString) {
         self.attributedString = attributedString
         cascade { $0.attributedString = attributedString }
     }
 
-    override func invalidateAttributesInIndexes(indexSet: NSIndexSet) {
+    override func invalidateAttributesInIndexes(_ indexSet: IndexSet) {
         cascade { $0.invalidateAttributesInIndexes(indexSet) }
     }
     
-    override func shiftIndexesAtLoaction(location: Int, by delta: Int) {
+    override func shiftIndexesAtLoaction(_ location: Int, by delta: Int) {
         cascade { $0.shiftIndexesAtLoaction(location, by: delta) }
     }
     
-    func cascade(block: (scope: JLScope) -> Void) {
+    func cascade(_ block: (scope: JLScope) -> Void) {
         for scope in subscopes {
             cascade(block, scope: scope)
         }
     }
     
-    private func cascade(block: (scope: JLScope) -> Void, scope: JLScope) {
+    private func cascade(_ block: (scope: JLScope) -> Void, scope: JLScope) {
         block(scope: scope)
         for subscope in scope.subscopes {
             cascade(block, scope: subscope)

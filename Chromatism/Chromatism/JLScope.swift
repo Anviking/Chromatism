@@ -24,56 +24,57 @@ public class JLScope: NSObject {
     var theme: JLColorTheme?
     var delegate: JLNestedScopeDelegate?
 
-    var indexSet = NSMutableIndexSet()
+    var indexSet = IndexSet()
     var subscopes = [JLScope]()
     
-    func addSubscope(subscope: JLScope) {
+    func addSubscope(_ subscope: JLScope) {
         subscopes.append(subscope)
     }
     
     func perform() {
-        perform(NSIndexSet(indexesInRange: NSMakeRange(0, attributedString.length)))
+        var set = IndexSet(integersIn: NSMakeRange(0, attributedString.length).toRange()!)
+        perform(&set)
     }
     
-    func perform(indexSet: NSIndexSet) {
+    func perform(_ indexSet: inout IndexSet) {
 
         // Create a copy of the indexSet and call perform to subscopes
         // The results of the subscope is removed from the indexSet copy before the next subscope is performed
-        let indexSetCopy = indexSet.mutableCopy() as! NSMutableIndexSet
-        performSubscopes(attributedString, indexSet: indexSetCopy)
-        self.indexSet = indexSet.mutableCopy() as! NSMutableIndexSet
+        self.indexSet = indexSet
+        performSubscopes(attributedString, indexSet: indexSet)
+        
     }
     
     // Will change indexSet
-    func performSubscopes(attributedString: NSMutableAttributedString, indexSet: NSMutableIndexSet) {
-        
-        let deletions = NSMutableIndexSet()
+    func performSubscopes(_ attributedString: NSMutableAttributedString, indexSet: IndexSet) {
+        var indexSet = indexSet
+        var deletions = IndexSet()
         for scope in subscopes {
             scope.theme = theme
             
             let oldSet = scope.indexSet
             scope.invalidateAttributesInIndexes(indexSet)
-            scope.perform(indexSet)
+            scope.perform(&indexSet)
             let newSet = scope.indexSet
-            
             indexSet -= newSet
             if scope.multiline {
                 deletions += NSIndexSetDelta(oldSet, newSet: newSet).deletions
             }
         }
         if deletions.count > 0 {
-            perform(deletions + indexSet)
+            var a = deletions + indexSet
+            perform(&a)
         }
     }
     
     // MARK:
     
-    func invalidateAttributesInIndexes(indexSet: NSIndexSet) {
+    func invalidateAttributesInIndexes(_ indexSet: IndexSet) {
 
     }
     
-    func shiftIndexesAtLoaction(location: Int, by delta: Int) {
-        indexSet.shiftIndexesStartingAtIndex(location, by: delta)
+    func shiftIndexesAtLoaction(_ location: Int, by delta: Int) {
+        indexSet.shift(startingAt: location, by: delta)
     }
     
     // MARK: Printable

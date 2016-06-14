@@ -9,12 +9,12 @@
 import UIKit
 import XCTest
 
-let ChromatismTestsDefaultTheme = JLColorTheme.Default
+let ChromatismTestsDefaultTheme = JLColorTheme.default
 
 class JLScopeTests: XCTestCase {
     
-    let blue = UIColor.blueColor()
-    let green = UIColor.greenColor()
+    let blue = UIColor.blue()
+    let green = UIColor.green()
     
     override func setUp() {
         super.setUp()
@@ -53,7 +53,7 @@ class JLScopeTests: XCTestCase {
 
     func testPerformanceExample() {
         // This is an example of a performance test case.
-        self.measureBlock() {
+        self.measure() {
             // Put the code you want to measure the time of here.
         }
     }
@@ -62,18 +62,18 @@ class JLScopeTests: XCTestCase {
 
 extension String {
     // I'm lazy
-    var comment: NSMutableAttributedString { return attributedStringWithTokenType(.Comment) }
-    var text: NSMutableAttributedString { return attributedStringWithTokenType(.Text) }
-    var keyword: NSMutableAttributedString { return attributedStringWithTokenType(.Keyword) }
+    var comment: NSMutableAttributedString { return attributedStringWithTokenType(.comment) }
+    var text: NSMutableAttributedString { return attributedStringWithTokenType(.text) }
+    var keyword: NSMutableAttributedString { return attributedStringWithTokenType(.keyword) }
     
-    func attributedStringWithTokenType(token: JLTokenType) -> NSMutableAttributedString {
-        let colors = JLColorTheme.Default.dictionary
+    func attributedStringWithTokenType(_ token: JLTokenType) -> NSMutableAttributedString {
+        let colors = JLColorTheme.default.dictionary
         return NSMutableAttributedString(string: self, attributes: [NSForegroundColorAttributeName:colors[token]! ])
     }
 }
 
- func + (left: NSAttributedString, right: NSAttributedString) -> NSMutableAttributedString {
+ func + (left: AttributedString, right: AttributedString) -> NSMutableAttributedString {
     let string = left.mutableCopy() as! NSMutableAttributedString
-    string.appendAttributedString(right)
+    string.append(right)
     return string
 }

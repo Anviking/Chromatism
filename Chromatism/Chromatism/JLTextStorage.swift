@@ -28,8 +28,8 @@ public class JLTextStorage: NSTextStorage {
         if let range = editedLineRange {
             // let layoutManager = layoutManagers[0] as NSLayoutManager
             //println("Non Contigigous Layout: \(layoutManager.hasNonContiguousLayout)")
-            let editedLineIndexSet = NSIndexSet(indexesInRange: range)
-            documentScope.perform(editedLineIndexSet)
+            var editedLineIndexSet = IndexSet(integersIn: range.toRange() ?? 0..<0)
+            documentScope.perform(&editedLineIndexSet)
             editedLineRange = nil
         }
         super.processEditing()
@@ -42,25 +42,25 @@ public class JLTextStorage: NSTextStorage {
     
     public override var string: String { return backingStore.string }
     
-    public override func attributesAtIndex(location: Int, effectiveRange range: NSRangePointer) -> [String: AnyObject] {
-        return backingStore.attributesAtIndex(location, effectiveRange: range)
+    public override func attributes(at location: Int, effectiveRange range: NSRangePointer?) -> [String: AnyObject] {
+        return backingStore.attributes(at: location, effectiveRange: range)
     }
     
-    public override func replaceCharactersInRange(range: NSRange, withString str: String) {
-        let actions: NSTextStorageEditActions = [NSTextStorageEditActions.EditedCharacters, NSTextStorageEditActions.EditedAttributes]
+    public override func replaceCharacters(in range: NSRange, with str: String) {
+        let actions: NSTextStorageEditActions = [NSTextStorageEditActions.editedCharacters, NSTextStorageEditActions.editedAttributes]
         let delta = str.utf16.count - range.length
         edited(actions, range: range, changeInLength: delta)
-        backingStore.replaceCharactersInRange(range, withString: str)
-        editedLineRange = (string as NSString).lineRangeForRange(editedRange)
-        documentScope.invalidateAttributesInIndexes(NSIndexSet(indexesInRange: range))
+        backingStore.replaceCharacters(in: range, with: str)
+        editedLineRange = (string as NSString).lineRange(for: editedRange)
+        documentScope.invalidateAttributesInIndexes(IndexSet(integersIn: range.toRange() ?? 0..<0))
         documentScope.shiftIndexesAtLoaction(range.end, by: delta)
     }
     
     
     
-    public override func setAttributes(attrs: [String : AnyObject]?, range: NSRange) {
+    public override func setAttributes(_ attrs: [String : AnyObject]?, range: NSRange) {
         backingStore.setAttributes(attrs, range: range)
-        edited(.EditedAttributes, range: range, changeInLength: 0)
+        edited(.editedAttributes, range: range, changeInLength: 0)
     }
 
 }
