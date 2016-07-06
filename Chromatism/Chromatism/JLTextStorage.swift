@@ -8,59 +8,87 @@
 
 import UIKit
 
-public class JLTextStorage: NSTextStorage {
+public class JLTextStorageDelegate: NSObject, NSTextStorageDelegate {
     
     public var documentScope: JLDocumentScope
+    public var textView: UITextView
     
-    init(documentScope: JLDocumentScope) {
-        self.documentScope = documentScope
+    public var language: Language
+    public var theme: ColorTheme {
+        didSet {
+            textView.backgroundColor = theme[.background]
+            language.documentScope.theme = theme
+        }}
+    
+    public init(managing textView: UITextView, language: LanguageType, theme: ColorTheme) {
+        let lang = language.language()
+        self.textView = textView
+        self.language = lang
+        self.documentScope = lang.documentScope
+        self.theme = theme
+        self.documentScope.cascadeAttributedString(textView.textStorage)
+        
         super.init()
-        self.documentScope.cascadeAttributedString(self)
-    }
-
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        textView.textStorage.delegate = self
+        documentScope.perform()
     }
     
-    // MARK: Syntax Highlighting
-    
-    public override func processEditing() {
-        if let range = editedLineRange {
-            // let layoutManager = layoutManagers[0] as NSLayoutManager
-            //println("Non Contigigous Layout: \(layoutManager.hasNonContiguousLayout)")
-            let editedLineIndexSet = NSIndexSet(indexesInRange: range)
-            documentScope.perform(editedLineIndexSet)
-            editedLineRange = nil
-        }
-        super.processEditing()
+    public func update() {
+        documentScope.perform()
     }
     
     // MARK: Text Storage Backing
     
-    private var backingStore = NSMutableAttributedString()
     private var editedLineRange: NSRange?
     
-    public override var string: String { return backingStore.string }
-    
-    public override func attributesAtIndex(location: Int, effectiveRange range: NSRangePointer) -> [String: AnyObject] {
-        return backingStore.attributesAtIndex(location, effectiveRange: range)
+    public func textStorage(_ textStorage: NSTextStorage, willProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
+        
+        /*
+        if editedMask.contains(.editedCharacters) {
+            editedLineRange = (textStorage.string as NSString).lineRange(for: editedRange)
+            documentScope.invalidateAttributesInIndexes(IndexSet(integersIn: editedRange.toRange() ?? 0..<0))
+            documentScope.shiftIndexesAtLoaction(editedRange.end, by: delta)
+        }*/
+        
+        if let range = editedLineRange {
+            // let layoutManager = layoutManagers[0] as NSLayoutManager
+            //println("Non Contigigous Layout: \(layoutManager.hasNonContiguousLayout)")
+            var editedLineIndexSet = IndexSet(integersIn: range.toRange() ?? 0..<0)
+            documentScope.perform(&editedLineIndexSet)
+            editedLineRange = nil
+        }
     }
     
-    public override func replaceCharactersInRange(range: NSRange, withString str: String) {
-        let actions: NSTextStorageEditActions = [NSTextStorageEditActions.EditedCharacters, NSTextStorageEditActions.EditedAttributes]
-        let delta = str.utf16.count - range.length
-        edited(actions, range: range, changeInLength: delta)
-        backingStore.replaceCharactersInRange(range, withString: str)
-        editedLineRange = (string as NSString).lineRangeForRange(editedRange)
-        documentScope.invalidateAttributesInIndexes(NSIndexSet(indexesInRange: range))
-        documentScope.shiftIndexesAtLoaction(range.end, by: delta)
+    //
+    
+    func updateTypingAttributes() {
+        let color = theme[JLTokenType.text]!
+        var dictionary: [String: AnyObject] = [NSForegroundColorAttributeName: color]
+        if let font = font {
+            dictionary[NSFontAttributeName] = font
+        }
+        
+        textView.typingAttributes = dictionary
     }
     
+    public var text: String! {
+        didSet {
+            updateTypingAttributes()
+            textView.attributedText = AttributedString(string: text, attributes: textView.typingAttributes)
+            update()
+        }
+    }
     
+    public var textColor: UIColor? {
+        didSet {
+            updateTypingAttributes()
+        }
+    }
     
-    public override func setAttributes(attrs: [String : AnyObject]?, range: NSRange) {
-        backingStore.setAttributes(attrs, range: range)
-        edited(.EditedAttributes, range: range, changeInLength: 0)
+    public var font: UIFont? {
+        didSet {
+            updateTypingAttributes()
+        }
     }
 
 }

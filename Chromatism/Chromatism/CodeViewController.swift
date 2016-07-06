@@ -8,13 +8,16 @@
 
 import UIKit
 
-public class JLTextViewController: UIViewController {
+public class CodeViewController: UIViewController {
     
-    public var textView: JLTextView
-    
-    public required init(text: String, language: JLLanguageType, theme: JLColorTheme) {
-        textView = JLTextView(language: language, theme: theme)
+    public var textView: UITextView
+    private let delegate: JLTextStorageDelegate
+    public required init(text: String, language: LanguageType, theme: ColorTheme) {
+        
+        let textView = UITextView()
+        self.textView = textView
         textView.text = text
+        delegate = JLTextStorageDelegate(managing: textView, language: language, theme: theme)
         super.init(nibName: nil, bundle: nil)
         registerForKeyboardNotifications()
     }
@@ -35,20 +38,20 @@ public class JLTextViewController: UIViewController {
     
     func registerForKeyboardNotifications()
     {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func unregisterForKeyboardNotifications() {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     // Called when the UIKeyboardDidShowNotification is sent.
-    func keyboardWasShown(notification: NSNotification) {
+    func keyboardWasShown(_ notification: Notification) {
         // FIXME: ! could be wrong
-        let info = notification.userInfo!
+        let info = (notification as NSNotification).userInfo!
         let scrollView = self.textView
-        let kbSize = (info[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue().size;
+        let kbSize = (info[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue().size;
         
         var contentInsets = scrollView.contentInset;
         contentInsets.bottom = kbSize.height;
@@ -56,14 +59,14 @@ public class JLTextViewController: UIViewController {
         scrollView.scrollIndicatorInsets = contentInsets;
         
         // FIXME: ! could be wrong
-        var point = textView.caretRectForPosition(textView.selectedTextRange!.start).origin;
+        var point = textView.caretRect(for: textView.selectedTextRange!.start).origin;
         point.y = min(point.y, self.textView.frame.size.height - kbSize.height);
         
         var aRect = self.view.frame;
         aRect.size.height -= kbSize.height;
-        if (!CGRectContainsPoint(aRect, point) ) {
+        if (!aRect.contains(point) ) {
             
-            var rect = CGRectMake(point.x, point.y, 1, 1)
+            var rect = CGRect(x: point.x, y: point.y, width: 1, height: 1)
             rect.size.height = kbSize.height
             rect.origin.y += kbSize.height
             textView.scrollRectToVisible(rect, animated: true)
@@ -71,7 +74,7 @@ public class JLTextViewController: UIViewController {
     }
     
     // Called when the UIKeyboardWillHideNotification is sent
-    func keyboardWillBeHidden(notification: NSNotification) {
+    func keyboardWillBeHidden(_ notification: Notification) {
         var contentInsets = textView.contentInset;
         contentInsets.bottom = 0;
         textView.contentInset = contentInsets;

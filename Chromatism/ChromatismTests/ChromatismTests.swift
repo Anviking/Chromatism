@@ -25,26 +25,5 @@ class ChromatismTests: XCTestCase {
         // This is an example of a functional test case.
         XCTAssert(true, "Pass")
     }
-    
-    func testIndexSetIntersection() {
-        // This is an example of a performance test case.
-        
-        let set1 = NSMutableIndexSet(indexesInRange: NSMakeRange(0, 200))
-        set1.addIndexesInRange(NSMakeRange(400, 200))
-        
-        let set2 = NSMutableIndexSet(indexesInRange: NSMakeRange(100, 200))
-        set2.addIndexesInRange(NSMakeRange(300, 200))
-        
-        let set3 = NSMutableIndexSet(indexesInRange: NSMakeRange(100, 100))
-        set3.addIndexesInRange(NSMakeRange(400, 100))
-        
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
-            for _ in 1...1000 {
-                let finalSet = set1.intersectionWithSet(set2)
-                XCTAssertEqual(set3, finalSet, "")
-            }
-        }
-    }
-    
+       
 }

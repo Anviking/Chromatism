@@ -11,9 +11,9 @@ import UIKit
 class JLKeywordScope: JLRegexScope {
     init(keywords: [String], prefix: String, suffix: String, tokenType: JLTokenType) {
         let pattern = prefix + Branch(character: "", array: keywords).description + suffix
-        let expression: NSRegularExpression?
+        let expression: RegularExpression?
         do {
-            expression = try NSRegularExpression(pattern: pattern, options: [])
+            expression = try RegularExpression(pattern: pattern, options: [])
         } catch _ {
             expression = nil
         }
@@ -27,7 +27,7 @@ class JLKeywordScope: JLRegexScope {
     
     /// Create a JLKeywordScope with a space-separated keyword string, with \\b prefix and suffix
     convenience init(keywords: String, tokenType: JLTokenType) {
-        self.init(keywords: keywords.componentsSeparatedByString(" "), tokenType: tokenType)
+        self.init(keywords: keywords.components(separatedBy: " "), tokenType: tokenType)
     }
 }
 
@@ -44,7 +44,7 @@ private struct Branch: Node, CustomStringConvertible {
     var children = [Node]()
     var character: String
     
-    func perform(string: NSString, range: Range<Int>) {
+    func perform(_ string: NSString, range: Range<Int>) {
 
     }
     
@@ -54,7 +54,7 @@ private struct Branch: Node, CustomStringConvertible {
         for string in array {
             if string.characters.count > 0 {
                 let firstCharacter = String(string[string.startIndex ... string.startIndex])
-                let remainingString = string[string.startIndex.successor() ..< string.endIndex]
+                let remainingString = string[string.characters.index(after: string.startIndex) ..< string.endIndex]
                 if var array = dictionary[firstCharacter] {
                     array.append(remainingString)
                     dictionary[firstCharacter] = array
@@ -74,12 +74,12 @@ private struct Branch: Node, CustomStringConvertible {
     
     var pattern: String {
     var array = children.map { $0.pattern }
-    array.sortInPlace { $0.characters.count < $1.characters.count }
+    array.sort { $0.characters.count < $1.characters.count }
         
     switch array.count {
         case 0: return character + ""
         case 1: return character + array[0]
-        default: return character + "(?:" + array.joinWithSeparator("|") + ")"
+        default: return character + "(?:" + array.joined(separator: "|") + ")"
     }
     }
     

@@ -22,11 +22,11 @@ public class JLTokenizingScope: JLScope {
     */
     public class Token: Equatable {
         var delta: Int /// Set to +1 to increment by one level, or -1 to decrement
-        var expression: NSRegularExpression
+        var expression: RegularExpression
         
         init(pattern: String, delta: Int) {
             self.delta = delta
-            self.expression = try! NSRegularExpression(pattern: pattern, options: [])
+            self.expression = try! RegularExpression(pattern: pattern, options: [])
         }
     }
     
@@ -69,18 +69,18 @@ public class JLTokenizingScope: JLScope {
     var matches = [TokenResult]()
     private var deletions = [TokenResult]()
     
-    override func perform(indexSet: NSIndexSet) {
-        self.indexSet = NSMutableIndexSet()
+    override public func perform(_ indexSet: inout IndexSet) {
+        self.indexSet = IndexSet()
         
         // Find Matches
         var array = [TokenResult]()
         let foundTokenIndexes = NSMutableIndexSet()
-        indexSet.enumerateRangesUsingBlock { (range, _) in
+        for range in indexSet.rangeView() {
             for token in self.tokens {
-                token.expression.enumerateMatchesInString(self.attributedString.string, options: [], range: range, usingBlock: { (result, _, _) in
-                    if !foundTokenIndexes.containsAnyIndexesInRange(result!.range) {
+                token.expression.enumerateMatches(in: self.attributedString.string, options: [], range: NSRange(Range(range)), using: { (result, _, _) in
+                    if !foundTokenIndexes.contains(in: result!.range) {
                         array.append(TokenResult(result: result!, token: token))
-                        foundTokenIndexes.addIndexesInRange(result!.range)
+                        foundTokenIndexes.add(in: result!.range)
                     }
                     })
             }
@@ -88,7 +88,7 @@ public class JLTokenizingScope: JLScope {
         
         
         matches += array
-        matches.sortInPlace { $0.range.location < $1.range.location }
+        matches.sort { $0.range.location < $1.range.location }
         
 //        oldLineIndexes =
         
@@ -102,9 +102,9 @@ public class JLTokenizingScope: JLScope {
     }
     
     
-    override func shiftIndexesAtLoaction(location: Int, by delta: Int) {
+    override func shiftIndexesAtLoaction(_ location: Int, by delta: Int) {
         
-        for (_, token) in Array(matches.reverse()).enumerate() {
+        for (_, token) in Array(matches.reversed()).enumerated() {
             if token.range.location < location { break }
             token.shiftRanges(delta)
         }
@@ -112,9 +112,9 @@ public class JLTokenizingScope: JLScope {
         super.shiftIndexesAtLoaction(location, by: delta)
     }
     
-    override func invalidateAttributesInIndexes(indexSet: NSIndexSet) {
+    override func invalidateAttributesInIndexes(_ indexSet: IndexSet) {
         self.indexSet -= indexSet
-        matches = matches.filter { !(indexSet.containsIndexesInRange($0.range)) }
+        matches = matches.filter { !(indexSet.contains(integersIn: $0.range.toRange() ?? 0..<0)) }
     }
     
     public class TokenResult: CustomStringConvertible {
@@ -122,17 +122,17 @@ public class JLTokenizingScope: JLScope {
         var ranges: [NSRange]
         var token: Token
         
-        init(result: NSTextCheckingResult, token: Token) {
+        init(result: TextCheckingResult, token: Token) {
             self.ranges = []
             self.token = token
             var i = 0
             while i < result.numberOfRanges {
-                ranges.append(result.rangeAtIndex(i))
+                ranges.append(result.range(at: i))
                 i += 1
             }
         }
         
-        func shiftRanges(delta: Int) {
+        func shiftRanges(_ delta: Int) {
             ranges = ranges.map { return NSMakeRange($0.location + delta, $0.length)}
         }
         
@@ -144,10 +144,10 @@ public func ==(lhs: JLTokenizingScope.Token, rhs: JLTokenizingScope.Token) -> Bo
     return (lhs.expression.pattern == rhs.expression.pattern && lhs.delta == rhs.delta)
 }
 
-private extension NSIndexSet {
-    func containsAnyIndexesInRange(range: NSRange) -> Bool {
+private extension IndexSet {
+    func containsAnyIndexesInRange(_ range: NSRange) -> Bool {
         for index in range.start ..< range.end {
-            if self.containsIndex(index) {
+            if self.contains(index) {
                 return true
             }
         }
