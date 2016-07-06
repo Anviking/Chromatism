@@ -58,7 +58,7 @@ public class JLLanguage {
         
         public required init() {
             super.init()
-            documentScope[
+            _ = documentScope[
                 blockComments,
                 lineComments,
                 preprocessor[strings, angularImports],
@@ -93,7 +93,7 @@ public class JLLanguage {
             
             super.init()
             
-            documentScope[
+            _ = documentScope[
                 blockComments,
                 dictionaryLiteral,
                 lineComments,
@@ -141,20 +141,20 @@ public class JLLanguage {
         required   public init() {
             
             super.init()
-            documentScope[
-                blockComments,
-                lineComments,
-                keywords,
-                atKeywords,
-                strings[
-                    interpolation
-                ],
-                numbers,
-                swiftTypes,
-                dotNotation,
-                NSUIClassNames,
-                functions,
-                projectClassNames
+            _ = documentScope[
+                    blockComments,
+                    lineComments,
+                    keywords,
+                    atKeywords,
+                    strings[
+                        interpolation
+                    ],
+                    numbers,
+                    swiftTypes,
+                    dotNotation,
+                    NSUIClassNames,
+                    functions,
+                    projectClassNames
             ]
         }
     }

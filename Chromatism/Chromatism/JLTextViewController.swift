@@ -10,11 +10,14 @@ import UIKit
 
 public class JLTextViewController: UIViewController {
     
-    public var textView: JLTextView
-    
+    public var textView: UITextView
+    private let delegate: JLTextStorageDelegate
     public required init(text: String, language: JLLanguageType, theme: JLColorTheme) {
-        textView = JLTextView(language: language, theme: theme)
+        
+        let textView = UITextView()
+        self.textView = textView
         textView.text = text
+        delegate = JLTextStorageDelegate(managing: textView, language: language, theme: theme)
         super.init(nibName: nil, bundle: nil)
         registerForKeyboardNotifications()
     }
@@ -35,8 +38,8 @@ public class JLTextViewController: UIViewController {
     
     func registerForKeyboardNotifications()
     {
-        NotificationCenter.default().addObserver(self, selector: "keyboardWasShown:", name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default().addObserver(self, selector: "keyboardWillBeHidden:", name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default().addObserver(self, selector: #selector(keyboardWasShown), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default().addObserver(self, selector: #selector(keyboardWillBeHidden), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func unregisterForKeyboardNotifications() {

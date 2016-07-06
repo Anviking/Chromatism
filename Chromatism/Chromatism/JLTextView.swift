@@ -8,82 +8,10 @@
 
 import UIKit
 
-public class JLTextView: UITextView {
-    
-    public var language: JLLanguage
-    public var theme: JLColorTheme {
-    didSet {
-        backgroundColor = theme[.background]
-        language.documentScope.theme = theme
-    }}
-    
-    private var _textStorage: JLTextStorage
-    
-    public init(language: JLLanguageType, theme: JLColorTheme) {
-        self.language = language.language()
-        self.theme = theme
-
-        let frame = CGRect.zero
-        _textStorage = JLTextStorage(documentScope: self.language.documentScope)
-        self.language.documentScope.theme = theme
-        let layoutManager = NSLayoutManager()
-        let textContainer = NSTextContainer()
-        textContainer.widthTracksTextView = true
-        layoutManager.addTextContainer(textContainer)
-        _textStorage.addLayoutManager(layoutManager)
-        super.init(frame: frame, textContainer: textContainer)
-        
-        self.language.documentScope.cascade { $0.delegate = self }
-        backgroundColor = theme[JLTokenType.background]
-        font = UIFont(name: "Menlo-Regular", size: 15)
-//        layoutManager.allowsNonContiguousLayout = true
-    }
-
-    required public init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: Override UITextView
-
-    override public var attributedText: AttributedString! {
-    didSet {
-
-    }
-    }
-    
-    func updateTypingAttributes() {
-        let color = theme[JLTokenType.text]!
-        var dictionary: [String: AnyObject] = [NSForegroundColorAttributeName: color]
-        if let font = font {
-            dictionary[NSFontAttributeName] = font
-        }
-        
-        typingAttributes = dictionary
-    }
-    
-    override public var text: String! {
-    didSet {
-        updateTypingAttributes()
-        attributedText = AttributedString(string: text, attributes: typingAttributes)
-    }
-    }
-    
-    override public var textColor: UIColor? {
-    didSet {
-        updateTypingAttributes()
-    }
-    }
-    
-    override public var font: UIFont? {
-    didSet {
-        updateTypingAttributes()
-    }
-    }
-}
 
 // MARK: JLScopeDelegate
 
-extension JLTextView: JLNestedScopeDelegate {
+extension UITextView: JLNestedScopeDelegate {
     func nestedScopeDidPerform(_ scope: JLNestedScope, additions: IndexSet) {
         DispatchQueue.main.async(execute: {
             for range in additions.rangeView() {
