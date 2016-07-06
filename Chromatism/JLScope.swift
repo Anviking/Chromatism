@@ -8,10 +8,10 @@
 
 import UIKit
 
-public class JLScope: NSObject {
+public class JLScope: Equatable {
     
-    override init() {
-        super.init()
+    init() {
+        
     }
     
     subscript(scopes: JLScope...) -> JLScope {
@@ -78,8 +78,8 @@ public class JLScope: NSObject {
     }
     
     // MARK: Printable
-    override public var description: String {
-    return "JLScope"
+    public var description: String {
+        return "JLScope"
     }
     
 }

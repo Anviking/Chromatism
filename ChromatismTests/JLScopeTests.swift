@@ -9,7 +9,7 @@
 import UIKit
 import XCTest
 
-let ChromatismTestsDefaultTheme = JLColorTheme.default
+let ChromatismTestsDefaultTheme = ColorTheme.default
 
 class JLScopeTests: XCTestCase {
     
@@ -67,7 +67,7 @@ extension String {
     var keyword: NSMutableAttributedString { return attributedStringWithTokenType(.keyword) }
     
     func attributedStringWithTokenType(_ token: JLTokenType) -> NSMutableAttributedString {
-        let colors = JLColorTheme.default.dictionary
+        let colors = ColorTheme.default.dictionary
         return NSMutableAttributedString(string: self, attributes: [NSForegroundColorAttributeName:colors[token]! ])
     }
 }
