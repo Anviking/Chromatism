@@ -8,8 +8,8 @@
 
 import UIKit
 
-public enum JLLanguageType {
-    case c, objectiveC, swift, other(JLLanguage)
+public enum LanguageType {
+    case c, objectiveC, swift, other(Language)
     
     
     /**
@@ -17,11 +17,11 @@ public enum JLLanguageType {
      
      - returns: A functional JLLanguage object.
      */
-    func language() -> JLLanguage {
+    func language() -> Language {
         switch self {
-        case c:                     return JLLanguage.C()
-        case objectiveC:            return JLLanguage.ObjectiveC()
-        case swift:                 return JLLanguage.Swift()
+        case c:                     return Language.C()
+        case objectiveC:            return Language.ObjectiveC()
+        case swift:                 return Language.Swift()
         case other(let language):   return language
         }
     }
@@ -38,14 +38,14 @@ public enum JLLanguageType {
      */
 }
 
-public class JLLanguage {
+public class Language {
     let documentScope = JLDocumentScope()
     
     public required init() {
         
     }
     
-    public class C: JLLanguage {
+    public class C: Language {
         var blockComments = JLTokenizingScope(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .comment, hollow: false)
         var lineComments = JLRegexScope(pattern: "//(.*)", tokenTypes: .comment)
         var preprocessor = JLRegexScope(pattern: "^#.*+$", tokenTypes: .preprocessor)
@@ -123,7 +123,7 @@ public class JLLanguage {
         }
     }
     
-    public class Swift: JLLanguage {
+    public class Swift: Language {
         var blockComments = JLTokenizingScope(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .comment, hollow: false)
         var lineComments = JLRegexScope(pattern: "//(.*)", tokenTypes: .comment)
         var keywords = JLKeywordScope(keywords: "class protocol init required public internal import private nil super var let func override deinit return true false", tokenType: .keyword)

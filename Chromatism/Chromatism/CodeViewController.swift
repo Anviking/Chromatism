@@ -8,11 +8,11 @@
 
 import UIKit
 
-public class JLTextViewController: UIViewController {
+public class CodeViewController: UIViewController {
     
     public var textView: UITextView
     private let delegate: JLTextStorageDelegate
-    public required init(text: String, language: JLLanguageType, theme: JLColorTheme) {
+    public required init(text: String, language: LanguageType, theme: ColorTheme) {
         
         let textView = UITextView()
         self.textView = textView
@@ -38,12 +38,12 @@ public class JLTextViewController: UIViewController {
     
     func registerForKeyboardNotifications()
     {
-        NotificationCenter.default().addObserver(self, selector: #selector(keyboardWasShown), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default().addObserver(self, selector: #selector(keyboardWillBeHidden), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func unregisterForKeyboardNotifications() {
-        NotificationCenter.default().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     // Called when the UIKeyboardDidShowNotification is sent.

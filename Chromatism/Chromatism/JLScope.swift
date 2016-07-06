@@ -21,7 +21,7 @@ public class JLScope: NSObject {
     
     var attributedString: NSMutableAttributedString!
     var multiline = false
-    var theme: JLColorTheme?
+    var theme: ColorTheme?
     var delegate: JLNestedScopeDelegate?
 
     var indexSet = IndexSet()

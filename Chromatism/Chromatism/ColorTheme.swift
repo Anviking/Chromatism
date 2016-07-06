@@ -12,7 +12,7 @@ func UIColorRGB(_ r:Int, g:Int, b:Int) -> UIColor {
     return UIColor(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: 1.0)
 }
 
-public enum JLColorTheme {
+public enum ColorTheme {
     case `default`, dusk, other([JLTokenType: UIColor])
     
     public subscript(type: JLTokenType) -> UIColor? {
@@ -67,9 +67,9 @@ public enum JLColorTheme {
     var dictionary: [JLTokenType: UIColor] {
         switch self {
         case .default:
-            return JLColorTheme.defaultTheme
+            return ColorTheme.defaultTheme
         case .dusk:
-            return JLColorTheme.duskTheme
+            return ColorTheme.duskTheme
         case .other(let dictionary):
             return dictionary
         }

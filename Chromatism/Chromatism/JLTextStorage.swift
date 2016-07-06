@@ -13,14 +13,14 @@ public class JLTextStorageDelegate: NSObject, NSTextStorageDelegate {
     public var documentScope: JLDocumentScope
     public var textView: UITextView
     
-    public var language: JLLanguage
-    public var theme: JLColorTheme {
+    public var language: Language
+    public var theme: ColorTheme {
         didSet {
             textView.backgroundColor = theme[.background]
             language.documentScope.theme = theme
         }}
     
-    public init(managing textView: UITextView, language: JLLanguageType, theme: JLColorTheme) {
+    public init(managing textView: UITextView, language: LanguageType, theme: ColorTheme) {
         let lang = language.language()
         self.textView = textView
         self.language = lang
