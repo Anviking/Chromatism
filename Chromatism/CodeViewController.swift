@@ -12,7 +12,7 @@ public class CodeViewController: UIViewController {
     
     public var textView: UITextView
     private let delegate: JLTextStorageDelegate
-    public required init(text: String, language: LanguageType, theme: ColorTheme) {
+    public required init(text: String, language: Language, theme: ColorTheme) {
         
         let textView = UITextView()
         self.textView = textView

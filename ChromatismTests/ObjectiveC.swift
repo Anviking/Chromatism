@@ -14,12 +14,12 @@ class ObjectiveC: XCTestCase {
     let string = String(contentsOfURL: Bundle(for: ObjectiveC.self).urlForResource("demo", withExtension: "txt")!, encoding: String.Encoding.utf8)
     
     var attributedString: NSMutableAttributedString!
-    var language: Language.ObjectiveC!
+    var language: JLDocumentScope
     
     override func setUp() {
         super.setUp()
         attributedString = NSMutableAttributedString(string: string)
-        language = Language.ObjectiveC()
+        language = Language.objectiveC.documentScope()
         language.documentScope.cascadeAttributedString(attributedString)
         language.documentScope.theme = .default
     }

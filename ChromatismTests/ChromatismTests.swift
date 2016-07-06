@@ -14,6 +14,9 @@ class ChromatismTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        let url = FileManager().urlsForDirectory(.desktopDirectory, inDomains: .userDomainMask)
+        print(url)
+        
     }
     
     override func tearDown() {

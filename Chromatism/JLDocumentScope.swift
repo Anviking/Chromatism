@@ -14,6 +14,11 @@ public class JLDocumentScope: JLScope {
         super.init()
     }
     
+    override subscript(scopes: JLScope...) -> JLDocumentScope {
+        self.subscopes = scopes
+        return self
+    }
+    
     override public func perform(_ indexSet: inout IndexSet)  {
         for range in indexSet.rangeView() {
             if let color = self.theme?[.text] {

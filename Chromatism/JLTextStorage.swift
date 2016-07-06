@@ -17,14 +17,13 @@ public class JLTextStorageDelegate: NSObject, NSTextStorageDelegate {
     public var theme: ColorTheme {
         didSet {
             textView.backgroundColor = theme[.background]
-            language.documentScope.theme = theme
+            documentScope.theme = theme
         }}
     
-    public init(managing textView: UITextView, language: LanguageType, theme: ColorTheme) {
-        let lang = language.language()
+    public init(managing textView: UITextView, language: Language, theme: ColorTheme) {
         self.textView = textView
-        self.language = lang
-        self.documentScope = lang.documentScope
+        self.language = language
+        self.documentScope = language.documentScope()
         self.theme = theme
         self.documentScope.cascadeAttributedString(textView.textStorage)
         
