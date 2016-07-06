@@ -25,6 +25,7 @@ public class JLTextStorageDelegate: NSObject, NSTextStorageDelegate {
         self.language = language
         self.documentScope = language.documentScope()
         self.theme = theme
+        self.documentScope.theme = theme
         self.documentScope.cascadeAttributedString(textView.textStorage)
         
         super.init()
@@ -40,14 +41,14 @@ public class JLTextStorageDelegate: NSObject, NSTextStorageDelegate {
     
     private var editedLineRange: NSRange?
     
-    public func textStorage(_ textStorage: NSTextStorage, willProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
+    public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
         
-        /*
+        
         if editedMask.contains(.editedCharacters) {
             editedLineRange = (textStorage.string as NSString).lineRange(for: editedRange)
             documentScope.invalidateAttributesInIndexes(IndexSet(integersIn: editedRange.toRange() ?? 0..<0))
             documentScope.shiftIndexesAtLoaction(editedRange.end, by: delta)
-        }*/
+        }
         
         if let range = editedLineRange {
             // let layoutManager = layoutManagers[0] as NSLayoutManager
