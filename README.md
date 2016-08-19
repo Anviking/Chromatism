@@ -5,6 +5,9 @@ iOS Syntax highlightning using Swift built for performance, but still at a very 
 
 ![image](http://i.imgur.com/P1ENCfv.png)
 
+## Notes
+This project is in limbo, and future is unsure. Master branch is targeting an Xcode 8 beta seed, but an old one. Latest stable Swift 2 version should be: [a99131349ff292825dde56b885be6aad14ed1718](https://t.co/lZ6oHxaHKS).
+
 ## New since Swift rewrite:
 - JLNestedToken  `/* Comment /* Another Comment */ */`. Could possible do great stuff with {}-scope-aware-auto-completion. Needs some more work though.
 - Tests – sort of.
