@@ -17,9 +17,9 @@ public enum Language {
      
      - returns: A functional JLLanguage object.
      */
-    func documentScope() -> JLDocumentScope {
+    public func documentScope() -> JLDocumentScope {
         switch self {
-        case c:
+        case .c:
             let blockComments = JLTokenizingScope(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .comment, hollow: false)
             let lineComments = JLRegexScope(pattern: "//(.*)", tokenTypes: .comment)
             let preprocessor = JLRegexScope(pattern: "^#.*+$", tokenTypes: .preprocessor)
@@ -42,7 +42,7 @@ public enum Language {
                 functions,
                 keywords
             ]
-        case objectiveC:
+        case .objectiveC:
             let dotNotation = JLRegexScope(pattern: "\\.\\w+", tokenTypes: .otherProperties)
             
             // Note about project class names: When symbolication is supported this pattern should be changed to .OtherClassNames
@@ -101,7 +101,7 @@ public enum Language {
                 NSUIClassNames,
                 projectClassNames]
             
-        case swift:
+        case .swift:
             let blockComments = JLTokenizingScope(incrementingPattern: "/\\*", decrementingPattern: "\\*/", tokenType: .comment, hollow: false)
             let lineComments = JLRegexScope(pattern: "//(.*)", tokenTypes: .comment)
             let keywords = JLKeywordScope(keywords: "class protocol init required public internal import private nil super var let func override deinit return true false", tokenType: .keyword)
@@ -130,7 +130,7 @@ public enum Language {
                 projectClassNames
             ]
             
-        case other(let scope):
+        case .other(let scope):
             return scope
         }
     }

@@ -74,7 +74,7 @@ public class JLTextStorageDelegate: NSObject, NSTextStorageDelegate {
     public var text: String! {
         didSet {
             updateTypingAttributes()
-            textView.attributedText = AttributedString(string: text, attributes: textView.typingAttributes)
+            textView.attributedText = NSAttributedString(string: text, attributes: textView.typingAttributes)
             update()
         }
     }

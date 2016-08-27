@@ -10,22 +10,22 @@ import UIKit
 
 public class JLRegexScope: JLScope {
     
-    var regularExpression: RegularExpression
+    var regularExpression: NSRegularExpression
     
     /// Allows you to specify specific tokenTypes for different capture groups. Index 0 means the whole match, following indexes represent capture groups.
     public var tokenTypes: [JLTokenType]
     
     
-    init(regularExpression: RegularExpression, tokenTypes: [JLTokenType]) {
+    init(regularExpression: NSRegularExpression, tokenTypes: [JLTokenType]) {
         self.regularExpression = regularExpression
         self.tokenTypes = tokenTypes
         super.init()
     }
     
-    convenience init(pattern: String, options: RegularExpression.Options = .anchorsMatchLines, tokenTypes: JLTokenType...) {
-        let expression: RegularExpression?
+    convenience init(pattern: String, options: NSRegularExpression.Options = .anchorsMatchLines, tokenTypes: JLTokenType...) {
+        let expression: NSRegularExpression?
         do {
-            expression = try RegularExpression(pattern: pattern, options: options)
+            expression = try NSRegularExpression(pattern: pattern, options: options)
         } catch _ {
             expression = nil
         }
@@ -43,11 +43,11 @@ public class JLRegexScope: JLScope {
         performSubscopes(attributedString, indexSet: indexSet)
     }
     
-    private func process(_ result: TextCheckingResult, attributedString: NSMutableAttributedString) {
+    private func process(_ result: NSTextCheckingResult, attributedString: NSMutableAttributedString) {
         for (index, type) in self.tokenTypes.enumerated() {
             if let color = self.theme?[type] {
                 if result.numberOfRanges > index {
-                    let range = result.range(at: index)
+                    let range = result.rangeAt(index)
                     attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
                     indexSet.insert(integersIn: range.toRange()!)
                 }

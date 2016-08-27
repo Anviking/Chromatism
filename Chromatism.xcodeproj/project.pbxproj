@@ -253,6 +253,8 @@
 				TargetAttributes = {
 					8FBFC16E19738B0400F75A76 = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = DQ69J4LB4T;
+						DevelopmentTeamName = "Johannes Lund";
 						LastSwiftMigration = 0800;
 					};
 					8FBFC17919738B0400F75A76 = {

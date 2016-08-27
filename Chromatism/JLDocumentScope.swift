@@ -20,7 +20,7 @@ public class JLDocumentScope: JLScope {
     }
     
     override public func perform(_ indexSet: inout IndexSet)  {
-        for range in indexSet.rangeView() {
+        for range in indexSet.rangeView {
             if let color = self.theme?[.text] {
                 self.attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: NSRange(Range(range)))
             }
@@ -42,14 +42,14 @@ public class JLDocumentScope: JLScope {
         cascade { $0.shiftIndexesAtLoaction(location, by: delta) }
     }
     
-    func cascade(_ block: (scope: JLScope) -> Void) {
+    func cascade(_ block: (_ scope: JLScope) -> Void) {
         for scope in subscopes {
             cascade(block, scope: scope)
         }
     }
     
-    private func cascade(_ block: (scope: JLScope) -> Void, scope: JLScope) {
-        block(scope: scope)
+    private func cascade(_ block: (_ scope: JLScope) -> Void, scope: JLScope) {
+        block(scope)
         for subscope in scope.subscopes {
             cascade(block, scope: subscope)
         }

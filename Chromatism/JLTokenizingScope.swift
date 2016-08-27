@@ -22,11 +22,11 @@ public class JLTokenizingScope: JLScope {
     */
     public class Token: Equatable {
         var delta: Int /// Set to +1 to increment by one level, or -1 to decrement
-        var expression: RegularExpression
+        var expression: NSRegularExpression
         
         init(pattern: String, delta: Int) {
             self.delta = delta
-            self.expression = try! RegularExpression(pattern: pattern, options: [])
+            self.expression = try! NSRegularExpression(pattern: pattern, options: [])
         }
     }
     
@@ -75,7 +75,7 @@ public class JLTokenizingScope: JLScope {
         // Find Matches
         var array = [TokenResult]()
         let foundTokenIndexes = NSMutableIndexSet()
-        for range in indexSet.rangeView() {
+        for range in indexSet.rangeView {
             for token in self.tokens {
                 token.expression.enumerateMatches(in: self.attributedString.string, options: [], range: NSRange(Range(range)), using: { (result, _, _) in
                     if !foundTokenIndexes.contains(in: result!.range) {
@@ -122,12 +122,12 @@ public class JLTokenizingScope: JLScope {
         var ranges: [NSRange]
         var token: Token
         
-        init(result: TextCheckingResult, token: Token) {
+        init(result: NSTextCheckingResult, token: Token) {
             self.ranges = []
             self.token = token
             var i = 0
             while i < result.numberOfRanges {
-                ranges.append(result.range(at: i))
+                ranges.append(result.rangeAt(i))
                 i += 1
             }
         }

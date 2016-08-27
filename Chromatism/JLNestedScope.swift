@@ -43,7 +43,7 @@ public class JLNestedScope: JLScope {
                 let decrementingToken = result
                 if incrementingTokenIsValid(incrementingToken) && decrementingTokenIsValid(decrementingToken) {
                     let indexes = indexesForTokens(incrementingToken, decrementingToken: decrementingToken, hollow: hollow)
-                    if indexes.last < attributedString.length {
+                    if indexes.last! < attributedString.length {
                         newIndexSet += indexes
                     }
                 }
@@ -76,7 +76,7 @@ public class JLNestedScope: JLScope {
     }
     
     private func setAttributesInIndexSet(_ indexSet: IndexSet) {
-        for range in indexSet.rangeView() {
+        for range in indexSet.rangeView {
             if let color = self.theme?[self.tokenType] {
                 self.attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: NSRange(Range(range)))
             }

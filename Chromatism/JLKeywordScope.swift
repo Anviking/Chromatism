@@ -11,9 +11,9 @@ import UIKit
 class JLKeywordScope: JLRegexScope {
     init(keywords: [String], prefix: String, suffix: String, tokenType: JLTokenType) {
         let pattern = prefix + Branch(character: "", array: keywords).description + suffix
-        let expression: RegularExpression?
+        let expression: NSRegularExpression?
         do {
-            expression = try RegularExpression(pattern: pattern, options: [])
+            expression = try NSRegularExpression(pattern: pattern, options: [])
         } catch _ {
             expression = nil
         }
@@ -53,7 +53,7 @@ private struct Branch: Node, CustomStringConvertible {
         var dictionary = [String: [String]]()
         for string in array {
             if string.characters.count > 0 {
-                let firstCharacter = String(string[string.startIndex ... string.startIndex])
+                guard let firstCharacter = String(string[string.startIndex ... string.startIndex]) else { continue }
                 let remainingString = string[string.characters.index(after: string.startIndex) ..< string.endIndex]
                 if var array = dictionary[firstCharacter] {
                     array.append(remainingString)

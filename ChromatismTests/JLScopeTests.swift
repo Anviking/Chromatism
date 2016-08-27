@@ -13,8 +13,8 @@ let ChromatismTestsDefaultTheme = ColorTheme.default
 
 class JLScopeTests: XCTestCase {
     
-    let blue = UIColor.blue()
-    let green = UIColor.green()
+    let blue = UIColor.blue
+    let green = UIColor.green
     
     override func setUp() {
         super.setUp()

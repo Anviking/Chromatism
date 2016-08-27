@@ -9,36 +9,38 @@
 import UIKit
 import XCTest
 
+let url = Bundle(for: ObjectiveC.self).url(forResource: "demo", withExtension: "txt")!
+
 class ObjectiveC: XCTestCase {
-    
-    let string = String(contentsOfURL: Bundle(for: ObjectiveC.self).urlForResource("demo", withExtension: "txt")!, encoding: String.Encoding.utf8)
+
+    let string = try! String(contentsOf: url)
     
     var attributedString: NSMutableAttributedString!
-    var language: JLDocumentScope
+    var scope: JLDocumentScope
     
     override func setUp() {
         super.setUp()
         attributedString = NSMutableAttributedString(string: string)
-        language = Language.objectiveC.documentScope()
-        language.documentScope.cascadeAttributedString(attributedString)
-        language.documentScope.theme = .default
+        scope = Language.objectiveC.documentScope()
+        scope.cascadeAttributedString(attributedString)
+        scope.theme = .default
     }
     
     func testEverything() {
         measure {
-            self.language.documentScope.perform()
+            self.scope.perform()
         }
     }
-    
+    /*
     func testSquareBrackets() {
         measure {
-            self.language.squareBrackets.perform()
+            scope.squareBrackets.perform()
         }
     }
     
     func testBlockComments() {
         measure {
-            self.language.blockComments.perform()
+            scope.blockComments.perform()
         }
     }
     
@@ -89,4 +91,5 @@ class ObjectiveC: XCTestCase {
             self.language.objcKeywords.perform()
         }
     }
+ */
 }

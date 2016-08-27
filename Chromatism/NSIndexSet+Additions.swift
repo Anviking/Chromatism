@@ -25,7 +25,7 @@ func NSIndexSetDelta(_ oldSet: IndexSet, newSet: IndexSet) -> (additions: IndexS
 
 func -(left: IndexSet, right: IndexSet) -> IndexSet {
     var indexSet = left
-    for range in right.rangeView() {
+    for range in right.rangeView {
         indexSet.remove(integersIn: Range(range))
     }
     return indexSet
@@ -33,7 +33,7 @@ func -(left: IndexSet, right: IndexSet) -> IndexSet {
 
 func +(left: IndexSet, right: IndexSet) -> IndexSet {
     var indexSet = left
-    for range in right.rangeView() {
+    for range in right.rangeView {
         indexSet.insert(integersIn: Range(range))
     }
     return indexSet

@@ -31,12 +31,12 @@ public class JLScope: Equatable {
         subscopes.append(subscope)
     }
     
-    func perform() {
+    public func perform() {
         var set = IndexSet(integersIn: NSMakeRange(0, attributedString.length).toRange()!)
         perform(&set)
     }
     
-    func perform(_ indexSet: inout IndexSet) {
+    public func perform(_ indexSet: inout IndexSet) {
 
         // Create a copy of the indexSet and call perform to subscopes
         // The results of the subscope is removed from the indexSet copy before the next subscope is performed

@@ -20,7 +20,7 @@ public enum ColorTheme {
     }
     
     private static let defaultTheme: [JLTokenType: UIColor] = [
-        .text:                         UIColor.black(),
+        .text:                         UIColor.black,
         .background:                   UIColorRGB(255, g: 255, b: 255),
         .comment:                      UIColorRGB(0, g: 131, b: 39),
         .documentationComment:         UIColorRGB(0, g: 131, b: 39),
@@ -42,7 +42,7 @@ public enum ColorTheme {
     ]
     
     private static let duskTheme: [JLTokenType: UIColor] = [
-        .text:                         UIColor.white(),
+        .text:                         UIColor.white,
         .background:                   UIColorRGB(30, g: 32, b: 40),
         .comment:                      UIColorRGB(72, g: 190, b: 102),
         .documentationComment:         UIColorRGB(72, g: 190, b: 102),
