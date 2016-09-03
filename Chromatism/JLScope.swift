@@ -21,7 +21,7 @@ public class JLScope: Equatable {
     
     var attributedString: NSMutableAttributedString!
     var multiline = false
-    var theme: ColorTheme?
+    public var theme: ColorTheme?
     var delegate: JLNestedScopeDelegate?
 
     var indexSet = IndexSet()
