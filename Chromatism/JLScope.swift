@@ -19,7 +19,7 @@ public class JLScope: Equatable {
             return self
     }
     
-    var attributedString: NSMutableAttributedString!
+    public var attributedString: NSMutableAttributedString!
     var multiline = false
     public var theme: ColorTheme?
     var delegate: JLNestedScopeDelegate?
